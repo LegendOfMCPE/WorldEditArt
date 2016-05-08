@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<language name="vi" version="1.0" rel="1.0">
+    <authors since="1.0" updated="1.0">
+        <author>KhoaGamingVN</author>
+    </authors>
+    <constants>
+        <constant name="FORMAT_ERROR">§c</constant>
+        <constant name="FORMAT_WARNING">§e</constant>
+        <constant name="FORMAT_PROGRESS">§8</constant>
+        <constant name="FORMAT_SUCCESS">§a</constant>
+        <constant name="FORMAT_INFO">§f</constant>
+        <constant name="FORMAT_HIGHLIGHT">§b</constant>
+        <constant name="FORMAT_HIGHLIGHT_1">§b</constant>
+        <constant name="FORMAT_HIGHLIGHT_2">§9</constant>
+        <constant name="FORMAT_HIGHLIGHT_3">§5</constant>
+        <constant name="FORMAT_HIGHLIGHT_4">§d</constant>
+        <constant name="@{VERTEX}">vertex</constant>
+	</constants>
+	<values>
+		<command>
+			<generic>
+				<substituting vars="ORIGINAL" since="1.4" updated="1.4">
+					${FORMAT_WARNING}New selection will replace your original selection (${ORIGINAL})
+				</substituting>
+			</generic>
+			<error>
+				<notFound since="1.0" updated="1.0">
+					${FORMAT_ERROR}Không có lệnh này. Sử dụng lệnh //help để biết thêm thông tin.
+				</notFound>
+				<userLoading since="1.0" updated="1.0">
+					${FORMAT_PROGRESS}Xin chờ. Bạn không thể sử dụng WorldEditArt khi dữ liệu của bạn vẫn đang được tải xuống.
+				</userLoading>
+				<noPerm since="1.0" updated="1.0">
+					${FORMAT_ERROR}Bạn không có quyền sử dụng lệnh này.
+				</noPerm>
+				<outOfRange since="1.1" updated="1.4">
+					<both since="1.4" updated="1.4">${FORMAT_ERROR}Các vị trí lựa chọn là vượt quá chiều cao thế giới.</both>
+					<tooHigh since="1.4" updated="1.4">${FORMAT_ERROR}Lựa chọn/vị trí của bạn là quá cao!</tooHigh>
+					<tooLow since="1.4" updated="1.4">${FORMAT_ERROR}Lựa chọn/vị trí của bạn là quá chậm!</tooLow>
+				</outOfRange>
+				<noSel since="1.3" updated="1.3" vars="NAME">
+					${FORMAT_ERROR}Bạn không có một lựa chọn được gọi là ${FORMAT_HIGHLIGHT}${NAME}${FORMAT_ERROR}!
+				</noSel>
+				<unknownBlock since="1.3" updated="1.3" vars="TYPE">
+					${FORMAT_ERROR}Kiểu khối chưa biết ${FORMAT_HIGHLIGHT}${TYPE}
+				</unknownBlock>
+				<usage since="1.4" updated="1.4" vars="USAGE">${FORMAT_INFO}Sử dụng: ${USAGE}</usage>
+				<centerFirst since="1.5" updated="1.5" vars="TYPE,COMMAND">
+					${FORMAT_ERROR}Vui lòng chọn các trung tâm của ${TYPE} first!\n
+					${FORMAT_WARNING}Bạn có thể sử dụng lệnh //${COMMAND} làm như vậy.
+				</centerFirst>
+			</error>
+			<help since="1.0" updated="1.0">
+				<description>Hiển thị thông báo trợ giúp này</description>
+				<usage>//help &lt;trang&gt;</usage>
+				<individual vars="COMMAND_NAME,COMMAND_DESCRIPTION,COMMAND_USAGE,COMMAND_ALIASES">
+					//${COMMAND_NAME}:\nDescription: ${COMMAND_DESCRIPTION}\nUsage: ${COMMAND_USAGE}\nAliases:
+					${COMMAND_ALIASES}
+				</individual>
+				<pageHeader vars="PAGE_NUMBER,MAX_PAGES">
+					Hiển thị trang trợ giúp ${PAGE_NUMBER} của ${MAX_PAGES}:
+				</pageHeader>
+				<pageEntry vars="COMMAND_NAME,COMMAND_DESCRIPTION">//${COMMAND_NAME}: ${COMMAND_DESCRIPTION}</pageEntry>
+			</help>
+			<pos since="1.1" updated="1.1">
+				<description>
+					<formula vars="TYPE,PROP">Chọn một ${TYPE} lựa chọn của ${PROP}</formula>
+				</description>
+				<usage vars="NAME">/${NAME} [anchor name]</usage>
+				<displaced vars="OLD">${FORMAT_WARNING}Lựa chọn cũ của bạn, ${OLD}, đã được thay thế.</displaced>
+				<success vars="SPACE">${FORMAT_SUCCESS}Lựa chọn của bạn bây giờ ${SPACE}</success>
+			</pos>
+			<desel since="1.2" updated="1.2">
+				<description>Bỏ chọn của bạn</description>
+				<usage>//desel [selection name]</usage>
+				<success vars="NAME">${FORMAT_SUCCESS}Lựa chọn của bạn ${NAME} đã được chọn trước.</success>
+			</desel>
+			<set since="1.3" updated="1.3">
+				<description>Thay đổi tất cả các khối trong lựa chọn của bạn</description>
+				<usage>//set [,n &lt;selection name&gt;] [,s &lt;seed&gt;] [.h [,p &lt;padding&gt;] [,m &lt;margin&gt;]]
+					&lt;block types&gt;</usage>
+				<detailedUsage>
+					//set [,n &lt;selection name&gt;] [,s &lt;seed&gt;] [.h [,p &lt;padding&gt;] [,m &lt;margin&gt;]]
+					&lt;block types&gt;\n
+					If ,n is not specified, the selection name will be ${FORMAT_HIGHLIGHT}default${FORMAT_INFO}.\n
+					,s is the seed for random blocks. If you want to generate the same pattern every time, specify the
+					same seed.\n
+					If ,s is not specified, the seed will be the current time.\n
+					Adding the ${FORMAT_HIGHLIGHT}.h${FORMAT_INFO} flag will only modify the surface blocks of the
+					selection.\n
+					If you enabled .h, you can also specify ,p (padding) and ,m (margin) to define the inner and outer
+					thickness (default 1 and 0) of the surface respectively.
+					For &lt;block types&gt;, separate blocks with spaces.\n
+					For each block, you can put the block name or the block ID.\n
+					If the block name contains spaces, replace them with an underscore ${FORMAT_HIGHLIGHT}_\n
+					The default block damage is 0. To specify block damage, add a colon then the damage value.\n
+					To specify the chance weight, add the chance then a semicolon ${FORMAT_HIGHLIGHT};${FORMAT_INFO}
+					before the block type.\n
+					${FORMAT_HIGHLIGHT_2}Examples:\n
+					${FORMAT_VERBOSE}//set ,n home air ${FORMAT_INFO}(sets all blocks to air in selection
+					${FORMAT_HIGHLIGHT_2}home${FORMAT_INFO})\n
+					${FORMAT_VERBOSE}//set 3;air glowstone ${FORMAT_INFO}(sets 3/4 blocks to air and 1/4 to glowstone)\n
+					${FORMAT_VERBOSE}//set glass 3;planks:3 ${FORMAT_INFO}(sets 1/4 blocks to glass and 3/4 to jungle
+					planks)\n
+				</detailedUsage>
+				<pending vars="COUNT">${FORMAT_PROGRESS}Setting ${COUNT} block(s)...</pending>
+			</set>
+			<sphere since="1.4" updated="1.4">
+				<description>Select a sphere</description>
+				<usage>//sph &lt;radius&gt;</usage>
+				<success vars="NEW,NAME">
+					${FORMAT_SUCCESS}Selected ${FORMAT_HIGHLIGHT}${NAME} ${FORMAT_SUCCESS}as ${FORMAT_HIGHLIGHT_2}${NEW}
+				</success>
+			</sphere>
+		</command>
+		<spaces since="1.4" updated="1.4">
+			<cuboid vars="POS_1,POS_2,LEVEL">
+				${FORMAT_HIGHLIGHT_1}cuboid from ${FORMAT_HIGHLIGHT_2}${POS_1}${FORMAT_HIGHLIGHT_1} to
+				${FORMAT_HIGHLIGHT_2}${POS_2}${FORMAT_HIGHLIGHT} in world ${FORMAT_HIGHLIGHT_3}${LEVEL}
+			</cuboid>
+			<sphere vars="CENTER,RADIUS,LEVEL">
+				${FORMAT_HIGHLIGHT_1}sphere at ${FORMAT_HIGHLIGHT_2}${CENTER}${FORMAT_HIGHLIGHT_1} with radius
+				${FORMAT_HIGHLIGHT_2}${RADIUS}${FORMAT_HIGHLIGHT} in world ${FORMAT_HIGHLIGHT_3}${LEVEL}
+			</sphere>
+			<cylinder vars="CENTER,TOP,RADIUS,AXIS,LEVEL">
+				${FORMAT_HIGHLIGHT_1}cylinder of ${FORMAT_HIGHLIGHT_2}radius ${RADIUS} ${FORMAT_HIGHLIGHT_3}along
+				${AXIS}-axis ${FORMAT_HIGHLIGHT_2}from ${CENTER} to ${TOP} in world ${FORMAT_HIGHLIGHT_3}${LEVEL}
+			</cylinder>
+		</spaces>
+		<info>
+			<zone since="1.1" updated="1.1">
+				<entry vars="ZONE_NAME,ZONE_TYPE">
+					${FORMAT_INFO}You just entered ${FORMAT_HIGHLIGHT}${ZONE_TYPE} ${FORMAT_HIGHLIGHT_2}${ZONE_NAME}.
+				</entry>
+				<entryDenied vars="ZONE_NAME,ZONE_TYPE">
+					${FORMAT_ERROR}You cannot enter ${FORMAT_HIGHLIGHT}${ZONE_TYPE} ${FORMAT_HIGHLIGHT_2}${ZONE_NAME}!
+				</entryDenied>
+				<left vars="ZONE_NAME,ZONE_TYPE">
+					${FORMAT_INFO}You just left ${FORMAT_HIGHLIGHT}${ZONE_TYPE} ${FORMAT_HIGHLIGHT_2}${ZONE_NAME}.
+				</left>
+			</zone>
+		</info>
+		<phrases>
+			<unknown>unknown</unknown>
+			<undefined>undefined</undefined>
+			<spaces since="1.1" updated="1.1">
+				<types>
+					<cuboid>cuboid</cuboid>
+					<cylinder>
+						<generic>cylinder</generic>
+						<right>right cylinder</right>
+						<oblique>oblique cylinder</oblique>
+						<distorted>distorted cylinder</distorted>
+					</cylinder>
+					<sphere>sphere</sphere>
+					<ellipsoid>ellipsoid</ellipsoid>
+				</types>
+				<properties>
+					<center>center</center>
+					<pos1>@{VERTEX} 1</pos1>
+					<pos2>@{VERTEX} 2</pos2>
+					<radius>radius</radius>
+					<height>height</height>
+				</properties>
+			</spaces>
+		</phrases>
+		<formats since="1.4" updated="1.4">
+			<vector3 vars="X,Y,Z">(${X}, ${Y}, ${Z})</vector3>
+			<pos vars="X,Y,Z,LEVEL">(${X}, ${Y}, ${Z}) in world ${LEVEL}</pos>
+		</formats>
+	</values>
+</language>
