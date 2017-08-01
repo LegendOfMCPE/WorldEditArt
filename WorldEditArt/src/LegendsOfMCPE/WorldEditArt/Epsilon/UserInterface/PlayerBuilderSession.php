@@ -44,7 +44,7 @@ class PlayerBuilderSession extends BuilderSession{
 	}
 
 	public function getUniqueId() : string{
-		return "player;" . strtolower($this->player->getName());
+		return "player;" . mb_strtolower($this->player->getName());
 	}
 
 	protected function getRealLocation() : Location{

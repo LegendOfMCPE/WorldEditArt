@@ -19,7 +19,7 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
-use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeDescriptor;
+use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
@@ -49,7 +49,7 @@ class BookmarkCommand extends SessionCommand{
 
 	public function run(BuilderSession $session, array $args){
 		if(isset($args[0])){
-			$action = strtolower($args[0]);
+			$action = mb_strtolower($args[0]);
 			if(!isset($args[1])){
 				$this->sendUsage($session);
 				return;
@@ -70,7 +70,7 @@ class BookmarkCommand extends SessionCommand{
 				}
 				$bm = $session->getBookmark($args[1]);
 				$owner->teleport($bm);
-				$session->msg("Teleported to bookmark $args[1]: " . ShapeDescriptor::formatLocation($bm, TextFormat::GREEN), BuilderSession::MSG_CLASS_SUCCESS);
+				$session->msg("Teleported to bookmark $args[1]: " . UserFormat::formatLocation($bm, TextFormat::GREEN), BuilderSession::MSG_CLASS_SUCCESS);
 				return;
 			}
 			if($action !== "add" && $action !== "remove"){
@@ -85,7 +85,7 @@ class BookmarkCommand extends SessionCommand{
 					return;
 				}
 				$session->setBookmark($name, $session->getLocation());
-				$session->msg("Added bookmark \"$name\" at " . ShapeDescriptor::formatLocation($session->getLocation(), BuilderSession::MSG_CLASS_COLOR_MAP[BuilderSession::MSG_CLASS_SUCCESS]), BuilderSession::MSG_CLASS_SUCCESS);
+				$session->msg("Added bookmark \"$name\" at " . UserFormat::formatLocation($session->getLocation(), BuilderSession::MSG_CLASS_COLOR_MAP[BuilderSession::MSG_CLASS_SUCCESS]), BuilderSession::MSG_CLASS_SUCCESS);
 			}else{
 				if(!$session->hasBookmark($name)){
 					$session->msg("You do not have a bookmark called \"$name\"!", BuilderSession::MSG_CLASS_ERROR);
@@ -98,7 +98,8 @@ class BookmarkCommand extends SessionCommand{
 			$str = "";
 			foreach($session->getBookmarks() as $name => $location){
 				$str .= sprintf("%s%s%s: %s",
-					TextFormat::BLUE, $name, TextFormat::WHITE, ShapeDescriptor::formatLocation($location, TextFormat::WHITE));
+					TextFormat::BLUE, $name, TextFormat::WHITE,
+					UserFormat::formatLocation($location, TextFormat::WHITE));
 			}
 			$session->msg($str, BuilderSession::MSG_CLASS_INFO, "Your Bookmarks");
 		}

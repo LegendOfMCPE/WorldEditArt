@@ -37,6 +37,7 @@ abstract class BuilderSession{
 		BuilderSession::MSG_CLASS_WARN => TextFormat::YELLOW,
 		BuilderSession::MSG_CLASS_ERROR => TextFormat::RED,
 	];
+	const DEFAULT_SELECTION_NAME = "a";
 
 	/** @var WorldEditArt */
 	private $plugin;
@@ -45,6 +46,8 @@ abstract class BuilderSession{
 	private $overridingLocation = null;
 	/** @var Location[] */
 	private $bookmarks = [];
+	/** @var IShape[] */
+	private $selections = [];
 
 	public function __construct(WorldEditArt $plugin){
 		$this->plugin = $plugin;
@@ -64,11 +67,19 @@ abstract class BuilderSession{
 
 	public abstract function getUniqueId() : string;
 
+	protected abstract function getRealLocation() : Location;
+
+	public function hasPermission(string $permission) : bool{
+		return $this->getOwner()->hasPermission($permission);
+	}
+
+	public function isAvailable() : bool{
+		return true;
+	}
+
 	public function getLocation() : Location{
 		return $this->overridingLocation ?? $this->getRealLocation();
 	}
-
-	protected abstract function getRealLocation() : Location;
 
 	public function executeAtLocation(Location $location, callable $function){
 		$old = $this->overridingLocation;
@@ -76,6 +87,20 @@ abstract class BuilderSession{
 		$function();
 		$this->overridingLocation = $old;
 	}
+
+	public function msg(string $message, int $class = BuilderSession::MSG_CLASS_INFO, string $title = null){
+		if(isset($title)){
+			$this->getOwner()->sendMessage(TextFormat::BOLD . BuilderSession::MSG_CLASS_COLOR_MAP[$class] . $title);
+		}
+		foreach(explode("\n", $message) as $line){
+			$this->getOwner()->sendMessage(BuilderSession::MSG_CLASS_COLOR_MAP[$class] . $line);
+		}
+	}
+
+	public function getPlugin() : WorldEditArt{
+		return $this->plugin;
+	}
+
 
 	/**
 	 * @return Location[]
@@ -90,39 +115,47 @@ abstract class BuilderSession{
 	 * @return null|Location
 	 */
 	public function getBookmark(string $name){
-		return $this->bookmarks[$name] ?? null;
+		return $this->bookmarks[mb_strtolower($name)] ?? null;
 	}
 
 	public function hasBookmark(string $name) : bool{
-		return isset($this->bookmarks[$name]);
+		return isset($this->bookmarks[mb_strtolower($name)]);
 	}
 
 	public function setBookmark(string $name, Location $location){
-		$this->bookmarks[$name] = $location;
+		$this->bookmarks[mb_strtolower($name)] = $location;
 	}
 
 	public function removeBookmark(string $name){
-		unset($this->bookmarks[$name]);
+		unset($this->bookmarks[mb_strtolower($name)]);
 	}
 
-	public function getPlugin() : WorldEditArt{
-		return $this->plugin;
+
+	/**
+	 * @return IShape[]
+	 */
+	public function getSelections() : array{
+		return $this->selections;
 	}
 
-	public function msg(string $message, int $class = BuilderSession::MSG_CLASS_INFO, string $title = null){
-		if(isset($title)){
-			$this->getOwner()->sendMessage(TextFormat::BOLD . BuilderSession::MSG_CLASS_COLOR_MAP[$class] . $title);
-		}
-		foreach(explode("\n", $message) as $line){
-			$this->getOwner()->sendMessage(BuilderSession::MSG_CLASS_COLOR_MAP[$class] . $line);
-		}
+	/**
+	 * @param string $name
+	 *
+	 * @return IShape|null
+	 */
+	public function getSelection(string $name){
+		return $this->selections[$name] ?? null;
 	}
 
-	public function hasPermission(string $permission) : bool{
-		return $this->getOwner()->hasPermission($permission);
+	public function hasSelection(string $name) : bool{
+		return isset($this->selections[$name]);
 	}
 
-	public function isAvailable() : bool{
-		return true;
+	public function setSelection(string $name = "default", IShape $shape){
+		$this->selections[$name] = $shape;
+	}
+
+	public function removeSelection(string $name){
+		unset($this->selections[$name]);
 	}
 }

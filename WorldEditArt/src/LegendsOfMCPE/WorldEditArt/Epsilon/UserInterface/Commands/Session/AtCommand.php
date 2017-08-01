@@ -20,7 +20,7 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session;
 use falkirks\simplewarp\api\SimpleWarpAPI;
 use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
-use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeDescriptor;
+use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 use pocketmine\level\Location;
 use pocketmine\math\Vector3;
@@ -137,7 +137,7 @@ class AtCommand extends SessionCommand{
 				return;
 			}
 		}else{
-			switch(strtolower(array_shift($args))){
+			switch(mb_strtolower(array_shift($args))){
 				case "s":
 				case "spawn":
 					if(!$session->hasPermission(Consts::PERM_AT_SPAWN)){
@@ -205,7 +205,7 @@ class AtCommand extends SessionCommand{
 			$cmd = $this->sesCommands[$cmdName];
 			$color = BuilderSession::MSG_CLASS_COLOR_MAP[BuilderSession::MSG_CLASS_LOADING];
 			$session->msg("Executing command " . TextFormat::AQUA . "//$cmdName " . implode(" ", $args) . " {$color}at " .
-				ShapeDescriptor::formatLocation($at, $color), BuilderSession::MSG_CLASS_LOADING);
+				UserFormat::formatLocation($at, $color), BuilderSession::MSG_CLASS_LOADING);
 			$session->executeAtLocation($at, function() use($session, $cmd, $args){
 				$cmd->run($session, $args);
 			});

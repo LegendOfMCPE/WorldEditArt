@@ -17,8 +17,6 @@ declare(strict_types=1);
 
 namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
-use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\IShape;
-
 class ConstructionZone{
 	const LOCK_MODE_EDIT = 1;
 	const LOCK_MODE_BLOCKS = 2;

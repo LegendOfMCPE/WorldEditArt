@@ -20,8 +20,8 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Construction
 use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\ConstructionZone;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
-use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeDescriptor;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 use pocketmine\utils\TextFormat;
 
@@ -87,7 +87,7 @@ class ConstructionZoneCommand extends SessionCommand{
 		$allZones = $this->getPlugin()->getConstructionZones();
 		/** @var ConstructionZone[] $zones */
 		$zones = [];
-		if(isset($args[1]) && strtolower($args[1]) !== "here"){
+		if(isset($args[1]) && mb_strtolower($args[1]) !== "here"){
 			if(!isset($allZones[mb_strtolower($args[1])])){
 				$session->msg("No such zone called $args[1]", BuilderSession::MSG_CLASS_ERROR);
 				return;
@@ -100,7 +100,7 @@ class ConstructionZoneCommand extends SessionCommand{
 				}
 			}
 		}
-		switch(strtolower($args[0])){
+		switch(mb_strtolower($args[0])){
 			case "lock":
 				if(count($zones) > 1){
 					$session->msg("You are standing in " . count($zones) . " zones! Which one do you wish to lock?", BuilderSession::MSG_CLASS_WARN);
@@ -120,7 +120,7 @@ class ConstructionZoneCommand extends SessionCommand{
 					return;
 				}
 
-				if(!isset(ConstructionZone::LOCK_STRING_TO_ID[$modeName = strtolower($args[2] ?? "edit")])){
+				if(!isset(ConstructionZone::LOCK_STRING_TO_ID[$modeName = mb_strtolower($args[2] ?? "edit")])){
 					$session->msg("Unknown lock type \"$modeName\"! Possible values: edit (default), blocks, entry", BuilderSession::MSG_CLASS_ERROR);
 					return;
 				}
@@ -177,7 +177,7 @@ class ConstructionZoneCommand extends SessionCommand{
 
 	private function showZoneInfo(BuilderSession $session, ConstructionZone $zone){
 		$session->msg(implode("\n", [
-			"Range: " . ShapeDescriptor::describe($zone->getShape(), ShapeDescriptor::FORMAT_USER_RANGE),
+			"Range: " . UserFormat::describeShape($zone->getShape(), UserFormat::FORMAT_USER_RANGE),
 			"State: " . TextFormat::GOLD . ($zone->getLockingSession() === null ? "Not locked" :
 				sprintf("Locked by %s%s%s with mode %s\"%s\"",
 					TextFormat::AQUA, $zone->getLockingSession()->getOwner()->getName(), TextFormat::GOLD,

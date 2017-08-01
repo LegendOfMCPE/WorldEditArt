@@ -65,7 +65,7 @@ class ManageSessionsCommand extends WorldEditArtCommand{
 			return;
 		}
 		/** @var Player $sender */
-		switch(strtolower($args[0])){
+		switch(mb_strtolower($args[0])){
 			case "start":
 				if(isset($sessions[PlayerBuilderSession::SESSION_KEY])){
 					$sender->sendMessage("You have already started a player session!");

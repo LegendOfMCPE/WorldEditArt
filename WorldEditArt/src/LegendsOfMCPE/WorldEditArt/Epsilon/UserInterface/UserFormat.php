@@ -15,8 +15,10 @@
 
 declare(strict_types=1);
 
-namespace LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter;
+namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface;
 
+use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
+use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeWrapper;
 use pocketmine\level\Level;
 use pocketmine\level\Location;
 use pocketmine\level\Position;
@@ -25,18 +27,18 @@ use pocketmine\utils\TextFormat;
 use sofe\libgeom\Shape;
 use sofe\libgeom\shapes\CuboidShape;
 
-abstract class ShapeDescriptor{
+abstract class UserFormat{
 	const FORMAT_USER_DEFINITION = 1;
 	const FORMAT_USER_RANGE = 2;
 	const FORMAT_DEBUG = 3;
 
-	public static function describe(IShape $shape, int $format) : ShapeDescriptor{
+	public static function describeShape(IShape $shape, int $format) : string{
 		return self::_describe($shape, $format);
 	}
 
 	/**
-	 * @param IShape|Shape|ShapeWrapper $shape
-	 * @param int                       $format
+	 * @param \LegendsOfMCPE\WorldEditArt\Epsilon\IShape|Shape|ShapeWrapper $shape
+	 * @param int                                                           $format
 	 *
 	 * @return string
 	 */

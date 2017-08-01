@@ -15,7 +15,7 @@
 
 declare(strict_types=1);
 
-namespace LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter;
+namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
 use pocketmine\math\Vector3;
 

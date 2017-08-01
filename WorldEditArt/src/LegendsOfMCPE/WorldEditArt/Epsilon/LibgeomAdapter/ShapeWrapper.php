@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter;
 
+use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
 use pocketmine\math\Vector3;
 use sofe\libgeom\Shape;
 

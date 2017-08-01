@@ -81,7 +81,7 @@ permissions: # default for permission.default is "op"
             description: Allows managing selections
             children:
               worldeditart.builder.select.show:
-                description: Allows using //showsel
+                description: Allows using //sels
               worldeditart.builder.select.desel:
                 description: Allows using //desel
       worldeditart.admin:
