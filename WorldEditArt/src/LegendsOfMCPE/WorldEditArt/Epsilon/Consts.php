@@ -60,4 +60,6 @@ class Consts{
 	];
 	const PERM_CZONE_BUILDER_BLOCKS = "worldeditart.builder.czone.blocks";
 	const PERM_CZONE_BUILDER_ENTRY = "worldeditart.builder.czone.entry";
+	const PERM_SELECT_SHOW = "worldeditart.builder.select.show";
+	const PERM_SELECT_DESEL = "worldeditart.builder.select.desel";
 }

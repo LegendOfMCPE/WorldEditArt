@@ -48,14 +48,15 @@ You may also use `//bm` to list all bookmarks. Use `//bm tp <name>` to teleport 
 
 Note that bookmarks will also save your rotation.
 
-> `PROTIP` Use `//bm add` along with `//at` to save bookmarks at specified coordinates, e.g. `//at 1 2 3 bm add my_new_bookmark`.
+> `PROTIP` Use `//bm add` along with `//at` to save bookmarks at specified coordinates, e.g.
+> `//at 1 2 3 bm add my_new_bookmark`.
 
 ### Executing commands at mocked locations
 Many WorldEditArt commands depend on your current location, but it may be annoying to fly/teleport around all the time.
 WorldEditArt lets you execute commands as if you are at another location using the `//at` command.
 
-> **IMPORTANT:** `//at` only works with **WorldEditArt builder commands**, i.e. commands that require you to start a builder session to
-use.
+> **IMPORTANT:** `//at` only works with **WorldEditArt builder commands**, i.e. commands that require you to start a
+> builder session to use.
 
 There are four types of location mocking:
 
@@ -77,7 +78,8 @@ The [tilde notation](https://minecraft.gamepedia.com/Commands#Tilde_notation) is
 //at s <world> <command> [args ...]
 ```
 
-The above command will execute `//<command> [args ...]` at the world spawn of `<world>`. Your rotation will not be mocked.
+The above command will execute `//<command> [args ...]` at the world spawn of `<world>`. Your rotation will not be
+mocked.
 
 You may or may not add slashes in front of `<command>` when you type it; WorldEditArt will fix it automatically (since
 all WorldEditArt commands start with `//`).
@@ -122,10 +124,13 @@ To gain exclusive access to this construction zone, the builder can use the `/cz
 builders from doing WorldEditArt world-editing in this construction zone.
 
 Adding the `blocks` argument (i.e. `/cz lock <name> blocks`) will additionally block players from breaking/placing
-blocks in the construction zone (but does not affect block updates like water flowing, TNT, etc.), while adding the `entry` argument (i.e. `/cz lock <name> entry`) will additionally block entry,
-block breaking/placement and world editing. They can later be unlocked with the `/cz unlock <name>` command, but they
-are automatically unlocked when the builder session is closed (when the player quits, when the session is explicitly
-closed, when the server restarts, etc.).
+blocks in the construction zone (but does not affect block updates like water flowing, TNT, etc.), while adding the
+`entry` argument (i.e. `/cz lock <name> entry`) will additionally block entry, block breaking/placement and world
+editing. They can later be unlocked with the `/cz unlock <name>` command, but they are automatically unlocked when the
+builder session is closed (when the player quits, when the session is explicitly closed, when the server restarts, etc.)
 
 > `PROTIP` World-editing operations may cause industrial accidents such as trapping players inside a wall, overlapping
 > other builders' constructions, etc.
+
+### Selections
+Selections can be created for any shapes.

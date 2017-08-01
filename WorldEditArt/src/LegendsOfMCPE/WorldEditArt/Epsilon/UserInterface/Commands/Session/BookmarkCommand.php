@@ -39,7 +39,7 @@ class BookmarkCommand extends SessionCommand{
 					"enum_values" => ["add", "remove", "tp"],
 				],
 				[
-					"name" => "bookmark name",
+					"name" => "bookmarkName",
 					"type" => "string"
 				],
 			],

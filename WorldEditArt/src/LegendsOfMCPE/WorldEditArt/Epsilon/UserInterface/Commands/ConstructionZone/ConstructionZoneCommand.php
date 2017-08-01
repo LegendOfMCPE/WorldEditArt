@@ -35,12 +35,12 @@ class ConstructionZoneCommand extends SessionCommand{
 					"enum_values" => ["lock"],
 				],
 				[
-					"name" => "construction zone",
+					"name" => "constructionZoneName",
 					"type" => "string",
 					"optional" => true,
 				],
 				[
-					"name" => "lock type",
+					"name" => "lockType",
 					"type" => "stringenum",
 					"enum_values" => ["edit", "blocks", "entry"],
 					"optional" => true,
@@ -53,12 +53,12 @@ class ConstructionZoneCommand extends SessionCommand{
 					"enum_values" => ["lock"],
 				],
 				[
-					"name" => "construction zone",
+					"name" => "constructionZoneName",
 					"type" => "stringenum",
 					"enum_values" => ["here"],
 				],
 				[
-					"name" => "lock type",
+					"name" => "lockType",
 					"type" => "stringenum",
 					"enum_values" => ["edit", "blocks", "entry"],
 				]
@@ -71,7 +71,7 @@ class ConstructionZoneCommand extends SessionCommand{
 					"optional" => true,
 				],
 				[
-					"name" => "construction zone",
+					"name" => "constructionZoneName",
 					"type" => "string",
 					"optional" => true,
 				],
