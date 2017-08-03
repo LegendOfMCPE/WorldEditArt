@@ -23,8 +23,10 @@ use pocketmine\level\Level;
 use pocketmine\level\Location;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
+use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use sofe\libgeom\Shape;
+use sofe\libgeom\shapes\CircularFrustumShape;
 use sofe\libgeom\shapes\CuboidShape;
 
 abstract class UserFormat{
@@ -32,19 +34,20 @@ abstract class UserFormat{
 	const FORMAT_USER_RANGE = 2;
 	const FORMAT_DEBUG = 3;
 
-	public static function describeShape(IShape $shape, int $format) : string{
-		return self::_describe($shape, $format);
+	public static function describeShape(Server $server, IShape $shape, int $format) : string{
+		return self::_describe($server, $shape, $format);
 	}
 
 	/**
-	 * @param \LegendsOfMCPE\WorldEditArt\Epsilon\IShape|Shape|ShapeWrapper $shape
-	 * @param int                                                           $format
+	 * @param Server                    $server
+	 * @param IShape|Shape|ShapeWrapper $shape
+	 * @param int                       $format
 	 *
 	 * @return string
 	 */
-	private static function _describe($shape, int $format) : string{
+	private static function _describe(Server $server, $shape, int $format) : string{
 		if($shape instanceof ShapeWrapper){
-			return self::_describe($shape->getBaseShape(), $format);
+			return self::_describe($server, $shape->getBaseShape(), $format);
 		}
 		assert($shape instanceof Shape);
 		$baseColor = TextFormat::GOLD;
@@ -57,16 +60,17 @@ abstract class UserFormat{
 					case self::FORMAT_USER_DEFINITION:
 						return "{$baseColor}Cuboid ({$em1}pos1: " . self::formatVector($shape->getFrom()) . "{$baseColor}, " .
 							"{$em2}pos2: " . self::formatVector($shape->getTo()) .
-							" {$baseColor}in world {$em3}" . self::nameLevel($shape->getLevel());
+							" {$baseColor}in world {$em3}" . self::nameLevel($shape->getLevel($server));
 					case self::FORMAT_USER_RANGE:
 						return "{$baseColor}Cuboid {$em1}from " . self::formatVector($shape->getMin()) .
 							" {$em2}to pos2: " . self::formatVector($shape->getMax()) .
-							" {$baseColor}in world {$em3}" . self::nameLevel($shape->getLevel());
+							" {$baseColor}in world {$em3}" . self::nameLevel($shape->getLevel($server));
 					case self::FORMAT_DEBUG:
-						return "Cuboid(from={$shape->getFrom()}, to={$shape->getTo()}, level=" . self::nameLevel($shape->getLevel()) . ")";
+						return "Cuboid(from={$shape->getFrom()}, to={$shape->getTo()}, level=" . self::nameLevel($shape->getLevel($server)) . ")";
 				}
 				throw self::unknownFormat($format);
-			// TODO implement more
+			default:
+				return var_export($shape, true); // TODO will be fixed in multi-lang support
 		}
 	}
 

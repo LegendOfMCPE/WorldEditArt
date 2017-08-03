@@ -177,7 +177,7 @@ class ConstructionZoneCommand extends SessionCommand{
 
 	private function showZoneInfo(BuilderSession $session, ConstructionZone $zone){
 		$session->msg(implode("\n", [
-			"Range: " . UserFormat::describeShape($zone->getShape(), UserFormat::FORMAT_USER_RANGE),
+			"Range: " . UserFormat::describeShape($this->getPlugin()->getServer(), $zone->getShape(), UserFormat::FORMAT_USER_RANGE),
 			"State: " . TextFormat::GOLD . ($zone->getLockingSession() === null ? "Not locked" :
 				sprintf("Locked by %s%s%s with mode %s\"%s\"",
 					TextFormat::AQUA, $zone->getLockingSession()->getOwner()->getName(), TextFormat::GOLD,

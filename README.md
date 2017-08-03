@@ -133,4 +133,16 @@ builder session is closed (when the player quits, when the session is explicitly
 > other builders' constructions, etc.
 
 ### Selections
-Selections can be created for any shapes.
+Selections can be created for any shapes. A builder session can hold multiple selections at the same time. Some commands
+accept an optional `selectionName` argument; if not provided, the _default selection name_ is used.
+
+The default selection name is `default` by default. It can be changed using the `//selname` (`//seln`) command, e.g. `//selname a` to
+change the default selection name to `a`.
+
+All selections can be listed using the `//sel` command. A specific selection can be viewed using the `//sel <selectionName>` command, and deselected using the `//desel` command.
+
+> `PROTIP` While `//desel` is generally useless, deselecting a selection that you have already finished working on may prevent mistakes.
+
+#### Creating selections
+
+#### Wands

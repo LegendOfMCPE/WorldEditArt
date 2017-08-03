@@ -22,13 +22,13 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 
-class DeselectCommand extends SessionCommand{
+class DefaultSelectionNameCommand extends SessionCommand{
 	public function __construct(WorldEditArt $plugin){
-		parent::__construct($plugin, "/desel", "Deselect a selection", "//desel [name]", ["/deselect"], Consts::PERM_SELECT_DESEL, [
+		parent::__construct($plugin, "/selname", "Change your default selection", "/seln [defaultSelectionName]", ["/seln"], Consts::PERM_SELECT_DEFAULT, [
 			"default" => [
 				[
-					"name" => "selectionName",
 					"type" => "string",
+					"name" => "defaultSelectionName",
 					"optional" => true
 				]
 			]
@@ -36,11 +36,11 @@ class DeselectCommand extends SessionCommand{
 	}
 
 	public function run(BuilderSession $session, array $args){
-		if(!$session->hasSelection($name = $args[0] ?? $session->getDefaultSelectionName())){
-			$session->msg("You don't have a selection called \"$name\"", BuilderSession::MSG_CLASS_ERROR);
-			return;
+		if(isset($args[0])){
+			$session->setDefaultSelectionName($args[0]);
+			$session->msg("Set your default selection to $args[0]", BuilderSession::MSG_CLASS_SUCCESS);
+		}else{
+			$session->msg("Your default selection is $args[0]");
 		}
-		$session->removeSelection($name);
-		$session->msg("Removed selection \"$name\"", BuilderSession::MSG_CLASS_SUCCESS);
 	}
 }

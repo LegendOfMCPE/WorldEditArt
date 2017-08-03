@@ -27,7 +27,7 @@ use pocketmine\utils\TextFormat;
 
 class ShowSelectionCommand extends SessionCommand{
 	public function __construct(WorldEditArt $plugin){
-		parent::__construct($plugin, "/sels", "Show your selections", "//sels [name]", ["/sellist"], Consts::PERM_SELECT_SHOW, [
+		parent::__construct($plugin, "/sel", "Show your selections", "//sel [name]", ["/sellist"], Consts::PERM_SELECT_SHOW, [
 			"default" => [
 				[
 					"name" => "selectionName",
@@ -41,19 +41,25 @@ class ShowSelectionCommand extends SessionCommand{
 	public function run(BuilderSession $session, array $args){
 		if(isset($args[0])){
 			if(!$session->hasSelection($name = $args[0])){
-				$session->msg("You don't have a selection called $name. Use //sels to show all selections", BuilderSession::MSG_CLASS_ERROR);
+				$session->msg("You don't have a selection called $name. Use //sel to show all selections", BuilderSession::MSG_CLASS_ERROR);
 				return;
 			}
 			$this->showSelection($session, $name, $session->getSelection($name));
 			return;
 		}
 		$sels = $session->getSelections();
+		$d = $session->getDefaultSelectionName();
+		if(isset($sels[$d])){
+			$session->msg(UserFormat::describeShape($this->getPlugin()->getServer(), $sels[$d], UserFormat::FORMAT_USER_DEFINITION), BuilderSession::MSG_CLASS_INFO, "Default selection " . TextFormat::AQUA . "\"$d\"");
+		}
 		foreach($sels as $name => $sel){
-			$this->showSelection($session, $name, $sel);
+			if($name !== $d){
+				$this->showSelection($session, $name, $sel);
+			}
 		}
 	}
 
 	private function showSelection(BuilderSession $session, string $name, IShape $shape, int $class = BuilderSession::MSG_CLASS_INFO){
-		$session->msg(UserFormat::describeShape($shape, UserFormat::FORMAT_USER_DEFINITION), $class, "Selection " . TextFormat::AQUA . "\"$name\"");
+		$session->msg(UserFormat::describeShape($session->getPlugin()->getServer(), $shape, UserFormat::FORMAT_USER_DEFINITION), $class, "Selection " . TextFormat::AQUA . "\"$name\"");
 	}
 }

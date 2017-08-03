@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeWrapper;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\WandManager;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\WorldEditArtCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\PlayerBuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\PlayerEventListener;
@@ -36,6 +37,8 @@ class WorldEditArt extends PluginBase{
 
 	/** @var BuilderSession[][]|\SplObjectStorage <CommandSender -> BuilderSession[]> */
 	private $builderSessionMap;
+	/** @var WandManager */
+	private $wandManager;
 
 	public function onEnable(){
 		SpoonDetector::printSpoon($this);
@@ -44,13 +47,16 @@ class WorldEditArt extends PluginBase{
 		$this->loadConstructionZones();
 
 		$this->builderSessionMap = new \SplObjectStorage();
+		$this->wandManager = new WandManager($this);
 
 		WorldEditArtCommand::registerAll($this);
 		new PlayerEventListener($this);
 	}
 
 	public function onDisable(){
-		$this->saveConstructionZones();
+		if(isset($this->constructionZones)){
+			$this->saveConstructionZones();
+		}
 	}
 
 	public function onLoad(){
@@ -115,6 +121,11 @@ class WorldEditArt extends PluginBase{
 	 */
 	public function getConstructionZones() : array{
 		return $this->constructionZones;
+	}
+
+
+	public function getWandManager() : WandManager{
+		return $this->wandManager;
 	}
 
 

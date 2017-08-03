@@ -37,7 +37,6 @@ abstract class BuilderSession{
 		BuilderSession::MSG_CLASS_WARN => TextFormat::YELLOW,
 		BuilderSession::MSG_CLASS_ERROR => TextFormat::RED,
 	];
-	const DEFAULT_SELECTION_NAME = "a";
 
 	/** @var WorldEditArt */
 	private $plugin;
@@ -48,6 +47,8 @@ abstract class BuilderSession{
 	private $bookmarks = [];
 	/** @var IShape[] */
 	private $selections = [];
+	/** @var string */
+	private $defaultSelectionName = "default";
 
 	public function __construct(WorldEditArt $plugin){
 		$this->plugin = $plugin;
@@ -151,11 +152,19 @@ abstract class BuilderSession{
 		return isset($this->selections[$name]);
 	}
 
-	public function setSelection(string $name = "default", IShape $shape){
+	public function setSelection(string $name, IShape $shape){
 		$this->selections[$name] = $shape;
 	}
 
 	public function removeSelection(string $name){
 		unset($this->selections[$name]);
+	}
+
+	public function getDefaultSelectionName() : string{
+		return $this->defaultSelectionName;
+	}
+
+	public function setDefaultSelectionName(string $defaultSelectionName){
+		$this->defaultSelectionName = $defaultSelectionName;
 	}
 }

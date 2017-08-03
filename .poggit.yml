@@ -8,5 +8,7 @@ projects:
       - src: BlockHorizons/libgeom/libgeom
         version: "^2.0"
       - src: Falkirks/spoondetector/spoondetector
-        version: "^0"
+        version: "^0.0"
+      - src: SOF3/libschematic/libschematic
+        version: "^0.0"
 ...
