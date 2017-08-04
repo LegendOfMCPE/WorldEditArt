@@ -1,8 +1,7 @@
 name: WorldEditArt-Epsilon
 version: 4.1.0.0 # {code name (rewrite)}.{major version (API change)}.{minor version (API addition)}.{patch version (identical API)}
 website: https://github.com/LegendOfMCPE/WorldEditArt/blob/v4.1.0/README.md # this is uesd in StatusCommand.php
-authors:
-- SOFe
+author: SOFe
 
 main: LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt
 api:
