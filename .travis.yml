@@ -7,4 +7,4 @@ install:
 - "wget -O - https://poggit.pmmp.io/res/travisInstall.sh | bash -s - || true"
 
 script:
-- "if [ -f unstaged/WorldEditArt-Epsilon.phar ] ; then wget -O - https://poggit.pmmp.io/res/travisScript.sh | bash -s - WorldEditArt-Epsilon WorldEditArt-Epsilon ; else true ; fi"
+- "if [ -f ${TRAVIS_BUILD_DIR}/../PocketMine/unstaged/WorldEditArt-Epsilon.phar ] ; then wget -O - https://poggit.pmmp.io/res/travisScript.sh | bash -s - WorldEditArt-Epsilon WorldEditArt-Epsilon ; else true ; fi"
