@@ -7,4 +7,4 @@ install:
 - wget -O - https://poggit.pmmp.io/res/travisInstall.sh | bash -s -
 
 script:
-- wget -O - https://poggit.pmmp.io/res/travisInstall.sh | bash -s - WorldEditArt WorldEditArt-Epsilon
+- wget -O - https://poggit.pmmp.io/res/travisScript.sh | bash -s - WorldEditArt WorldEditArt-Epsilon
