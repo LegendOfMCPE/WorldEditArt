@@ -4,7 +4,7 @@ sudo: false
 dist: trusty
 
 install:
-- wget -O - https://poggit.pmmp.io/res/travisInstall.sh | bash -s -
+- "wget -O - https://poggit.pmmp.io/res/travisInstall.sh | bash -s - || true"
 
 script:
-- wget -O - https://poggit.pmmp.io/res/travisScript.sh | bash -s - WorldEditArt-Epsilon WorldEditArt-Epsilon
+- "[ -f unstaged/WorldEditArt-Epsilon.phar] && wget -O - https://poggit.pmmp.io/res/travisScript.sh | bash -s - WorldEditArt-Epsilon WorldEditArt-Epsilon"
