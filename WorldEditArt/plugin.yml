@@ -9,7 +9,8 @@ api:
 - 3.0.0-ALPHA7
 extensions:
   mbstring: "*"
-softdepend: [SimpleWarp]
+softdepend:
+- SimpleWarp
 
 permissions: # default for permission.default is "op"
   worldeditart:
