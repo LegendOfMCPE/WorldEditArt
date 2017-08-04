@@ -18,6 +18,8 @@ declare(strict_types=1);
 namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
 use pocketmine\math\Vector3;
+use sofe\libgeom\LibgeomBinaryStream;
+use sofe\libgeom\Shape;
 
 /**
  * Adapter interface for exposing libgeom shapes to other plugins
@@ -34,4 +36,6 @@ interface IShape{
 	public function marginalDistance(Vector3 $vector) : float;
 
 	public function getChunksInvolved() : array;
+
+	public function getBaseShape() : Shape;
 }

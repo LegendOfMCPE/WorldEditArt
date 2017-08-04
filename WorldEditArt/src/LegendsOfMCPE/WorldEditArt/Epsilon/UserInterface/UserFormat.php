@@ -26,7 +26,6 @@ use pocketmine\math\Vector3;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use sofe\libgeom\Shape;
-use sofe\libgeom\shapes\CircularFrustumShape;
 use sofe\libgeom\shapes\CuboidShape;
 
 abstract class UserFormat{
@@ -72,6 +71,7 @@ abstract class UserFormat{
 			default:
 				return var_export($shape, true); // TODO will be fixed in multi-lang support
 		}
+		// TODO handle incomplete shapes
 	}
 
 	public static function formatLocation(Location $location, string $normalColor) : string{

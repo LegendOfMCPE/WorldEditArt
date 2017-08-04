@@ -85,6 +85,11 @@ permissions: # default for permission.default is "op"
                 description: Allows using //seln
               worldeditart.builder.select.desel:
                 description: Allows using //desel
+              worldeditart.builder.select.set:
+                description: Allows modifying the selection shape
+                children:
+                  worldeditart.builder.select.set.cuboid:
+                    description: Allows modifying the selection shape into a cuboid
       worldeditart.admin:
         description: Permissions for admins
         children:

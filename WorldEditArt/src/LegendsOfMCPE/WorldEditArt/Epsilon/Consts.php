@@ -63,4 +63,5 @@ class Consts{
 	const PERM_SELECT_SHOW = "worldeditart.builder.select.show";
 	const PERM_SELECT_DEFAULT = "worldeditart.builder.select.default";
 	const PERM_SELECT_DESEL = "worldeditart.builder.select.desel";
+	const PERM_SELECT_SET_CUBOID = "worldeditart.builder.select.set.cuboid";
 }

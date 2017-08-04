@@ -17,14 +17,18 @@ declare(strict_types=1);
 
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand;
 
+use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl\CuboidPosWand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 
 class WandManager{
 	private $plugin;
 	private $wands = [];
 
-	public function __construct(WorldEditArt$plugin){
+	public function __construct(WorldEditArt $plugin){
 		$this->plugin = $plugin;
+
+		$this->addWand(new CuboidPosWand(true));
+		$this->addWand(new CuboidPosWand(false));
 	}
 
 	public function addWand(Wand $wand){

@@ -103,7 +103,7 @@ class WorldEditArt extends PluginBase{
 		$stream->putByte(1);
 		$stream->putUnsignedVarInt(count($this->constructionZones));
 		foreach($this->constructionZones as $zone){
-			$shape = $zone->getShape();
+			$shape = $zone->getShape()->getBaseShape();
 			$stream->putString($zone->getName());
 			$stream->putString(get_class($shape));
 			$shape->toBinary($stream);
