@@ -44,8 +44,8 @@ class ConstructionZone{
 	/**
 	 * ConstructionZone constructor.
 	 *
-	 * @param string              $name
-	 * @param IShape               $shape
+	 * @param string $name
+	 * @param IShape $shape
 	 */
 	public function __construct($name, IShape $shape){
 		$this->name = $name;

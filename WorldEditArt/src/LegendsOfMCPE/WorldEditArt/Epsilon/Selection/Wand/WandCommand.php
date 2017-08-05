@@ -37,8 +37,8 @@ class WandCommand extends SessionCommand{
 					"type" => "string",
 					"name" => "selectionName",
 					"optional" => true,
-				]
-			]
+				],
+			],
 		]);
 	}
 

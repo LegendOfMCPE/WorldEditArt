@@ -38,8 +38,8 @@ class ManageSessionsCommand extends WorldEditArtCommand{
 					"name" => "passphrase",
 					"type" => "string",
 					"optional" => true,
-				]
-			]
+				],
+			],
 		]);
 	}
 

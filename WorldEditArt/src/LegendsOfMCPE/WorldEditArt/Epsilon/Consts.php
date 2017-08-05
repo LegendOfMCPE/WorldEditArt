@@ -38,10 +38,12 @@ class Consts{
 	const PERM_AT_SPAWN = "worldeditart.builder.at.spawn";
 	const PERM_AT_BOOKMARK = "worldeditart.builder.at.bookmark";
 	const PERM_AT_WARP = "worldeditart.builder.at.warp";
+	const PERM_AT_PLAYER = "worldeditart.builder.at.player";
 	const PERM_AT_ANY = [
 		Consts::PERM_AT_ABSOLUTE,
 		Consts::PERM_AT_RELATIVE,
 		Consts::PERM_AT_SPAWN,
+		Consts::PERM_AT_PLAYER,
 		Consts::PERM_AT_WARP,
 	];
 	const PERM_CZONE_BUILDER_VIEW = "worldeditart.builder.czone.view";
@@ -56,7 +58,7 @@ class Consts{
 		Consts::PERM_CZONE_BUILDER_LOCK_BLOCKS,
 		Consts::PERM_CZONE_BUILDER_LOCK_EDIT,
 		Consts::PERM_CZONE_BUILDER_UNLOCK_SELF,
-		Consts::PERM_CZONE_BUILDER_UNLOCK_OTHER
+		Consts::PERM_CZONE_BUILDER_UNLOCK_OTHER,
 	];
 	const PERM_CZONE_BUILDER_BLOCKS = "worldeditart.builder.czone.blocks";
 	const PERM_CZONE_BUILDER_ENTRY = "worldeditart.builder.czone.entry";

@@ -48,7 +48,7 @@ class PlayerBuilderSession extends BuilderSession{
 	}
 
 	protected function getRealLocation() : Location{
-		return $this->player->asLocation();
+		return $this->player;
 	}
 
 	public function msg(string $message, int $class = BuilderSession::MSG_CLASS_INFO, string $title = null){

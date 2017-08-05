@@ -44,7 +44,7 @@ class ConstructionZoneCommand extends SessionCommand{
 					"type" => "stringenum",
 					"enum_values" => ["edit", "blocks", "entry"],
 					"optional" => true,
-				]
+				],
 			],
 			"lock_here" => [
 				[
@@ -61,7 +61,7 @@ class ConstructionZoneCommand extends SessionCommand{
 					"name" => "lockType",
 					"type" => "stringenum",
 					"enum_values" => ["edit", "blocks", "entry"],
-				]
+				],
 			],
 			"other" => [
 				[

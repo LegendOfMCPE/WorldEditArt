@@ -48,8 +48,8 @@ class WorldEditArt extends PluginBase{
 
 		$this->builderSessionMap = new \SplObjectStorage();
 		$this->wandManager = new WandManager($this);
+		WorldEditArtCommand::registerAll($this, $this->wandManager->getCommands());
 
-		WorldEditArtCommand::registerAll($this);
 		new PlayerEventListener($this);
 	}
 

@@ -23,6 +23,7 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 class WandManager{
 	private $plugin;
 	private $wands = [];
+	private $cmds = [];
 
 	public function __construct(WorldEditArt $plugin){
 		$this->plugin = $plugin;
@@ -33,6 +34,11 @@ class WandManager{
 
 	public function addWand(Wand $wand){
 		$this->wands[$wand->getName()] = $wand;
-		$this->plugin->getServer()->getCommandMap()->register("wand", new WandCommand($this->plugin, $wand));
+		$this->plugin->getServer()->getCommandMap()->register("wand",
+			$this->cmds[] = new WandCommand($this->plugin, $wand));
+	}
+
+	public function getCommands() : array{
+		return $this->cmds;
 	}
 }

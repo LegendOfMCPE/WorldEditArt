@@ -49,6 +49,8 @@ permissions: # default for permission.default is "op"
                 description: Allows running session commands mocking location as bookmark
               worldeditart.builder.at.spawn:
                 description: Allows running session commands mocking location as spawn
+              worldeditart.builder.at.player:
+                description: Allows running session commands mocking location as another player
               worldeditart.builder.at.warp:
                 description: Allows running session commands mocking location as SimpleWarp warp
           worldeditart.builder.czone:

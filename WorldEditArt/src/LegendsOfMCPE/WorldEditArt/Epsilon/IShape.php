@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
 use pocketmine\math\Vector3;
-use sofe\libgeom\LibgeomBinaryStream;
 use sofe\libgeom\Shape;
 
 /**

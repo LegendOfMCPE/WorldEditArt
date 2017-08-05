@@ -40,7 +40,7 @@ class BookmarkCommand extends SessionCommand{
 				],
 				[
 					"name" => "bookmarkName",
-					"type" => "string"
+					"type" => "string",
 				],
 			],
 			"list" => [],

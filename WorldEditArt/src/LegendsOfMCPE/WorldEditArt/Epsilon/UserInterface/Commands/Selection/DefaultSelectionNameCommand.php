@@ -29,9 +29,9 @@ class DefaultSelectionNameCommand extends SessionCommand{
 				[
 					"type" => "string",
 					"name" => "defaultSelectionName",
-					"optional" => true
-				]
-			]
+					"optional" => true,
+				],
+			],
 		]);
 	}
 

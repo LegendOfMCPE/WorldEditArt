@@ -108,6 +108,14 @@ If the server has [SimpleWarp](https://github.com/Falkirks/SimpleWarp) enabled, 
 
 This command is similar to bookmarks, except that the rotation will **not** be mocked.
 
+#### by player
+```
+//at p <player> <command> [args ...]
+```
+
+The above command will execute `//<command> [args ...]` at the location of the player named `<player>`. The rotation
+**will** be mocked as the player's rotation.
+
 ### Construction zones
 > `ADMIN` Construction zones are disabled by default. Set `construction zone check` in config.yml to `true` to enable.
 

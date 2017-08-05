@@ -79,7 +79,7 @@ abstract class BuilderSession{
 	}
 
 	public function getLocation() : Location{
-		return $this->overridingLocation ?? $this->getRealLocation();
+		return ($this->overridingLocation ?? $this->getRealLocation())->asLocation();
 	}
 
 	public function executeAtLocation(Location $location, callable $function){

@@ -29,9 +29,9 @@ class DeselectCommand extends SessionCommand{
 				[
 					"name" => "selectionName",
 					"type" => "string",
-					"optional" => true
-				]
-			]
+					"optional" => true,
+				],
+			],
 		]);
 	}
 

@@ -17,7 +17,12 @@ declare(strict_types=1);
 
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands;
 
+use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\WandCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\ConstructionZone\ConstructionZoneCommand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\DefaultSelectionNameCommand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\DeselectCommand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\Edit\CuboidCommand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\ShowSelectionCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\AtCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\BookmarkCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\ManageSessionsCommand;
@@ -43,7 +48,7 @@ abstract class WorldEditArtCommand extends Command implements PluginIdentifiable
 			foreach($formats as $name => $format){
 				$arr->{$name} = [
 					"input" => ["parameters" => $format],
-					"output" => new stdClass()
+					"output" => new stdClass(),
 				];
 			}
 			$this->commandData["overloads"] = $arr;
@@ -58,11 +63,22 @@ abstract class WorldEditArtCommand extends Command implements PluginIdentifiable
 		return $this->plugin;
 	}
 
-	public static function registerAll(WorldEditArt $plugin){
+	public function getFormats(){
+		return $this->formats;
+	}
+
+	/**
+	 * @param WorldEditArt  $plugin
+	 * @param WandCommand[] $cmds Wand commands
+	 */
+	public static function registerAll(WorldEditArt $plugin, array $cmds){
 		// session commands except //@
-		$cmds = [];
 		$cmds[] = new ConstructionZoneCommand($plugin);
 		$cmds[] = new BookmarkCommand($plugin);
+		$cmds[] = new ShowSelectionCommand($plugin);
+		$cmds[] = new DeselectCommand($plugin);
+		$cmds[] = new DefaultSelectionNameCommand($plugin);
+		$cmds[] = new CuboidCommand($plugin);
 		// then //@
 		$at = new AtCommand($plugin, $cmds);
 		$cmds[] = $at;
@@ -70,9 +86,5 @@ abstract class WorldEditArtCommand extends Command implements PluginIdentifiable
 		$cmds[] = new WeaStatusCommand($plugin);
 		$cmds[] = new ManageSessionsCommand($plugin);
 		$plugin->getServer()->getCommandMap()->registerAll("wea", $cmds);
-	}
-
-	public function getFormats(){
-		return $this->formats;
 	}
 }

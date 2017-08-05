@@ -33,8 +33,8 @@ class ShowSelectionCommand extends SessionCommand{
 					"name" => "selectionName",
 					"type" => "string",
 					"optional" => true,
-				]
-			]
+				],
+			],
 		]);
 	}
 

@@ -69,7 +69,7 @@ class AtCommand extends SessionCommand{
 				[
 					"name" => "position",
 					"type" => "blockpos",
-				]
+				],
 			],
 			"bySpawn" => [
 				[
@@ -91,6 +91,17 @@ class AtCommand extends SessionCommand{
 				[
 					"name" => "bookmark",
 					"type" => "string",
+				],
+			],
+			"byPlayer" => [
+				[
+					"name" => "type",
+					"type" => "stringenum",
+					"enum_values" => ["player", "p"],
+				],
+				[
+					"name" => "player",
+					"type" => "target",
 				],
 			],
 		];
@@ -115,7 +126,7 @@ class AtCommand extends SessionCommand{
 		}
 		$warp = isset($this->swApi) ? "|{w <warp>}}" : "";
 		parent::__construct($plugin, "/at", "Execute a session command mocking your location", /** @lang text */
-			"//at {<x> <y> <z>}|{s <world>}|{b <bookmark>}{$warp} <command...>", ["/@"], implode(";", Consts::PERM_AT_ANY), $formats);
+			"//at {<x> <y> <z>}|{s <world>}|{b <bookmark>}|{p <player>}{$warp} <command...>", ["/@"], implode(";", Consts::PERM_AT_ANY), $formats);
 	}
 
 	public function run(BuilderSession $session, array $args){
@@ -163,6 +174,19 @@ class AtCommand extends SessionCommand{
 						return;
 					}
 					break;
+				case "p":
+				case "player":
+					if(!$session->hasPermission(Consts::PERM_AT_PLAYER)){
+						$session->msg("You don't have permission to use //at player", BuilderSession::MSG_CLASS_ERROR);
+						return;
+					}
+					$player = $session->getPlugin()->getServer()->getPlayerExact($pname = array_shift($args));
+					if($at === null){
+						$session->msg("No player called \"$pname\"", BuilderSession::MSG_CLASS_ERROR);
+						return;
+					}
+					$at = $player->getLocation();
+					break;
 				case "w":
 				case "warp":
 					if(!isset($this->swApi)){
@@ -206,7 +230,7 @@ class AtCommand extends SessionCommand{
 			$color = BuilderSession::MSG_CLASS_COLOR_MAP[BuilderSession::MSG_CLASS_LOADING];
 			$session->msg("Executing command " . TextFormat::AQUA . "//$cmdName " . implode(" ", $args) . " {$color}at " .
 				UserFormat::formatLocation($at, $color), BuilderSession::MSG_CLASS_LOADING);
-			$session->executeAtLocation($at, function() use($session, $cmd, $args){
+			$session->executeAtLocation($at, function() use ($session, $cmd, $args){
 				$cmd->run($session, $args);
 			});
 		}else{
