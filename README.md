@@ -144,13 +144,88 @@ builder session is closed (when the player quits, when the session is explicitly
 Selections can be created for any shapes. A builder session can hold multiple selections at the same time. Some commands
 accept an optional `selectionName` argument; if not provided, the _default selection name_ is used.
 
-The default selection name is `default` by default. It can be changed using the `//selname` (`//seln`) command, e.g. `//selname a` to
-change the default selection name to `a`.
+The default selection name is `default` by default. It can be changed using the `//selname` (`//seln`) command, e.g.
+`//selname a` to change the default selection name to `a`.
 
-All selections can be listed using the `//sel` command. A specific selection can be viewed using the `//sel <selectionName>` command, and deselected using the `//desel` command.
+All selections can be listed using the `//sel` command. A specific selection can be viewed using the
+`//sel <selectionName>` command, and deselected using the `//desel` command.
 
-> `PROTIP` While `//desel` is generally useless, deselecting a selection that you have already finished working on may prevent mistakes.
+> `PROTIP` While `//desel` is generally useless, deselecting a selection that you have already finished working on may
+> prevent mistakes.
 
-#### Creating selections
+Selections can be created and modified using wands and commands. Some selections cannot be created directly, and you
+have to modify a created selection.
+
+> `PROTIP` All wand commands and commands for creating/modifying selections can be used with `//at`.
 
 #### Wands
+Wands are used to select positions to create/modify selections. Use the wand on a block, and the block's position will
+be used to modify your selection depending on the wand type.
+
+The wand type depends on the item (neglecting the damage) you are holding and how you click the block. You can modify
+the wand types using the `//wand <wandType> <itemName> <clickType>`. Different wand types are used for different shapes,
+which will be explained below. `itemName` is the item you are holding, and `clickType` is how you click the block
+(`left`/`right`, where `left` is equivalent to long-clicking a block <sup>(on mobile)</sup> or left-clicking a block
+<sup>(on PC)</sup>, and `right` is equivalent to tapping a block <sup>(on mobile)</sup> or right-clicking a block
+<sup>(on PC)</sup>.
+
+The wand's item is independent from the item's damage. For example, a coal item and a charcoal item are identified as
+the same item, and a broken golden hoe is the same as a brand new golden hoe, but a golden hoe is different from an iron
+hoe.
+
+Each wand has an equivalent command, e.g. the `pos1` command has an equivalent command `//pos1`. Wand commands
+are equivalent to using the wand on **the block your feet are _in_**. Here are a few common cases:
+
+* **Swimming in the middle of a lake**: Since your feet are in water, the highest water block is used.
+* **Floating at the edge of a well** (where you are trapped in the water): Sometimes you are in the air block above the
+water, and sometimes you are in the water block.
+* **Standing on a _full_ block**: The air block above the full block is used.
+  * This also includes upper slabs, inverted stairs, the upper step of stairs and closed trapdoors placed on the upper half, etc.
+* **Standing on an _incomplete_ block**: The incomplete block is used.
+  * This includes both "thin" and "thick" blocks, such as chests, soul sand, lower slabs, redstone repeaters, cauldrons, etc.
+
+The wand will apply to your default selection name. You may add an argument behind wand commands to specify the
+selection to modify, e.g. `//pos1 selection-2`.
+
+If you use a wand for a shape different from your current selection's shape, your current selection will be deleted,
+replaced by the new shape.
+
+Note that it is unreasonable for a shape to have its points in different worlds, so your current selection will also be
+deleted if you use any wands in a different world. You may temporarily disable wands using the `//wand true|false` command.
+
+Selection beyond the height limit is allowed. They will be automatically skipped like non-construction-area blocks if
+you try to change them with block-setting commands.
+
+#### Cuboid Selections
+A cuboid selection is a rectangular box oriented vertically.
+
+##### Wands
+There are two wands -- `pos1` and `pos2`. When both wand positions are set, the selection will become a valid cuboid
+selection, containing all blocks between `pos1` and `pos2` along the three axes, **including `pos1` and `pos2`
+themselves**, so you can select a single block, a line of blocks, a wall/floor of blocks or a cuboid of blocks using
+cuboid selections.
+
+The `pos1` and `pos2` values will be preserved, so if you use either wand again in the same world, the other position
+will be kept. For example, using `pos1` again will only change the position of `pos1` but does not affect `pos2`.
+
+`//pos1` and `//pos2` can be aliased as `//1` and `//2`.
+
+##### Commands
+###### Shoot
+The `//cub s <distance>` command sets `pos1` as your current location, and `pos2` as `<distance>` blocks to the
+direction you are looking at.
+
+###### Grow
+The `//cub g <-x> <-y> <-z> <+x> <+y> <+z>` command will expand your cuboid selection. If you do not have a selection
+or your current selection was not a cuboid, it will take a 1&cross;1&cross;1 cuboid (the block you are standing **in**).
+
+The order of `pos1` and `pos2` will not be preserved -- after running `//cub g`, `pos1` is always the minimum (most
+negative) point in your cuboid, and `pos2` is always the maximum (most positive) point.
+
+###### SkyBed
+The `//cub skybed` (`//cub sb`) command will move `pos1` vertically to the lowest bedrock level (y=0) and `pos2` to the
+build height level (y=255 right now).
+
+> `PROTIP` The SkyBed command can be used to create "area" selections. For example, if you wish to mark the whole area
+> from bedrock to the sky as a construction area, SkyBed can help you select the area without teleporting to the lowest
+> and highest levels.

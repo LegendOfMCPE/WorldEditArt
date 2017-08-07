@@ -17,6 +17,69 @@ declare(strict_types=1);
 
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\Selection;
 
-class PolygonFrustumShapeBuilder{
+use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
+use pocketmine\math\Vector3;
+use sofe\libgeom\LibgeomBinaryStream;
+use sofe\libgeom\Shape;
 
+class PolygonFrustumShapeBuilder extends Shape implements IShape{
+	public function getBaseShape() : Shape{
+		return $this;
+	}
+
+	public function isInside(Vector3 $vector) : bool{
+		throw new \AssertionError("Incomplete shape");
+	}
+
+	protected function estimateSize() : int{
+		throw new \AssertionError("Incomplete shape");
+	}
+
+	public function getSolidStream(Vector3 $vector) : \Generator{
+		throw new \AssertionError("Incomplete shape");
+	}
+
+	public function getShallowStream(Vector3 $vector, float $padding, float $margin) : \Generator{
+		throw new \AssertionError("Incomplete shape");
+	}
+
+	public function marginalDistance(Vector3 $vector) : float{
+		throw new \AssertionError("Incomplete shape");
+	}
+
+	public function getChunksInvolved() : array{
+		throw new \AssertionError("Incomplete shape");
+	}
+
+	public function toBinary(LibgeomBinaryStream $stream){
+		throw new \AssertionError("Incomplete shape");
+	}
+
+	public function getMinX() : int{
+		throw new \AssertionError("Incomplete shape");
+	}
+
+	public function getMinY() : int{
+		throw new \AssertionError("Incomplete shape");
+	}
+
+	public function getMinZ() : int{
+		throw new \AssertionError("Incomplete shape");
+	}
+
+	public function getMaxX() : int{
+		throw new \AssertionError("Incomplete shape");
+	}
+
+	public function getMaxY() : int{
+		throw new \AssertionError("Incomplete shape");
+	}
+
+	public function getMaxZ() : int{
+		throw new \AssertionError("Incomplete shape");
+	}
+
+	public function isComplete() : bool{
+		return false;
+	}
 }

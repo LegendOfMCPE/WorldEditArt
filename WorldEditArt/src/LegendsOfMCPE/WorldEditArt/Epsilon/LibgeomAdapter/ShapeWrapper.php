@@ -59,11 +59,11 @@ class ShapeWrapper implements IShape{
 		return $this->baseShape->getEstimatedSize();
 	}
 
-	public function getSolidStream(Vector3 $vector) : \Iterator{
+	public function getSolidStream(Vector3 $vector) : \Generator{
 		return $this->baseShape->getSolidStream($vector);
 	}
 
-	public function getShallowStream(Vector3 $vector, float $padding, float $margin) : \Iterator{
+	public function getShallowStream(Vector3 $vector, float $padding, float $margin) : \Generator{
 		return $this->baseShape->getShallowStream($vector, $padding, $margin);
 	}
 

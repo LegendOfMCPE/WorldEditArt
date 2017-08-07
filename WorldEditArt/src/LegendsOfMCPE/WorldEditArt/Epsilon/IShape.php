@@ -28,9 +28,9 @@ interface IShape{
 
 	public function getEstimatedSize() : int;
 
-	public function getSolidStream(Vector3 $vector) : \Iterator;
+	public function getSolidStream(Vector3 $vector) : \Generator;
 
-	public function getShallowStream(Vector3 $vector, float $padding, float $margin) : \Iterator;
+	public function getShallowStream(Vector3 $vector, float $padding, float $margin) : \Generator;
 
 	public function marginalDistance(Vector3 $vector) : float;
 
