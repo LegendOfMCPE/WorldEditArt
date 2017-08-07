@@ -46,7 +46,7 @@ class WorldEditArt extends PluginBase{
 		$this->getConfig();
 		$this->loadConstructionZones();
 
-		$this->builderSessionMap = new \SplObjectStorage();
+		$this->builderSessionMap = [];
 		$this->wandManager = new WandManager($this);
 		WorldEditArtCommand::registerAll($this, $this->wandManager->getCommands());
 
@@ -75,8 +75,9 @@ class WorldEditArt extends PluginBase{
 		if(is_file($fn = $this->getDataFolder() . "constructionZones.dat")){
 			try{
 				$stream = new LibgeomBinaryStream(file_get_contents($fn));
-				if($stream->getShort() !== 1){
-					throw new UnsupportedOperationException("Unsupported constructionZones.dat version");
+				$version = $stream->getShort();
+				if($version !== 1){
+					throw new UnsupportedOperationException("Unsupported constructionZones.dat version ($version, only supports 1)");
 				}
 				$count = $stream->getUnsignedVarInt();
 				$this->constructionZones = [];
@@ -100,7 +101,7 @@ class WorldEditArt extends PluginBase{
 
 	private function saveConstructionZones(){
 		$stream = new LibgeomBinaryStream();
-		$stream->putByte(1);
+		$stream->putShort(1); // version
 		$stream->putUnsignedVarInt(count($this->constructionZones));
 		foreach($this->constructionZones as $zone){
 			$shape = $zone->getShape()->getBaseShape();
@@ -137,10 +138,10 @@ class WorldEditArt extends PluginBase{
 	 * @return PlayerBuilderSession
 	 */
 	public function startPlayerSession(Player $player) : PlayerBuilderSession{
-		if(!isset($this->builderSessionMap[$player])){
-			$this->builderSessionMap[$player] = [];
+		if(!isset($this->builderSessionMap[$player->getId()])){
+			$this->builderSessionMap[$player->getId()] = [];
 		}
-		$this->builderSessionMap[$player][PlayerBuilderSession::SESSION_KEY] = $session
+		$this->builderSessionMap[$player->getId()][PlayerBuilderSession::SESSION_KEY] = $session
 			= new PlayerBuilderSession($this, $player);
 		return $session;
 	}
@@ -151,8 +152,8 @@ class WorldEditArt extends PluginBase{
 	 * @param Player $player
 	 */
 	public function closePlayerSession(Player $player){
-		$this->builderSessionMap[$player][PlayerBuilderSession::SESSION_KEY]->close();
-		unset($this->builderSessionMap[$player][PlayerBuilderSession::SESSION_KEY]);
+		$this->builderSessionMap[$player->getId()][PlayerBuilderSession::SESSION_KEY]->close();
+		unset($this->builderSessionMap[$player->getId()][PlayerBuilderSession::SESSION_KEY]);
 	}
 
 	/**
@@ -163,7 +164,7 @@ class WorldEditArt extends PluginBase{
 	 * @return BuilderSession[]
 	 */
 	public function getSessionsOf(CommandSender $sender) : array{
-		return $this->builderSessionMap[$sender] ?? [];
+		return $this->builderSessionMap[$sender instanceof Player ? $sender->getId() : $sender->getName()] ?? [];
 	}
 
 	/**
@@ -172,11 +173,11 @@ class WorldEditArt extends PluginBase{
 	 * @param CommandSender $sender
 	 */
 	public function closeSessions(CommandSender $sender){
-		if(isset($this->builderSessionMap[$sender])){
-			foreach($this->builderSessionMap[$sender] as $session){
+		if(isset($this->builderSessionMap[$sender instanceof Player ? $sender->getId() : $sender->getName()])){
+			foreach($this->builderSessionMap[$sender instanceof Player ? $sender->getId() : $sender->getName()] as $session){
 				$session->close();
 			}
-			unset($this->builderSessionMap[$sender]);
+			unset($this->builderSessionMap[$sender instanceof Player ? $sender->getId() : $sender->getName()]);
 		}
 	}
 }

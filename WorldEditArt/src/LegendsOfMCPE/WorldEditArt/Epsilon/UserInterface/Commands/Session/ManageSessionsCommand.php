@@ -23,6 +23,7 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\PlayerBuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
+use pocketmine\utils\TextFormat;
 
 class ManageSessionsCommand extends WorldEditArtCommand{
 	public function __construct(WorldEditArt $plugin){
@@ -68,28 +69,29 @@ class ManageSessionsCommand extends WorldEditArtCommand{
 		switch(mb_strtolower($args[0])){
 			case "start":
 				if(isset($sessions[PlayerBuilderSession::SESSION_KEY])){
-					$sender->sendMessage("You have already started a player session!");
+					$sender->sendMessage(TextFormat::RED . "You have already started a player session!");
 					return;
 				}
 				if($pass = $this->getPlugin()->getConfig()->get(Consts::CONFIG_SESSION_GLOBAL_PASSPHRASE)){
 					if(!isset($args[1])){
-						$sender->sendMessage("Usage: //session start <passphrase>");
+						$sender->sendMessage(TextFormat::RED . "Usage: //session start <passphrase>");
 						return;
 					}
 					if($args[1] !== $pass){
-						$sender->sendMessage("Wrong passphrase");
+						$sender->sendMessage(TextFormat::RED . "Wrong passphrase");
 						return;
 					}
 				}
 				$this->getPlugin()->startPlayerSession($sender);
-				$sender->sendMessage("Started builder session");
+				$sender->sendMessage(TextFormat::GREEN . "Started builder session");
 				return;
 			case "close":
 				if(!isset($sessions[PlayerBuilderSession::SESSION_KEY])){
-					$sender->sendMessage("You haven't started a session to close");
+					$sender->sendMessage(TextFormat::RED . "You haven't started a session to close");
 					return;
 				}
-
+				$this->getPlugin()->closePlayerSession($sender);
+				$sender->sendMessage(TextFormat::GREEN . "Your session has been closed");
 		}
 	}
 }

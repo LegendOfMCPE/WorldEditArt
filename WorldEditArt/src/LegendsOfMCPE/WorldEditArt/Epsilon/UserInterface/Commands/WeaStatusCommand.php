@@ -21,6 +21,7 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\PlayerBuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 use pocketmine\command\CommandSender;
+use pocketmine\Player;
 
 class WeaStatusCommand extends WorldEditArtCommand{
 	public function __construct(WorldEditArt $plugin){
@@ -45,7 +46,7 @@ class WeaStatusCommand extends WorldEditArtCommand{
 			}else{
 				$sender->sendMessage("You have started " . count($sessions) . " minion sessions");
 			}
-		}elseif($sender->hasPermission(Consts::PERM_SESSION_START)){
+		}elseif($sender instanceof Player && $sender->hasPermission(Consts::PERM_SESSION_START)){
 			$sender->sendMessage("You have not started a builder session. Use `//session start` to start one to use WorldEditArt.");
 		}
 	}
