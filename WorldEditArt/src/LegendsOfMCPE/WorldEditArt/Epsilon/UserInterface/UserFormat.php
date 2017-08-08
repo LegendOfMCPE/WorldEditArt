@@ -34,7 +34,7 @@ abstract class UserFormat{
 	const FORMAT_DEBUG = 3;
 
 	public static function describeShape(Server $server, IShape $shape, int $format) : string{
-		return self::_describe($server, $shape, $format);
+		return UserFormat::describeImpl($server, $shape, $format);
 	}
 
 	/**
@@ -44,40 +44,40 @@ abstract class UserFormat{
 	 *
 	 * @return string
 	 */
-	private static function _describe(Server $server, $shape, int $format) : string{
+	private static function describeImpl(Server $server, $shape, int $format) : string{
 		if($shape instanceof ShapeWrapper){
-			return self::_describe($server, $shape->getBaseShape(), $format);
+			return UserFormat::describeImpl($server, $shape->getBaseShape(), $format);
 		}
 		assert($shape instanceof Shape);
 		$baseColor = TextFormat::GOLD;
 		$em1 = TextFormat::AQUA;
 		$em2 = TextFormat::LIGHT_PURPLE;
 		$em3 = TextFormat::BLUE;
-		switch(true){
-			case $shape instanceof CuboidShape:
-				switch($format){
-					case self::FORMAT_USER_DEFINITION:
-						return "{$baseColor}Cuboid ({$em1}pos1: " . self::formatVector($shape->getFrom()) . "{$baseColor}, " .
-							"{$em2}pos2: " . self::formatVector($shape->getTo()) .
-							" {$baseColor}in world {$em3}" . self::nameLevel($shape->getLevel($server));
-					case self::FORMAT_USER_RANGE:
-						return "{$baseColor}Cuboid {$em1}from " . self::formatVector($shape->getMin()) .
-							" {$em2}to pos2: " . self::formatVector($shape->getMax()) .
-							" {$baseColor}in world {$em3}" . self::nameLevel($shape->getLevel($server));
-					case self::FORMAT_DEBUG:
-						return "Cuboid(from={$shape->getFrom()}, to={$shape->getTo()}, level=" . self::nameLevel($shape->getLevel($server)) . ")";
-				}
-				throw self::unknownFormat($format);
-			default:
-				return var_export($shape, true); // TODO will be fixed in multi-lang support
+
+		if($shape instanceof CuboidShape){
+			switch($format){
+				case UserFormat::FORMAT_USER_DEFINITION:
+					return "{$baseColor}Cuboid ({$em1}pos1: " . UserFormat::formatVector($shape->getFrom()) . "{$baseColor}, " .
+						"{$em2}pos2: " . UserFormat::formatVector($shape->getTo()) .
+						" {$baseColor}in world {$em3}" . UserFormat::nameLevel($shape->getLevel($server));
+				case UserFormat::FORMAT_USER_RANGE:
+					return "{$baseColor}Cuboid {$em1}from " . UserFormat::formatVector($shape->getMin()) .
+						" {$em2}to pos2: " . UserFormat::formatVector($shape->getMax()) .
+						" {$baseColor}in world {$em3}" . UserFormat::nameLevel($shape->getLevel($server));
+				case UserFormat::FORMAT_DEBUG:
+					return "Cuboid(from={$shape->getFrom()}, to={$shape->getTo()}, level=" . UserFormat::nameLevel($shape->getLevel($server)) . ")";
+			}
+			throw UserFormat::unknownFormat($format);
 		}
+
+		return var_export($shape, true); // TODO will be fixed in multi-lang support
 		// TODO handle incomplete shapes
 	}
 
 	public static function formatLocation(Location $location, string $normalColor) : string{
-		return TextFormat::AQUA . self::formatVector($location) .
-			TextFormat::LIGHT_PURPLE . " (" . self::yawAsReducedBearing($location->yaw) . ", " . self::pitchAsBearing($location->pitch) .
-			") {$normalColor}in world " . TextFormat::BLUE . self::nameLevel($location->getLevel()) . $normalColor;
+		return TextFormat::AQUA . UserFormat::formatVector($location) .
+			TextFormat::LIGHT_PURPLE . " (" . UserFormat::yawAsReducedBearing($location->yaw) . ", " . UserFormat::pitchAsBearing($location->pitch) .
+			") {$normalColor}in world " . TextFormat::BLUE . UserFormat::nameLevel($location->getLevel()) . $normalColor;
 	}
 
 	/**
@@ -95,13 +95,14 @@ abstract class UserFormat{
 
 		if($yaw < 90){
 			return "S " . round($yaw, 2) . "° W";
-		}elseif($yaw < 180){
-			return "N " . round(180 - $yaw, 2) . "° W";
-		}elseif($yaw < 270){
-			return "N " . round($yaw - 180, 2) . "° E";
-		}else{
-			return "S " . round(360 - $yaw, 2) . "° E";
 		}
+		if($yaw < 180){
+			return "N " . round(180 - $yaw, 2) . "° W";
+		}
+		if($yaw < 270){
+			return "N " . round($yaw - 180, 2) . "° E";
+		}
+		return "S " . round(360 - $yaw, 2) . "° E";
 	}
 
 	/**
@@ -114,7 +115,7 @@ abstract class UserFormat{
 	}
 
 	public static function formatPosition(Position $position, string $normalColor) : string{
-		return TextFormat::AQUA . self::formatVector($position) . " {$normalColor}in world " . TextFormat::LIGHT_PURPLE . self::nameLevel($position->getLevel()) . $normalColor;
+		return TextFormat::AQUA . UserFormat::formatVector($position) . " {$normalColor}in world " . TextFormat::LIGHT_PURPLE . UserFormat::nameLevel($position->getLevel()) . $normalColor;
 	}
 
 	public static function formatVector(Vector3 $vector) : string{
@@ -125,7 +126,7 @@ abstract class UserFormat{
 		return $level->getFolderName() . ($level->getFolderName() === $level->getName() ? "" : " ({$level->getName()})");
 	}
 
-	private static function unknownFormat(int $format){
+	private static function unknownFormat(int $format) : \InvalidArgumentException{
 		return new \InvalidArgumentException("Unknown format $format");
 	}
 }

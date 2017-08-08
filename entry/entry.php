@@ -1,17 +1,19 @@
 <?php
 
 /*
+ *
  * WorldEditArt
  *
- * Copyright (C) 2016 LegendsOfMCPE
+ * Copyright (C) 2017 SOFe
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author LegendsOfMCPE Team
  */
+
+declare(strict_types=1);
 
 if(version_compare(PHP_VERSION, "7.0.0", "<")){
 	echo "Fatal: This entry script requires PHP >=7.0.0!\n";
@@ -19,7 +21,7 @@ if(version_compare(PHP_VERSION, "7.0.0", "<")){
 }
 
 if(!defined("STDIN")){
-	define("STDIN", fopen("php://stdin", "r"));
+	define("STDIN", fopen("php://stdin", "rb"));
 }
 
 spl_autoload_register(function (string $class){

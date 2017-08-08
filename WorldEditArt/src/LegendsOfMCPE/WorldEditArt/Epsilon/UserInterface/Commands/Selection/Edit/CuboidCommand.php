@@ -95,7 +95,7 @@ class CuboidCommand extends SessionCommand{
 					$this->sendUsage($session);
 					return;
 				}
-				$distance = floatval($args[1]);
+				$distance = (float) $args[1];
 				$from = $session->getLocation();
 				$to = $from->add(MathUtils::yawPitchToVector($from->yaw, $from->pitch)->multiply($distance));
 				$shape = new class($from->getLevel(), $from, $to) extends CuboidShape implements IShape{

@@ -54,15 +54,15 @@ class PlayerBuilderSession extends BuilderSession{
 	public function msg(string $message, int $class = BuilderSession::MSG_CLASS_INFO, string $title = null){
 		$color = BuilderSession::MSG_CLASS_COLOR_MAP[$class];
 		if($class === BuilderSession::MSG_CLASS_LOADING || $class === BuilderSession::MSG_CLASS_UPDATE){
-			if(isset($title)){
+			if($title !== null){
 				$this->player->sendPopup($color . $title, $color . $message);
 			}else{
 				$this->player->sendPopup($color . $message);
 			}
 		}elseif($class === BuilderSession::MSG_CLASS_SUCCESS){
-			$this->player->sendTip((isset($title) ? (TextFormat::BOLD . $color . $message . TextFormat::RESET . "\n") : "") . $color . $message);
+			$this->player->sendTip(($title !== null ? (TextFormat::BOLD . $color . $message . TextFormat::RESET . "\n") : "") . $color . $message);
 		}else{
-			if(isset($title)){
+			if($title !== null){
 				$this->player->sendMessage(TextFormat::BOLD . $color . $title);
 			}
 			$this->player->sendMessage($color . $message);

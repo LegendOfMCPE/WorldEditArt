@@ -59,10 +59,22 @@ class ShapeWrapper implements IShape{
 		return $this->baseShape->getEstimatedSize();
 	}
 
+	/** @noinspection PhpInconsistentReturnPointsInspection
+	 * @param Vector3 $vector
+	 *
+	 * @return \Generator
+	 */
 	public function getSolidStream(Vector3 $vector) : \Generator{
 		return $this->baseShape->getSolidStream($vector);
 	}
 
+	/** @noinspection PhpInconsistentReturnPointsInspection
+	 * @param Vector3 $vector
+	 * @param float   $padding
+	 * @param float   $margin
+	 *
+	 * @return \Generator
+	 */
 	public function getShallowStream(Vector3 $vector, float $padding, float $margin) : \Generator{
 		return $this->baseShape->getShallowStream($vector, $padding, $margin);
 	}

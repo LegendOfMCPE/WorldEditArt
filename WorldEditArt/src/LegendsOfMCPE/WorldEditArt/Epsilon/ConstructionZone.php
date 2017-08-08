@@ -22,14 +22,14 @@ class ConstructionZone{
 	const LOCK_MODE_BLOCKS = 2;
 	const LOCK_MODE_ENTRY = 3;
 	const LOCK_STRING_TO_ID = [
-		"edit" => self::LOCK_MODE_EDIT,
-		"blocks" => self::LOCK_MODE_BLOCKS,
-		"entry" => self::LOCK_MODE_ENTRY,
+		"edit" => ConstructionZone::LOCK_MODE_EDIT,
+		"blocks" => ConstructionZone::LOCK_MODE_BLOCKS,
+		"entry" => ConstructionZone::LOCK_MODE_ENTRY,
 	];
 	const LOCK_ID_TO_PERM = [
-		self::LOCK_MODE_EDIT => Consts::PERM_CZONE_BUILDER_LOCK_EDIT,
-		self::LOCK_MODE_BLOCKS => Consts::PERM_CZONE_BUILDER_LOCK_BLOCKS,
-		self::LOCK_MODE_ENTRY => Consts::PERM_CZONE_BUILDER_LOCK_ENTRY,
+		ConstructionZone::LOCK_MODE_EDIT => Consts::PERM_CZONE_BUILDER_LOCK_EDIT,
+		ConstructionZone::LOCK_MODE_BLOCKS => Consts::PERM_CZONE_BUILDER_LOCK_BLOCKS,
+		ConstructionZone::LOCK_MODE_ENTRY => Consts::PERM_CZONE_BUILDER_LOCK_ENTRY,
 	];
 
 	/** @var string */

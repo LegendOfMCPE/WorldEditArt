@@ -41,6 +41,7 @@ class PlayerEventListener implements Listener{
 
 	public function onJoin(PlayerJoinEvent $event){
 		$player = $event->getPlayer();
+		/** @noinspection NotOptimalIfConditionsInspection */
 		if($this->plugin->getConfig()->get(Consts::CONFIG_SESSION_IMPLICIT) && $player->hasPermission(Consts::PERM_SESSION_START)){
 			$this->plugin->startPlayerSession($player);
 		}

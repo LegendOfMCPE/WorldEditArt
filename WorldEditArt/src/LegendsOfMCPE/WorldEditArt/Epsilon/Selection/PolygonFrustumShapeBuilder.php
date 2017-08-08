@@ -22,6 +22,9 @@ use pocketmine\math\Vector3;
 use sofe\libgeom\LibgeomBinaryStream;
 use sofe\libgeom\Shape;
 
+/** @noinspection PhpInconsistentReturnPointsInspection */
+
+/** @noinspection PhpInconsistentReturnPointsInspection */
 class PolygonFrustumShapeBuilder extends Shape implements IShape{
 	public function getBaseShape() : Shape{
 		return $this;
@@ -35,10 +38,24 @@ class PolygonFrustumShapeBuilder extends Shape implements IShape{
 		throw new \AssertionError("Incomplete shape");
 	}
 
+	/** @noinspection PhpInconsistentReturnPointsInspection
+	 * @param Vector3 $vector
+	 *
+	 * @return \Generator
+	 * @throws \AssertionError
+	 */
 	public function getSolidStream(Vector3 $vector) : \Generator{
 		throw new \AssertionError("Incomplete shape");
 	}
 
+	/** @noinspection PhpInconsistentReturnPointsInspection
+	 * @param Vector3 $vector
+	 * @param float   $padding
+	 * @param float   $margin
+	 *
+	 * @return \Generator
+	 * @throws \AssertionError
+	 */
 	public function getShallowStream(Vector3 $vector, float $padding, float $margin) : \Generator{
 		throw new \AssertionError("Incomplete shape");
 	}

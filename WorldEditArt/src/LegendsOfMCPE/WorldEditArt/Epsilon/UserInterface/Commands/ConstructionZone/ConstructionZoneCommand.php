@@ -109,10 +109,13 @@ class ConstructionZoneCommand extends SessionCommand{
 					}, $zones)), BuilderSession::MSG_CLASS_WARN);
 					$session->msg("Please run the command with the name: //cz lock <zone> " . ($args[2] ?? ""), BuilderSession::MSG_CLASS_WARN);
 					return;
-				}elseif(count($zones) === 0){
+				}
+
+				if(count($zones) === 0){
 					$session->msg("You are not standing in any zones! Please either run this command again when you are standing in a zone, or specify the zone you wish to lock: //cz lock <zone> " . ($args[2] ?? ""), BuilderSession::MSG_CLASS_WARN);
 					return;
 				}
+
 				$zone = $zones[0];
 
 				if($zone->getLockingSession() !== null){
@@ -142,10 +145,13 @@ class ConstructionZoneCommand extends SessionCommand{
 					}, $zones)), BuilderSession::MSG_CLASS_WARN);
 					$session->msg("Please run the command with the name: //cz unlock <zone>", BuilderSession::MSG_CLASS_WARN);
 					return;
-				}elseif(count($zones) === 0){
+				}
+
+				if(count($zones) === 0){
 					$session->msg("You are not standing in any zones! Please either run this command again when you are standing in a zone, or specify the zone you wish to unlock: //cz unlock <zone>", BuilderSession::MSG_CLASS_WARN);
 					return;
 				}
+
 				$zone = $zones[0];
 				if($zone->getLockingSession()->getOwner() === $session->getOwner()){
 					if(!$session->hasPermission(Consts::PERM_CZONE_BUILDER_UNLOCK_SELF)){
@@ -181,7 +187,7 @@ class ConstructionZoneCommand extends SessionCommand{
 			"State: " . TextFormat::GOLD . ($zone->getLockingSession() === null ? "Not locked" :
 				sprintf("Locked by %s%s%s with mode %s\"%s\"",
 					TextFormat::AQUA, $zone->getLockingSession()->getOwner()->getName(), TextFormat::GOLD,
-					TextFormat::LIGHT_PURPLE, array_search($zone->getLockMode(), ConstructionZone::LOCK_STRING_TO_ID))),
+					TextFormat::LIGHT_PURPLE, array_search($zone->getLockMode(), ConstructionZone::LOCK_STRING_TO_ID, true))),
 		]), BuilderSession::MSG_CLASS_INFO, "Construction Zone \"" . $zone->getName() . "\"");
 	}
 }

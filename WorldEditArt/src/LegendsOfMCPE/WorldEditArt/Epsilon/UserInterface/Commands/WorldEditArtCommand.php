@@ -45,8 +45,8 @@ abstract class WorldEditArtCommand extends Command implements PluginIdentifiable
 		$this->setPermission($permission);
 		if(count($formats) > 0){
 			$arr = new stdClass();
-			foreach($formats as $name => $format){
-				$arr->{$name} = [
+			foreach($formats as $formatName => $format){
+				$arr->{$formatName} = [
 					"input" => ["parameters" => $format],
 					"output" => new stdClass(),
 				];

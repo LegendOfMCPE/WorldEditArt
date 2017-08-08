@@ -35,7 +35,7 @@ class WorldEditArt extends PluginBase{
 	/** @var ConstructionZone[] */
 	private $constructionZones;
 
-	/** @var BuilderSession[][]|\SplObjectStorage <CommandSender -> BuilderSession[]> */
+	/** @var BuilderSession[][] */
 	private $builderSessionMap;
 	/** @var WandManager */
 	private $wandManager;

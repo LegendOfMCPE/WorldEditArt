@@ -54,7 +54,7 @@ class MinionBuilderSession extends BuilderSession{
 	}
 
 	public function msg(string $message, int $class = BuilderSession::MSG_CLASS_INFO, string $title = null){
-		if(isset($title)){
+		if($title !== null){
 			parent::msg($message, $class, "[Minion $this->name] " . $title);
 		}else{
 			parent::msg("[Minion $this->name] " . $message, $class);

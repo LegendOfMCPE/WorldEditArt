@@ -21,7 +21,7 @@ use pocketmine\math\Vector3;
 
 class MathUtils{
 	public static function vectorToYawPitch(Vector3 $vector, float &$yaw, float &$pitch){
-		if($vector->lengthSquared() != 1){
+		if(((float) $vector->lengthSquared()) !== 1.0){
 			$vector = $vector->normalize();
 		}
 		$yaw = rad2deg(atan2($vector->z, -$vector->x));

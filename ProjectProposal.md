@@ -10,7 +10,7 @@ This plugin will inherit the development of the WorldEditArt project and bring i
 This plugin be continued in the LegendOfMCPE/WorldEditArt repository.
 
 ## PocketMine-MP version
-This plugin is going to be targetted at PocketMine-MP API 3.0.0-ALPHA7 onwards.
+This plugin is going to be targeted at PocketMine-MP API 3.0.0-ALPHA7 onwards.
 
 ## Libraries
 This plugin is going to use [_libgeom_](https://github.com/BlockHorizons/libgeom) for geometric calculation.
@@ -102,7 +102,7 @@ A wand can be virtually used using a command. For example, the command `//pos1` 
  * A circular frustum is defined by two parallel ellipses. The two ellipses may have different dimensions, but their major and minor radii must be either parallel or perpendicular.
  * A basic circular frustum is a cylinder. To create a cylinder selection:
    * Command: `//cylinder <radius> [xyz] <height>`
-     * The cylinder's base ellipse is a circle of `<radius>` blocks radius, cenetered at the builder session's current position.
+     * The cylinder's base ellipse is a circle of `<radius>` blocks radius, centred at the builder session's current position.
      * The cylinder's top ellipse is a circle of `<radius>` blocks radius, centered at +`<height>` blocks to the `[xyz]` (one of X, Y or Z, or Y if skipped) axis.
    * 4 wands: Wand `baseCenter`, Wand `topCenter`, Wand `rightCircum`, Wand `frontCircum`. This creates an elliptic cylinder.
      * Wands `baseCenter` and `topCenter` select the centers of the base and top ellipses respectively.
@@ -134,7 +134,7 @@ A wand can be virtually used using a command. For example, the command `//pos1` 
      * Selects the sphere at the builder session's current position with radii on the three axes as `<radius>`
    * 2-4 wands: `center`, `circumAbs`, `circumX`, `circumY`, `circumZ`
      * `center` sets the center of the ellipsoid.
-     * `cicumAbs` will set all radii to the distance between the clicked block and the center.
+     * `circumAbs` will set all radii to the distance between the clicked block and the center.
      * When the wand `circumX`/`circumY`/`circumZ` is clicked on a block, the X/Y/Z component of the block's distance from the center is resolved, and used as the X/Y/Z radius of the block.
      * If `circumX`/`circumY`/`circumZ` is clicked before any other `circum*` (including `circumAbs`) wands are clicked, the X/Y/Z component of the block's distance from the center is resolved and used as **all radii** of the block.
  * Manipulating an ellipsoid selection:

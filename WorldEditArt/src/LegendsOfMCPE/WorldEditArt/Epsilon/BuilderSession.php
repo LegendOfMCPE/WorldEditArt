@@ -53,10 +53,12 @@ abstract class BuilderSession{
 	public function __construct(WorldEditArt $plugin){
 		$this->plugin = $plugin;
 		// TODO load bookmarks
+		// TODO load selections
 	}
 
 	public function close(){
 		// TODO save bookmarks
+		// TODO save selections
 		foreach($this->plugin->getConstructionZones() as $zone){
 			if($zone->getLockingSession() === $this){
 				$zone->unlock();
@@ -90,7 +92,7 @@ abstract class BuilderSession{
 	}
 
 	public function msg(string $message, int $class = BuilderSession::MSG_CLASS_INFO, string $title = null){
-		if(isset($title)){
+		if($title !== null){
 			$this->getOwner()->sendMessage(TextFormat::BOLD . BuilderSession::MSG_CLASS_COLOR_MAP[$class] . $title);
 		}
 		foreach(explode("\n", $message) as $line){

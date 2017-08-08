@@ -23,13 +23,17 @@ use pocketmine\level\Position;
 use sofe\libgeom\Shape;
 
 /**
- * @internal This class should not be uesd by non-WorldEditArt code.
+ * @internal This class should not be used by non-WorldEditArt code.
  */
 abstract class AbstractFieldDefinitionWand implements Wand{
 	public function execute(BuilderSession $session, Position $position, string $selectionName){
-		$shape = $session->getSelection($selectionName)->getBaseShape();
+		$shape = $session->getSelection($selectionName);
+		if($shape !== null){
+			$shape = $shape->getBaseShape();
+		}
 		try{
-			if($shape->getLevelName() === $position->getLevel()->getName() and $this->canModify($shape)){
+			/** @noinspection NullPointerExceptionInspection */
+			if($shape !== null and $shape->getLevelName() === $position->getLevel()->getName() and $this->canModify($shape)){
 				$this->modify($shape, $position);
 			}else{
 				$shape = $this->createNew($position);
