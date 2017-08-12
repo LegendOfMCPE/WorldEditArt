@@ -5,11 +5,11 @@ author: SOFe
 
 main: LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt
 api:
-- 3.0.0-ALPHA7
+  - 3.0.0-ALPHA7
 extensions:
   mbstring: "*"
 softdepend:
-- SimpleWarp
+  - SimpleWarp
 
 permissions: # default for permission.default is "op"
   worldeditart:
