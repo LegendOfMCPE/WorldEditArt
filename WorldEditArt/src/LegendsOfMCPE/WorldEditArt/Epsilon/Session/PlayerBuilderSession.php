@@ -15,7 +15,7 @@
 
 declare(strict_types=1);
 
-namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface;
+namespace LegendsOfMCPE\WorldEditArt\Epsilon\Session;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;

@@ -21,55 +21,41 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
 use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\AbstractFieldDefinitionWand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
 use pocketmine\level\Position;
-use pocketmine\utils\TextFormat;
 use sofe\libgeom\Shape;
-use sofe\libgeom\shapes\CuboidShape;
+use sofe\libgeom\shapes\CircularFrustumShape;
 
-class CuboidPosWand extends AbstractFieldDefinitionWand{
-	/** @var bool */
-	private $one;
-
-	public function __construct(bool $one){
-		$this->one = $one;
-	}
-
+class CylinderBaseCenterWand extends AbstractFieldDefinitionWand{
 	public function getName() : string{
-		return $this->one ? "pos1" : "pos2";
+		return "cylbase";
 	}
 
 	public function getAliases() : array{
-		return $this->one ? ["1"] : ["2"];
+		return ["cb"];
 	}
 
 	public function getPermission() : string{
-		return Consts::PERM_SELECT_SET_CUBOID;
+		return Consts::PERM_SELECT_SET_CYLINDER;
 	}
 
 	protected function canModify(Shape $shape) : bool{
-		return $shape instanceof CuboidShape;
+		return $shape instanceof CircularFrustumShape;
 	}
 
 	protected function modify(BuilderSession $session, Shape $shape, Position $position){
-		assert($shape instanceof CuboidShape);
-		if($this->one){
-			$shape->setFrom($position);
-		}else{
-			$shape->setTo($position);
-		}
+		assert($shape instanceof CircularFrustumShape);
+		$oldBase = $shape->getBase();
+		$shape->setBase($position);
+		$session->msg("Moved base center from " . UserFormat::formatVector($oldBase) . " to " . UserFormat::formatVector($position), BuilderSession::MSG_CLASS_SUCCESS);
 	}
 
 	protected function createNew(Position $position) : IShape{
-		$shape = new class($position->getLevel()) extends CuboidShape implements IShape{
+		$shape = new class($position->getLevel(), $position) extends CircularFrustumShape implements IShape{
 			public function getBaseShape() : Shape{
 				return $this;
 			}
 		};
-		if($this->one){
-			$shape->setFrom($position);
-		}else{
-			$shape->setTo($position);
-		}
 		return $shape;
 	}
 }

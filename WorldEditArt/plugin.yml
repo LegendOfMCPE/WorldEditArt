@@ -91,6 +91,8 @@ permissions: # default for permission.default is "op"
                 children:
                   worldeditart.builder.select.set.cuboid:
                     description: Allows setting the selection shape to a cuboid or modify a cuboid selection
+                  worldeditart.builder.select.set.cuboid:
+                    description: Allows setting the selection shape to a cylinder or modify a cylinder selection
       worldeditart.admin:
         description: Permissions for admins
         children:

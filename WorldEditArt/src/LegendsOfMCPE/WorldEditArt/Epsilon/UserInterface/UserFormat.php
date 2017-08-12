@@ -122,6 +122,34 @@ abstract class UserFormat{
 		return "(" . round($vector->x, 2) . ", " . round($vector->y, 2) . ", " . round($vector->z, 2) . ")";
 	}
 
+	public static function formatDelta(Vector3 $delta) : string{
+		$changes = [];
+		if($delta->x > 0){
+			$changes["east"] = $delta->x;
+		}elseif($delta->x < 0){
+			$changes["west"] = -$delta->x;
+		}
+		if($delta->y > 0){
+			$changes["up"] = $delta->y;
+		}elseif($delta->y < 0){
+			$changes["down"] = -$delta->y;
+		}
+		if($delta->z > 0){
+			$changes["south"] = $delta->z;
+		}elseif($delta->z < 0){
+			$changes["north"] = -$delta->z;
+		}
+		if($changes === []){
+			return "0 blocks";
+		}
+
+		$phrases = [];
+		foreach($changes as $side => $length){
+			$phrases[] = round($length, 2) . " blocks $side";
+		}
+		return implode(", ", $phrases);
+	}
+
 	public static function nameLevel(Level $level) : string{
 		return $level->getFolderName() . ($level->getFolderName() === $level->getName() ? "" : " ({$level->getName()})");
 	}

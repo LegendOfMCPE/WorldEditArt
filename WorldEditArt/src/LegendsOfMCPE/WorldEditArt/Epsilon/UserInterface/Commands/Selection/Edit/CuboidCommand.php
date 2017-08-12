@@ -20,9 +20,9 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\Ed
 use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
 use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
-use LegendsOfMCPE\WorldEditArt\Epsilon\MathUtils;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\WEAMath;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
@@ -97,7 +97,7 @@ class CuboidCommand extends SessionCommand{
 				}
 				$distance = (float) $args[1];
 				$from = $session->getLocation();
-				$to = $from->add(MathUtils::yawPitchToVector($from->yaw, $from->pitch)->multiply($distance));
+				$to = $from->add(WEAMath::yawPitchToVector($from->yaw, $from->pitch)->multiply($distance));
 				$shape = new class($from->getLevel(), $from, $to) extends CuboidShape implements IShape{
 					public function getBaseShape() : Shape{
 						return $this;

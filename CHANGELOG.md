@@ -15,5 +15,14 @@ The plugin version comprises four numbers:
 - Basic player sessions
 - Construction zones
 - Bookmarks and `//at`
+- Selections
+  - //sels and //desel
+  - Wands semi-internal API (the `AbstractFieldDefinitionWand` class must not be implemented by other plugins due to its usage of libgeom classes in parameter type hint)
+  - Cuboid selection (commands and wands)
+  - Cylinder selection (commands and wands)
+    - Except:
+      - `rightCircum` and `frontCircum` wands, as in ProjectProposal, have not been implemented yet.
+      - `//cyl normalize false` (`false` for `preserveLength`) is not properly implemented, and temporarily redirects to `//cyl normalize true` due to technical difficulties that can be overcome _had I tried harder learning vector mathematics_.
+    - **UNDOCUMENTED**
 
 [Unreleased]: https://github.com/LegendOfMCPE/WorldEditArt/compare/delta/v3.0...HEAD

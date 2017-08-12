@@ -18,8 +18,8 @@ declare(strict_types=1);
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Session\PlayerBuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\WorldEditArtCommand;
-use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\PlayerBuilderSession;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
 

@@ -19,8 +19,8 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeWrapper;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\WandManager;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Session\PlayerBuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\WorldEditArtCommand;
-use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\PlayerBuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\PlayerEventListener;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
@@ -135,7 +135,7 @@ class WorldEditArt extends PluginBase{
 	 *
 	 * @param Player $player
 	 *
-	 * @return PlayerBuilderSession
+	 * @return \LegendsOfMCPE\WorldEditArt\Epsilon\Session\PlayerBuilderSession
 	 */
 	public function startPlayerSession(Player $player) : PlayerBuilderSession{
 		if(!isset($this->builderSessionMap[$player->getId()])){

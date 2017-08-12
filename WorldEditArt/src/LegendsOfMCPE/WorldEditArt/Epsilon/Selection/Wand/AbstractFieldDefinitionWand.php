@@ -19,6 +19,7 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
+use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
 use pocketmine\level\Position;
 use sofe\libgeom\Shape;
 
@@ -34,11 +35,15 @@ abstract class AbstractFieldDefinitionWand implements Wand{
 		try{
 			/** @noinspection NullPointerExceptionInspection */
 			if($shape !== null and $shape->getLevelName() === $position->getLevel()->getName() and $this->canModify($shape)){
-				$this->modify($shape, $position);
+				$this->modify($session, $shape, $position);
 			}else{
+				if(!$this->canCreateNoisy($session)){
+					return;
+				}
 				$shape = $this->createNew($position);
 				$session->setSelection($selectionName, $shape);
 			}
+			$session->msg(UserFormat::describeShape($session->getPlugin()->getServer(), $shape, UserFormat::FORMAT_USER_DEFINITION), BuilderSession::MSG_CLASS_SUCCESS, "Your \"$selectionName\" selection has been changed.");
 		}catch(WandException $ex){
 			$session->msg($ex->getMessage(), BuilderSession::MSG_CLASS_ERROR);
 		}
@@ -46,7 +51,15 @@ abstract class AbstractFieldDefinitionWand implements Wand{
 
 	protected abstract function canModify(Shape $shape) : bool;
 
-	protected abstract function modify(Shape $shape, Position $position);
+	protected abstract function modify(BuilderSession $session, Shape $shape, Position $position);
 
-	protected abstract function createNew(Position $position) : IShape;
+	protected function canCreateNoisy(/** @noinspection PhpUnusedParameterInspection */
+		BuilderSession $session) : bool{
+		return true;
+	}
+
+	protected function createNew(/** @noinspection PhpUnusedParameterInspection */
+		Position $position) : IShape{
+		throw new \AssertionError("Implementation must override this method unless it returns false in canCreateNoisy");
+	}
 }

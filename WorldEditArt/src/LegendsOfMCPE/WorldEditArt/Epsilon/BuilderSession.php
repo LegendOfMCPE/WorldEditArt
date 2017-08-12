@@ -147,19 +147,19 @@ abstract class BuilderSession{
 	 * @return IShape|null
 	 */
 	public function getSelection(string $name){
-		return $this->selections[$name] ?? null;
+		return $this->selections[mb_strtolower($name)] ?? null;
 	}
 
 	public function hasSelection(string $name) : bool{
-		return isset($this->selections[$name]);
+		return isset($this->selections[mb_strtolower($name)]);
 	}
 
 	public function setSelection(string $name, IShape $shape){
-		$this->selections[$name] = $shape;
+		$this->selections[mb_strtolower($name)] = $shape;
 	}
 
 	public function removeSelection(string $name){
-		unset($this->selections[$name]);
+		unset($this->selections[mb_strtolower($name)]);
 	}
 
 	public function getDefaultSelectionName() : string{
