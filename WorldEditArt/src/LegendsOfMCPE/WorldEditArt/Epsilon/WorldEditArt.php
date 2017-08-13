@@ -70,6 +70,12 @@ class WorldEditArt extends PluginBase{
 		return $server->getPluginManager()->getPlugin(Consts::PLUGIN_NAME);
 	}
 
+	public static function requireVersion(Server $server, int $edition, int $major, int $minor) : bool{
+		$instance = WorldEditArt::getInstance($server);
+		list($a, $b, $c,) = array_map("intval", explode(".", $instance->getDescription()->getVersion()));
+		return $a === $edition && $major === $b && $minor < $c;
+	}
+
 
 	private function loadConstructionZones(){
 		if(is_file($fn = $this->getDataFolder() . "constructionZones.dat")){

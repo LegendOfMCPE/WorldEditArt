@@ -31,7 +31,7 @@ use sofe\libgeom\shapes\CircularFrustumShape;
 class CylinderCommand extends SessionCommand{
 	public function __construct(WorldEditArt $plugin){
 		parent::__construct($plugin, "/cyl", "Manage a cylinder selection", /** @lang text */
-			"//cyl ratio|rad|j|n|c ... OR //cyl <radius> [x|y|z] <height>", ["/cylinder"], Consts::PERM_SELECT_SET_CUBOID, [
+			"//cyl ratio|rad|j|n|c|f ... OR //cyl <radius> [x|y|z] <height>", ["/cylinder"], Consts::PERM_SELECT_SET_CUBOID, [
 				"setRadiusHeight" => [
 					[
 						"name" => "radius",
@@ -164,6 +164,18 @@ class CylinderCommand extends SessionCommand{
 						"optional" => true,
 					],
 				],
+				"flip" => [
+					[
+						"name" => "action",
+						"type" => "stringenum",
+						"enum_values" => ["flip", "f"],
+					],
+					[
+						"name" => "selectionName",
+						"type" => "string",
+						"optional" => true,
+					],
+				],
 			]);
 	}
 
@@ -196,6 +208,10 @@ class CylinderCommand extends SessionCommand{
 				case "c":
 				case "cone":
 					$result = $this->overloadCone($session, $args, $selName);
+					break;
+				case "f":
+				case "flip":
+					$result = $this->overloadFlip($session, $args, $selName);
 					break;
 				default:
 					$result = 0;
@@ -541,6 +557,41 @@ class CylinderCommand extends SessionCommand{
 			};
 			$session->setSelection($selName, $shape);
 		}
+		return 1;
+	}
+
+	private function overloadFlip(BuilderSession $session, array $args, string &$selName) : int{
+		if(isset($args[0])){
+			$selName = $args[0];
+		}
+
+		$shape = $session->getSelection($selName);
+		if($shape === null){
+			$session->msg("You don't have a selection called \"$selName\" to flip", BuilderSession::MSG_CLASS_ERROR);
+			return 2;
+		}
+		if(!($shape instanceof CircularFrustumShape)){
+			$session->msg("Your \"$selName\" selection is not a cylinder/circular frustum", BuilderSession::MSG_CLASS_ERROR);
+			return 2;
+		}
+		if($shape->getTop() === null){
+			$session->msg("Your \"$selName\" selection does not have a top center defined, so it cannot be flipped.", BuilderSession::MSG_CLASS_ERROR);
+			return 2;
+		}
+
+		$base = $shape->getTop();
+		$top = $shape->getBase();
+		$baseFrontRadius = $shape->getTopFrontRadius();
+		$baseRightRadius = $shape->getTopRightRadius();
+		$topFrontRadius = $shape->getBaseFrontRadius();
+		$topRightRadius = $shape->getBaseRightRadius();
+		$shape->setBase($base);
+		$shape->setTop($top);
+		$shape->setBaseFrontRadius($baseFrontRadius);
+		$shape->setBaseRightRadius($baseRightRadius);
+		$shape->setTopFrontRadius($topFrontRadius);
+		$shape->setTopRightRadius($topRightRadius);
+
 		return 1;
 	}
 

@@ -18,6 +18,11 @@ declare(strict_types=1);
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl\CuboidPosWand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl\CylinderBaseCenterWand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl\CylinderCircumProjectionWand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl\CylinderCircumRotateWand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl\CylinderShiftWand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl\CylinderTopCenterWand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 
 class WandManager{
@@ -30,6 +35,17 @@ class WandManager{
 
 		$this->addWand(new CuboidPosWand(true));
 		$this->addWand(new CuboidPosWand(false));
+		$this->addWand(new CylinderShiftWand);
+		$this->addWand(new CylinderTopCenterWand);
+		$this->addWand(new CylinderBaseCenterWand);
+		$this->addWand(new CylinderCircumProjectionWand(true, true));
+		$this->addWand(new CylinderCircumProjectionWand(true, false));
+		$this->addWand(new CylinderCircumProjectionWand(false, true));
+		$this->addWand(new CylinderCircumProjectionWand(false, false));
+		$this->addWand(new CylinderCircumRotateWand(true, true));
+		$this->addWand(new CylinderCircumRotateWand(true, false));
+		$this->addWand(new CylinderCircumRotateWand(false, true));
+		$this->addWand(new CylinderCircumRotateWand(false, false));
 	}
 
 	public function addWand(Wand $wand){

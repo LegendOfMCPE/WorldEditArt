@@ -104,10 +104,16 @@ A wand can be virtually used using a command. For example, the command `//pos1` 
    * Command: `//cylinder <radius> [xyz] <height>`
      * The cylinder's base ellipse is a circle of `<radius>` blocks radius, centred at the builder session's current position.
      * The cylinder's top ellipse is a circle of `<radius>` blocks radius, centered at +`<height>` blocks to the `[xyz]` (one of X, Y or Z, or Y if skipped) axis.
-   * 4 wands: Wand `baseCenter`, Wand `topCenter`, Wand `rightCircum`, Wand `frontCircum`. This creates an elliptic cylinder.
+   * 2 + 2 + 8 wands: Wands `(base|top)Center`, Wands `(base|top)(Front|Right)Circum(Proj|Rot)`. This creates an elliptic cylinder.
      * Wands `baseCenter` and `topCenter` select the centers of the base and top ellipses respectively.
-     * Wand `frontCircum` selects any of the two intersection points between the circumference and the major/minor diameter in the base ellipse.
-     * Wand `rightCircum` selects any of the two intersection points between the circumference and the other minor/major diameter in the base ellipse. If `frontCircum` has been defined but the angle `frontCircum-baseCenter-rightCircum` is not perpendicular, the `rightCircum` point is shifted to the closest point that makes the angle perpendicular; in other words, `rightCircum` will be shifted to its projection on the plane containing `baseCenter` and perpendicular to the line `baseCenter-frontCircum`.
+     * Regarding wands `baseFrontCircumProject` and `baseFrontCircumRotate`:
+       * If `baseRightCircumProj`/`baseRightCircumRotate` has not been selected yet, they select any of the two intersection points between the major/minor diameter and the circumference in the base ellipse, then automatically set the other diameter to the same length as this diameter..
+       * If `rightCircum`/`rightCircum` has already been defined, they behave differently.
+         * `baseFrontCircumRotate` will also select the intersection point, **and change the `rightCircum` point by rotation** such that the angle `frontCircum--baseCenter--rightCircum` is a right angle. Since the base and top ellipses must be parallel, this change will be propagated to the top ellipse too.
+         * `baseFrontCircumProj`'s selection will be projected to its closest point on the should-be `frontCircum` diameter (based on the `rightCircum` diameter) (the locus of possible points is a plane). This **will not change `rightCircum`**.
+       * In addition, if the top radii have not been defined yet, changes to the base radius lengths will be propagated to the top radius lengths accordingly.
+     * Vice versa for `baseRightCircum*`.
+     * Vice versa for `top*Circum*`.
  * The selection can be further modified as follows:
    * Command: `//cylinder topsize <ratio>`
      * The top ellipse's radii will be set to `<ratio>` times those of the base ellipse, regardless its original radii.

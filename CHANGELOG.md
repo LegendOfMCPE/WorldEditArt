@@ -7,8 +7,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 The plugin version comprises four numbers:
 - Edition number: The number of times this project has been rewritten :sob: (This is epsilon, the 5<sup>th</sup> Greek alphabet, and I have rewritten WorldEditArt 4 times!)
 - Major version: Bumped every time WorldEditArt's API has backward-incompatible changes
-- Minor version: Bumped every time WorldEditArt's API has additions
-- Patch version: Bumped every time WorldEditArt is released without API changes
+- Minor version: Bumped every time WorldEditArt's API has backward-compatible forward-incompatible changes
+- Patch version: Bumped every time WorldEditArt is released without API changes (backward-compatible and forward-compatible)
 
 ## [Unreleased] (Epsilon 4.1.0.0)
 ### Added
@@ -21,7 +21,6 @@ The plugin version comprises four numbers:
   - Cuboid selection (commands and wands)
   - Cylinder selection (commands and wands)
     - Except:
-      - `rightCircum` and `frontCircum` wands, as in ProjectProposal, have not been implemented yet.
       - `//cyl normalize false` (`false` for `preserveLength`) is not properly implemented, and temporarily redirects to `//cyl normalize true` due to technical difficulties that can be overcome _had I tried harder learning vector mathematics_.
     - **UNDOCUMENTED**
 

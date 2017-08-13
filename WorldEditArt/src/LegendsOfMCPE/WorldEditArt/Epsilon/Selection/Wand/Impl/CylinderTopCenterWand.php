@@ -54,7 +54,7 @@ class CylinderTopCenterWand extends AbstractFieldDefinitionWand{
 	}
 
 	protected function canCreateNoisy(BuilderSession $session) : bool{
-		$session->msg("Please define the base of the cylinder/cone/circular frustum before defining the top", BuilderSession::MSG_CLASS_ERROR);
+		$session->msg("Please select the base center with the cylbase wand first.", BuilderSession::MSG_CLASS_ERROR);
 		return false;
 	}
 }
