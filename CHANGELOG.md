@@ -11,6 +11,13 @@ The plugin version comprises four numbers:
 - Patch version: Bumped every time WorldEditArt is released without API changes (backward-compatible and forward-compatible)
 
 ## [Unreleased] (Epsilon 4.1.0.0)
+Dependencies should validate WorldEditArt version:
+
+```php
+use LegendOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
+WorldEditArt::requireVersion($this->getServer(), 4, 1, 0);
+```
+
 ### Added
 - Basic player sessions
 - Construction zones
@@ -22,6 +29,6 @@ The plugin version comprises four numbers:
   - Cylinder selection (commands and wands)
     - Except:
       - `//cyl normalize false` (`false` for `preserveLength`) is not properly implemented, and temporarily redirects to `//cyl normalize true` due to technical difficulties that can be overcome _had I tried harder learning vector mathematics_.
-    - **UNDOCUMENTED**
+    - **UNDOCUMENTED: Commands**
 
 [Unreleased]: https://github.com/LegendOfMCPE/WorldEditArt/compare/delta/v3.0...HEAD

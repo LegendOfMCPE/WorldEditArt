@@ -217,7 +217,7 @@ direction you are looking at.
 
 ###### Grow
 The `//cub g <-x> <-y> <-z> <+x> <+y> <+z>` command will expand your cuboid selection. If you do not have a selection
-or your current selection was not a cuboid, it will take a 1&cross;1&cross;1 cuboid (the block you are standing **in**).
+or your current selection was not a cuboid, it will take a 1&times;1&times;1 cuboid (the block you are standing **in**).
 
 The order of `pos1` and `pos2` will not be preserved -- after running `//cub g`, `pos1` is always the minimum (most
 negative) point in your cuboid, and `pos2` is always the maximum (most positive) point.
@@ -229,3 +229,60 @@ build height level (y=255 right now).
 > `PROTIP` The SkyBed command can be used to create "area" selections. For example, if you wish to mark the whole area
 > from bedrock to the sky as a construction area, SkyBed can help you select the area without teleporting to the lowest
 > and highest levels.
+
+#### Cylinder / Cone / Circular Frustum (CCC) Selections
+
+[![](doc_img/circular-frustum-definition.png)](doc_img/circular-frustum-definition.png)
+
+##### Wands
+As CCC selection is very flexible, it is very complicated to select all possible CCCs only with wands. Nevertheless,
+basic shapes like simple upright cylinders, upright cones, etc. can still be created only with simple wands. Let's first
+look at the list of all CCC wands:
+
+1. `cylbase` (aliased `cb`)
+2. `cyltop` (aliased `ct`)
+3. 4 projection wands:
+  * `cylbasefrontproj` (aliased `cbfp`)
+  * `cylbaserightproj` (aliased `cbrp`)
+  * `cyltopfrontproj` (aliased `ctfp`)
+  * `cyltoprightproj` (aliased `ctrp`)
+4. 4 rotation wands:
+  * `cylbasefrontrot` (aliased `cbfr`)
+  * `cylbaserightrot` (aliased `cbrr`)
+  * `cyltopfrontrot` (aliased `ctfr`)
+  * `cyltoprightrot` (aliased `ctrr`)
+5. `cylshift` (aliased `cs`)
+
+Looks very complicated, right? Actually, to define a simple cylinder with two congruent circles as the _top ellipse_ and
+_base ellipse_, you just need three wands: `cylbase`, `cyltop` and any one of the 8 rotation/projection wands.
+
+
+`cylbase` selects the _Base_, and `cyltop` selects the _Top_. **`cylbase` must always be used before any other CCC
+wands** (unless your selection is already a CCC shape, where the wands will move the base instead.).
+
+Then you can use any of the 8 projection/rotation wands to set the radius of the CCC shape. Using any `cylbase***`
+wands (excluding `cylbase`) the first time will set all radii to the distance between the clicked block and the _Base_.
+Vice versa for `cyltop***` wands.
+
+> ###### `PROTIP` Elliptic CCCs:
+> Once any projection/rotation wands have been used, the ellipses' radial directions are fixed. As explained in the
+> diagram above, the _front radius_/_right radius_ are not fixed to the X/Y/Z axes, so the direction of the radii have
+> to be determined when you use a projection/rotation wand the first time.
+>
+> In addition to commands, the radial directions can also be changed using the 4 rotation wands. Every time a rotation
+> wand is used, in addition to the radius length, the ellipse is also rotated such that the clicked point becomes the
+> intersection point of the circumference and the respective radius.
+>
+> Otherwise, using projection wands, the radii (lengths) can still be changed, but the ellipses will not be rotated. If
+> a projection wand is used on a point that cannot be used as the respective radius, the **closest possible point** (not
+> the rotated point!) will be used instead.
+>
+> The mechanism is quite complicated and cannot be explained with words easily. Try experimenting them in the game insetad!
+
+---
+
+> ###### `PROTIP` Shifting CCCs:
+> If you want to move the whole CCC selection (only your "cursor", not the blocks selected), the `cylshift` wand can
+> help you. Just click the new _Base_ and the CCC selection is moved.
+>
+> The `cylshift` wand does not affect the rotation of the CCC shape.

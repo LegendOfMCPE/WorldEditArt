@@ -25,6 +25,7 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\PlayerEventListener;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
+use pocketmine\plugin\PluginException;
 use pocketmine\Server;
 use pocketmine\utils\Binary;
 use sofe\libgeom\LibgeomBinaryStream;
@@ -70,10 +71,12 @@ class WorldEditArt extends PluginBase{
 		return $server->getPluginManager()->getPlugin(Consts::PLUGIN_NAME);
 	}
 
-	public static function requireVersion(Server $server, int $edition, int $major, int $minor) : bool{
+	public static function requireVersion(Server $server, int $edition, int $major, int $minor) {
 		$instance = WorldEditArt::getInstance($server);
 		list($a, $b, $c,) = array_map("intval", explode(".", $instance->getDescription()->getVersion()));
-		return $a === $edition && $major === $b && $minor < $c;
+		if(!($a === $edition && $major === $b && $minor < $c)){
+			throw new PluginException("Depends on unsupported WorldEditArt version (provided $a.$b.$c, dependent uses $edition.$major.$minor)");
+		}
 	}
 
 
