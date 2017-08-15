@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
+use LegendsOfMCPE\WorldEditArt\Epsilon\Session\WandTrigger;
 use pocketmine\command\CommandSender;
 use pocketmine\level\Location;
 use pocketmine\utils\TextFormat;
@@ -43,28 +44,36 @@ abstract class BuilderSession{
 
 	/** @var Location|null */
 	private $overridingLocation = null;
+
 	/** @var Location[] */
 	private $bookmarks = [];
 	/** @var IShape[] */
 	private $selections = [];
 	/** @var string */
 	private $defaultSelectionName = "default";
+	/** @var bool */
+	private $wandEnabled = true;
+	/** @var WandTrigger[] */
+	private $wandTriggers = [];
 
 	public function __construct(WorldEditArt $plugin){
 		$this->plugin = $plugin;
 		// TODO load bookmarks
 		// TODO load selections
+		// TODO load wand triggers
 	}
 
 	public function close(){
 		// TODO save bookmarks
 		// TODO save selections
+		// TODO save wand triggers
 		foreach($this->plugin->getConstructionZones() as $zone){
 			if($zone->getLockingSession() === $this){
 				$zone->unlock();
 			}
 		}
 	}
+
 
 	public abstract function getOwner() : CommandSender;
 
@@ -168,5 +177,28 @@ abstract class BuilderSession{
 
 	public function setDefaultSelectionName(string $defaultSelectionName){
 		$this->defaultSelectionName = $defaultSelectionName;
+	}
+
+	public function isWandEnabled() : bool{
+		return $this->wandEnabled;
+	}
+
+	public function setWandEnabled(bool $wandEnabled){
+		$this->wandEnabled = $wandEnabled;
+	}
+
+	public function addWandTrigger(WandTrigger $trigger){
+		$this->wandTriggers[$trigger->getClickId()] = $trigger;
+	}
+
+	public function getWandTrigger(int $itemId, int $actionType){
+		return $this->wandTriggers[WandTrigger::clickId($itemId, $actionType)] ?? null;
+	}
+
+	/**
+	 * @return WandTrigger[]
+	 */
+	public function getWandTriggers() : array{
+		return $this->wandTriggers;
 	}
 }

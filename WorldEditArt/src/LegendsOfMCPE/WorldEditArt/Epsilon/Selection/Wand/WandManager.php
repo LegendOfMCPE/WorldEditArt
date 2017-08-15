@@ -57,4 +57,15 @@ class WandManager{
 	public function getCommands() : array{
 		return $this->cmds;
 	}
+
+	public function getWand(string $wandName) : Wand{
+		return $this->wands[$wandName];
+	}
+
+	/**
+	 * @return Wand[]
+	 */
+	public function getWands() : array{
+		return $this->wands;
+	}
 }

@@ -22,10 +22,12 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\ConstructionZone\C
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\DefaultSelectionNameCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\DeselectCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\Edit\CuboidCommand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\Edit\CylinderCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\ShowSelectionCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\AtCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\BookmarkCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\ManageSessionsCommand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\WandConfigCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 use pocketmine\command\Command;
 use pocketmine\command\PluginIdentifiableCommand;
@@ -79,6 +81,8 @@ abstract class WorldEditArtCommand extends Command implements PluginIdentifiable
 		$cmds[] = new DeselectCommand($plugin);
 		$cmds[] = new DefaultSelectionNameCommand($plugin);
 		$cmds[] = new CuboidCommand($plugin);
+		$cmds[] = new CylinderCommand($plugin);
+		$cmds[] = new WandConfigCommand($plugin);
 		// then //@
 		$at = new AtCommand($plugin, $cmds);
 		$cmds[] = $at;

@@ -180,9 +180,11 @@ are equivalent to using the wand on **the block your feet are _in_**. Here are a
 * **Floating at the edge of a well** (where you are trapped in the water): Sometimes you are in the air block above the
 water, and sometimes you are in the water block.
 * **Standing on a _full_ block**: The air block above the full block is used.
-  * This also includes upper slabs, inverted stairs, the upper step of stairs and closed trapdoors placed on the upper half, etc.
+  * This also includes upper slabs, inverted stairs, the upper step of stairs and closed trapdoors placed on the upper
+    half, etc.
 * **Standing on an _incomplete_ block**: The incomplete block is used.
-  * This includes both "thin" and "thick" blocks, such as chests, soul sand, lower slabs, redstone repeaters, cauldrons, etc.
+  * This includes both "thin" and "thick" blocks, such as chests, soul sand, lower slabs, redstone repeaters, cauldrons,
+    etc.
 
 The wand will apply to your default selection name. You may add an argument behind wand commands to specify the
 selection to modify, e.g. `//pos1 selection-2`.
@@ -191,10 +193,13 @@ If you use a wand for a shape different from your current selection's shape, you
 replaced by the new shape.
 
 Note that it is unreasonable for a shape to have its points in different worlds, so your current selection will also be
-deleted if you use any wands in a different world. You may temporarily disable wands using the `//wand true|false` command.
+deleted if you use any wands in a different world. You may temporarily disable wands using the `//wand true|false`
+command.
 
 Selection beyond the height limit is allowed. They will be automatically skipped like non-construction-area blocks if
 you try to change them with block-setting commands.
+
+Minion builder sessions can only use wands by typing the respective commands.
 
 #### Cuboid Selections
 A cuboid selection is a rectangular box oriented vertically.
@@ -277,7 +282,8 @@ Vice versa for `cyltop***` wands.
 > a projection wand is used on a point that cannot be used as the respective radius, the **closest possible point** (not
 > the rotated point!) will be used instead.
 >
-> The mechanism is quite complicated and cannot be explained with words easily. Try experimenting them in the game insetad!
+> The mechanism is quite complicated and cannot be explained with words easily. Try experimenting them in the game
+> instead!
 
 ---
 

@@ -54,21 +54,21 @@ abstract class UserFormat{
 		$em2 = TextFormat::LIGHT_PURPLE;
 		$em3 = TextFormat::BLUE;
 
-		if($shape instanceof CuboidShape){
-			switch($format){
-				case UserFormat::FORMAT_USER_DEFINITION:
-					return "{$baseColor}Cuboid ({$em1}pos1: " . UserFormat::formatVector($shape->getFrom()) . "{$baseColor}, " .
-						"{$em2}pos2: " . UserFormat::formatVector($shape->getTo()) .
-						" {$baseColor}in world {$em3}" . UserFormat::nameLevel($shape->getLevel($server));
-				case UserFormat::FORMAT_USER_RANGE:
-					return "{$baseColor}Cuboid {$em1}from " . UserFormat::formatVector($shape->getMin()) .
-						" {$em2}to pos2: " . UserFormat::formatVector($shape->getMax()) .
-						" {$baseColor}in world {$em3}" . UserFormat::nameLevel($shape->getLevel($server));
-				case UserFormat::FORMAT_DEBUG:
-					return "Cuboid(from={$shape->getFrom()}, to={$shape->getTo()}, level=" . UserFormat::nameLevel($shape->getLevel($server)) . ")";
-			}
-			throw UserFormat::unknownFormat($format);
-		}
+//		if($shape instanceof CuboidShape){
+//			switch($format){
+//				case UserFormat::FORMAT_USER_DEFINITION:
+//					return "{$baseColor}Cuboid ({$em1}pos1: " . UserFormat::formatVector($shape->getFrom()) . "{$baseColor}, " .
+//						"{$em2}pos2: " . UserFormat::formatVector($shape->getTo()) .
+//						" {$baseColor}in world {$em3}" . UserFormat::nameLevel($shape->getLevel($server));
+//				case UserFormat::FORMAT_USER_RANGE:
+//					return "{$baseColor}Cuboid {$em1}from " . UserFormat::formatVector($shape->getMin()) .
+//						" {$em2}to pos2: " . UserFormat::formatVector($shape->getMax()) .
+//						" {$baseColor}in world {$em3}" . UserFormat::nameLevel($shape->getLevel($server));
+//				case UserFormat::FORMAT_DEBUG:
+//					return "Cuboid(from={$shape->getFrom()}, to={$shape->getTo()}, level=" . UserFormat::nameLevel($shape->getLevel($server)) . ")";
+//			}
+//			throw UserFormat::unknownFormat($format);
+//		}
 
 		return var_export($shape, true); // TODO will be fixed in multi-lang support
 		// TODO handle incomplete shapes

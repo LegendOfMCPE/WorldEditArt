@@ -19,12 +19,14 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\ConstructionZone;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Session\PlayerBuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 use pocketmine\block\Block;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\Cancellable;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
@@ -103,5 +105,25 @@ class PlayerEventListener implements Listener{
 				}
 			}
 		}
+	}
+
+	/**
+	 * @param PlayerInteractEvent $event
+	 *
+	 * @priority LOW
+	 */
+	public function onInteract(PlayerInteractEvent $event){
+		$player = $event->getPlayer();
+		$sessions = $this->plugin->getSessionsOf($player);
+		if(!isset($sessions[PlayerBuilderSession::SESSION_KEY])){
+			return;
+		}
+		$session = $sessions[PlayerBuilderSession::SESSION_KEY];
+		$trigger = $session->getWandTrigger($event->getItem()->getId(), $event->getAction());
+		if($trigger === null){
+			return;
+		}
+		$wand = $this->plugin->getWandManager()->getWand($trigger->wandName);
+		$wand->execute($session, $event->getBlock(), $session->getDefaultSelectionName());
 	}
 }

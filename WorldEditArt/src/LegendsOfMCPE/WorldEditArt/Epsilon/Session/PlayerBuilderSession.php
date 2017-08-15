@@ -59,8 +59,12 @@ class PlayerBuilderSession extends BuilderSession{
 			}else{
 				$this->player->sendPopup($color . $message);
 			}
-		}elseif($class === BuilderSession::MSG_CLASS_SUCCESS){
-			$this->player->sendTip(($title !== null ? (TextFormat::BOLD . $color . $message . TextFormat::RESET . "\n") : "") . $color . $message);
+//		}elseif($class === BuilderSession::MSG_CLASS_SUCCESS){
+//			if($title !== null){
+//				$this->player->sendTip(TextFormat::BOLD . $color . $title . TextFormat::RESET . "\n" . $color . $message);
+//			}else{
+//				$this->player->sendTip($color . $message);
+//			}
 		}else{
 			if($title !== null){
 				$this->player->sendMessage(TextFormat::BOLD . $color . $title);
