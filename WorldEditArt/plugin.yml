@@ -100,6 +100,13 @@ permissions: # default for permission.default is "op"
                 description: Allows toggling wands
               worldeditart.builder.wand.configure:
                 description: Allows viewing and configuring wand triggers
+          worldeditart.builder.set:
+            description: Permission to use //set
+            children:
+              worldeditart.builder.set.hollow:
+                description: Allows using //set with hollow=true
+              worldeditart.builder.set.solid:
+                description: Allows using //set with hollow=false
       worldeditart.admin:
         description: Permissions for admins
         children:

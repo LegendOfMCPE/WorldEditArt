@@ -69,4 +69,5 @@ class Consts{
 	const PERM_SELECT_SET_CYLINDER = "worldeditart.builder.select.set.cylinder";
 	const PERM_WAND_TOGGLE = "worldeditart.builder.wand.toggle";
 	const PERM_WAND_CONFIGURE = "worldeditart.builder.wand.configure";
+	const PERM_SET = "worldeditart.builder.set";
 }
