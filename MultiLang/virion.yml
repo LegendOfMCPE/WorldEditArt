@@ -1,0 +1,4 @@
+name: WorldEditArt.MultiLang
+version: 4.1.0.0
+antigen: LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\MultiLang
+

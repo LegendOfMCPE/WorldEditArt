@@ -11,4 +11,11 @@ projects:
         version: "^0.0"
       - src: SOF3/pschemlib/pschemlib
         version: "^0.0"
+      - src: /WorldEditArt-MultiLang
+        version: "4.*"
+
+  WorldEditArt-MultiLang:
+    path: MultiLang
+    type: library
+    model: virion
 ...
