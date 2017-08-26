@@ -542,7 +542,7 @@ class CylinderCommand extends SessionCommand{
 		}
 
 		if($isTop){
-			$shape->setTopRightRadius(0)->setTopFrontRadius(0);
+			$shape->setTopRightRadius(0.0)->setTopFrontRadius(0.0);
 		}else{
 			if(!$this->notNull($shape->getTop(), $shape->getNormal(), $shape->getRightDir(), $shape->getTopRightRadius(), $shape->getTopFrontRadius())){
 				$session->msg("Your \"$selName\" selection does not have a complete top ellipse, hence the base ellipse cannot be converted into a cone tip.", BuilderSession::MSG_CLASS_ERROR);

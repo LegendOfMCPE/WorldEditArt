@@ -20,7 +20,6 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Manipulation
 use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockPicker;
-use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Synchronizer\Cassette;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 

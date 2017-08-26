@@ -29,11 +29,13 @@ use pocketmine\plugin\PluginException;
 use pocketmine\Server;
 use pocketmine\utils\Binary;
 use sofe\libgeom\io\LibgeomLittleEndianDataReader;
-use sofe\libgeom\LibgeomBinaryStream;
+use sofe\libgeom\io\LibgeomLittleEndianDataWriter;
+use sofe\libgeom\LibgeomMathUtils;
 use sofe\libgeom\UnsupportedOperationException;
 use sofe\pschemlib\SchematicFile;
 use sofe\toomuchbuffer\Closeable;
 use sofe\toomuchbuffer\StreamInputStream;
+use sofe\toomuchbuffer\StreamOutputStream;
 use spoondetector\SpoonDetector;
 
 class WorldEditArt extends PluginBase{
@@ -77,8 +79,8 @@ class WorldEditArt extends PluginBase{
 
 	private function loadConstructionZones(){
 		if(is_file($fn = $this->getDataFolder() . "constructionZones.dat")){
+			$stream = new LibgeomLittleEndianDataReader(new StreamInputStream(fopen($fn, "rb")));
 			try{
-				$stream = new LibgeomLittleEndianDataReader(new StreamInputStream(fopen($fn, "rb")));
 				$version = $stream->readShort();
 				if($version !== 1){
 					throw new UnsupportedOperationException("Unsupported constructionZones.dat version ($version, only supports 1)");
@@ -97,6 +99,8 @@ class WorldEditArt extends PluginBase{
 				$this->getLogger()->error("Corrupted constructionZones.dat, resetting to empty...");
 				file_put_contents($fn, Binary::writeUnsignedVarInt(0));
 				$this->constructionZones = [];
+			}finally{
+				$stream->close();
 			}
 		}else{
 			$this->constructionZones = [];
@@ -104,16 +108,16 @@ class WorldEditArt extends PluginBase{
 	}
 
 	private function saveConstructionZones(){
-		$stream = new LibgeomBinaryStream();
-		$stream->putShort(1); // version
-		$stream->putUnsignedVarInt(count($this->constructionZones));
+		$stream = new LibgeomLittleEndianDataWriter(new StreamOutputStream(fopen($this->getDataFolder() . "constructionZones.dat", "wb")));
+		$stream->writeShort(1); // version
+		$stream->writeVarInt(count($this->constructionZones), false);
 		foreach($this->constructionZones as $zone){
 			$shape = $zone->getShape()->getBaseShape();
-			$stream->putString($zone->getName());
-			$stream->putString(get_class($shape));
+			$stream->writeString($zone->getName());
+			$stream->writeString(get_class($shape));
 			$shape->toBinary($stream);
 		}
-		file_put_contents($this->getDataFolder() . "constructionZones.dat", $stream->getBuffer());
+		$stream->close();
 	}
 
 	public function onEnable(){
@@ -136,7 +140,7 @@ class WorldEditArt extends PluginBase{
 				return;
 			}
 		}
-		if(!class_exists(LibgeomBinaryStream::class)){
+		if(!class_exists(LibgeomMathUtils::class)){
 			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without libgeom v2");
 		}
 		if(!class_exists(SchematicFile::class)){

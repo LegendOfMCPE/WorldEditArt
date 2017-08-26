@@ -152,8 +152,4 @@ abstract class UserFormat{
 	public static function nameLevel(Level $level) : string{
 		return $level->getFolderName() . ($level->getFolderName() === $level->getName() ? "" : " ({$level->getName()})");
 	}
-
-	private static function unknownFormat(int $format) : \InvalidArgumentException{
-		return new \InvalidArgumentException("Unknown format $format");
-	}
 }

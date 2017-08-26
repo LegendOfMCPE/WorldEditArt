@@ -19,14 +19,9 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\Selection;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
 use pocketmine\math\Vector3;
-use sofe\libgeom\io\LibgeomDataReader;
 use sofe\libgeom\io\LibgeomDataWriter;
-use sofe\libgeom\LibgeomBinaryStream;
 use sofe\libgeom\Shape;
 
-/** @noinspection PhpInconsistentReturnPointsInspection */
-
-/** @noinspection PhpInconsistentReturnPointsInspection */
 class PolygonFrustumShapeBuilder extends Shape implements IShape{
 	public function getBaseShape() : Shape{
 		return $this;
