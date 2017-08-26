@@ -59,6 +59,10 @@ class ShapeWrapper implements IShape{
 		return $this->baseShape->getEstimatedSize();
 	}
 
+	public function getEstimatedSurfaceSize(float $padding, float $margin) : int{
+		return $this->baseShape->getEstimatedSurfaceSize($padding, $margin);
+	}
+
 	/** @noinspection PhpInconsistentReturnPointsInspection
 	 * @param Vector3 $vector
 	 *
@@ -75,8 +79,8 @@ class ShapeWrapper implements IShape{
 	 *
 	 * @return \Generator
 	 */
-	public function getShallowStream(Vector3 $vector, float $padding, float $margin) : \Generator{
-		return $this->baseShape->getShallowStream($vector, $padding, $margin);
+	public function getHollowStream(Vector3 $vector, float $padding, float $margin) : \Generator{
+		return $this->baseShape->getHollowStream($vector, $padding, $margin);
 	}
 
 	public function marginalDistance(Vector3 $vector) : float{
@@ -85,5 +89,37 @@ class ShapeWrapper implements IShape{
 
 	public function getChunksInvolved() : array{
 		return $this->baseShape->getChunksInvolved();
+	}
+
+	public function isComplete() : bool{
+		return $this->baseShape->isComplete();
+	}
+
+	public function getCenter(){
+		return $this->baseShape->getCenter();
+	}
+
+	public function getMinX() : int{
+		return $this->baseShape->getMinX();
+	}
+
+	public function getMinY() : int{
+		return $this->baseShape->getMinY();
+	}
+
+	public function getMinZ() : int{
+		return $this->baseShape->getMinZ();
+	}
+
+	public function getMaxX() : int{
+		return $this->baseShape->getMaxX();
+	}
+
+	public function getMaxY() : int{
+		return $this->baseShape->getMaxY();
+	}
+
+	public function getMaxZ() : int{
+		return $this->baseShape->getMaxZ();
 	}
 }

@@ -8,5 +8,7 @@ construction zone check: false
 construction zone worlds:
   - list world names here
 
+blocks-per-chunk threshold for asynchronous editing: 200
+
 DO NOT EDIT THIS LINE: 1
 ...

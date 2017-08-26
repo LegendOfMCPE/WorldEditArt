@@ -26,7 +26,6 @@ use pocketmine\math\Vector3;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use sofe\libgeom\Shape;
-use sofe\libgeom\shapes\CuboidShape;
 
 abstract class UserFormat{
 	const FORMAT_USER_DEFINITION = 1;

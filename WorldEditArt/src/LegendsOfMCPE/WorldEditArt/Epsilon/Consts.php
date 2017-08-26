@@ -18,10 +18,12 @@ declare(strict_types=1);
 namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
 class Consts{
-	const PLUGIN_NAME = "WorldEditArt-Epsilon";
+	const PLUGIN_NAME = "WorldEditArt";
 
 	const CONFIG_SESSION_IMPLICIT = "implicit builder session";
 	const CONFIG_SESSION_GLOBAL_PASSPHRASE = "builder session global passphrase";
+
+	const CONFIG_ASYNC_THRESHOLD = "blocks-per-chunk threshold for asynchronous editing";
 
 	const CONFIG_VERSION = "DO NOT EDIT THIS LINE";
 	const CONFIG_VERSION_VALUE = 1;
@@ -69,4 +71,5 @@ class Consts{
 	const PERM_SELECT_SET_CYLINDER = "worldeditart.builder.select.set.cylinder";
 	const PERM_WAND_TOGGLE = "worldeditart.builder.wand.toggle";
 	const PERM_WAND_CONFIGURE = "worldeditart.builder.wand.configure";
+	const PERM_SET = "worldeditart.builder.set";
 }

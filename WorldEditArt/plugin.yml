@@ -1,4 +1,4 @@
-name: WorldEditArt-Epsilon
+name: WorldEditArt
 version: 4.1.0.0 # {code name (rewrite)}.{major version (API change)}.{minor version (API addition)}.{patch version (identical API)}
 website: https://legendofmcpe.github.io/WorldEditArt/v4.1.0.html # this is used in StatusCommand.php, TODO update this every release
 author: SOFe
@@ -100,6 +100,16 @@ permissions: # default for permission.default is "op"
                 description: Allows toggling wands
               worldeditart.builder.wand.configure:
                 description: Allows viewing and configuring wand triggers
+          worldeditart.builder.manipulate:
+            description: Permission to manipulate blocks in selections with WorldEditArt
+            children:
+              worldeditart.builder.manipulate.set:
+                description: Permission to use //set
+                children:
+                  worldeditart.builder.manipulate.set.hollow:
+                    description: Allows using //set with hollow=true
+                  worldeditart.builder.manipulate.set.solid:
+                    description: Allows using //set with hollow=false
       worldeditart.admin:
         description: Permissions for admins
         children:

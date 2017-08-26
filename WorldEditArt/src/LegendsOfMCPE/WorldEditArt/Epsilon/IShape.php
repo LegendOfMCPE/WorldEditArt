@@ -28,13 +28,19 @@ interface IShape{
 
 	public function getEstimatedSize() : int;
 
+	public function getEstimatedSurfaceSize(float $padding, float $margin) : int;
+
 	public function getSolidStream(Vector3 $vector) : \Generator;
 
-	public function getShallowStream(Vector3 $vector, float $padding, float $margin) : \Generator;
+	public function getHollowStream(Vector3 $vector, float $padding, float $margin) : \Generator;
 
 	public function marginalDistance(Vector3 $vector) : float;
 
 	public function getChunksInvolved() : array;
+
+	public function isComplete() : bool;
+
+	public function getCenter();
 
 	public function getBaseShape() : Shape;
 }

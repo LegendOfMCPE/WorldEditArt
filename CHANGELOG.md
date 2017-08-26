@@ -30,5 +30,8 @@ WorldEditArt::requireVersion($this->getServer(), 4, 1, 0);
     - Except:
       - `//cyl normalize false` (`false` for `preserveLength`) is not properly implemented, and temporarily redirects to `//cyl normalize true` due to technical difficulties that can be overcome _had I tried harder learning vector mathematics_.
     - **UNDOCUMENTED: Commands**
+  - Manipulation commands
+    - //set
+      - **UNDOCUMENTED**
 
 [Unreleased]: https://github.com/LegendOfMCPE/WorldEditArt/compare/delta/v3.0...HEAD

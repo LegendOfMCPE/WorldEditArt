@@ -22,7 +22,6 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
 use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\AbstractFieldDefinitionWand;
 use pocketmine\level\Position;
-use pocketmine\utils\TextFormat;
 use sofe\libgeom\Shape;
 use sofe\libgeom\shapes\CuboidShape;
 

@@ -64,7 +64,7 @@ class WandConfigCommand extends SessionCommand{
 		if(!isset($args[0])){
 			// list
 			if(!$session->hasPermission(Consts::PERM_WAND_CONFIGURE)){
-				$session->msg("You don't have permission to configure wand triggers",BuilderSession::MSG_CLASS_ERROR);
+				$session->msg("You don't have permission to configure wand triggers", BuilderSession::MSG_CLASS_ERROR);
 				return;
 			}
 			$session->msg(implode(", ", array_keys($wands)), BuilderSession::MSG_CLASS_INFO, "Wands Types");
@@ -91,7 +91,7 @@ class WandConfigCommand extends SessionCommand{
 		$arg0 = mb_strtolower($args[0]);
 		if($arg0 === "true" || $arg0 === "false"){
 			if(!$session->hasPermission(Consts::PERM_WAND_TOGGLE)){
-				$session->msg("You don't have permission to toggle wands",BuilderSession::MSG_CLASS_ERROR);
+				$session->msg("You don't have permission to toggle wands", BuilderSession::MSG_CLASS_ERROR);
 				return;
 			}
 			// toggle
@@ -101,7 +101,7 @@ class WandConfigCommand extends SessionCommand{
 		}
 
 		if(!$session->hasPermission(Consts::PERM_WAND_CONFIGURE)){
-			$session->msg("You don't have permission to configure wand triggers",BuilderSession::MSG_CLASS_ERROR);
+			$session->msg("You don't have permission to configure wand triggers", BuilderSession::MSG_CLASS_ERROR);
 			return;
 		}
 		if(!isset($wands[$arg0])){
@@ -154,7 +154,7 @@ class WandConfigCommand extends SessionCommand{
 			case "r":
 			case "right":
 			case "rightClick":
-				$right =true;
+				$right = true;
 				break;
 			case "*":
 			case "any":
@@ -177,12 +177,12 @@ class WandConfigCommand extends SessionCommand{
 		foreach($triggers as $trigger){
 			$session->addWandTrigger($trigger);
 			$session->msg(sprintf("Added trigger: %s%s %s%s => %s%s",
-					TextFormat::AQUA,
-					$trigger->actionType === PlayerInteractEvent::LEFT_CLICK_BLOCK ? "Left-click " : "Right-click ",
-					TextFormat::LIGHT_PURPLE,
-					Item::get($trigger->itemId)->getName(),
-					TextFormat::BLUE,
-					$trigger->wandName),BuilderSession::MSG_CLASS_SUCCESS);
+				TextFormat::AQUA,
+				$trigger->actionType === PlayerInteractEvent::LEFT_CLICK_BLOCK ? "Left-click " : "Right-click ",
+				TextFormat::LIGHT_PURPLE,
+				Item::get($trigger->itemId)->getName(),
+				TextFormat::BLUE,
+				$trigger->wandName), BuilderSession::MSG_CLASS_SUCCESS);
 		}
 	}
 }

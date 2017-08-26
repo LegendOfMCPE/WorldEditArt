@@ -19,6 +19,8 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\Selection;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
 use pocketmine\math\Vector3;
+use sofe\libgeom\io\LibgeomDataReader;
+use sofe\libgeom\io\LibgeomDataWriter;
 use sofe\libgeom\LibgeomBinaryStream;
 use sofe\libgeom\Shape;
 
@@ -56,7 +58,7 @@ class PolygonFrustumShapeBuilder extends Shape implements IShape{
 	 * @return \Generator
 	 * @throws \AssertionError
 	 */
-	public function getShallowStream(Vector3 $vector, float $padding, float $margin) : \Generator{
+	public function getHollowStream(Vector3 $vector, float $padding, float $margin) : \Generator{
 		throw new \AssertionError("Incomplete shape");
 	}
 
@@ -68,7 +70,7 @@ class PolygonFrustumShapeBuilder extends Shape implements IShape{
 		throw new \AssertionError("Incomplete shape");
 	}
 
-	public function toBinary(LibgeomBinaryStream $stream){
+	public function toBinary(LibgeomDataWriter $stream){
 		throw new \AssertionError("Incomplete shape");
 	}
 
@@ -98,5 +100,13 @@ class PolygonFrustumShapeBuilder extends Shape implements IShape{
 
 	public function isComplete() : bool{
 		return false;
+	}
+
+	public function getEstimatedSurfaceSize(float $padding, float $margin) : int{
+		throw new \AssertionError("Incomplete shape");
+	}
+
+	protected function lazyGetCenter() : Vector3{
+		throw new \AssertionError("Incomplete shape");
 	}
 }

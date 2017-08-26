@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\Utils;
 
 use pocketmine\math\Vector3;
-use sofe\libgeom\LibgeomMathUtils;
 
 /**
  * A 3x3 matrix is represented as a Vector3[3] array, and a 1x3 matrix is represented as a Vector3 object.

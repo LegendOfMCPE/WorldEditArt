@@ -28,50 +28,25 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\plugin\PluginException;
 use pocketmine\Server;
 use pocketmine\utils\Binary;
+use sofe\libgeom\io\LibgeomLittleEndianDataReader;
 use sofe\libgeom\LibgeomBinaryStream;
 use sofe\libgeom\UnsupportedOperationException;
+use sofe\pschemlib\SchematicFile;
+use sofe\toomuchbuffer\Closeable;
+use sofe\toomuchbuffer\StreamInputStream;
 use spoondetector\SpoonDetector;
 
 class WorldEditArt extends PluginBase{
+	/** @var array */
+	private $metadata;
 	/** @var ConstructionZone[] */
 	private $constructionZones;
-
 	/** @var BuilderSession[][] */
 	private $builderSessionMap;
 	/** @var WandManager */
 	private $wandManager;
 
-	public function onEnable(){
-		SpoonDetector::printSpoon($this);
-		$this->saveDefaultConfig();
-		$this->getConfig();
-		$this->loadConstructionZones();
-
-		$this->builderSessionMap = [];
-		$this->wandManager = new WandManager($this);
-		WorldEditArtCommand::registerAll($this, $this->wandManager->getCommands());
-
-		new PlayerEventListener($this);
-	}
-
-	public function onDisable(){
-		if(isset($this->constructionZones)){
-			$this->saveConstructionZones();
-		}
-	}
-
-	public function onLoad(){
-		if(!class_exists(LibgeomBinaryStream::class)){
-			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without libgeom v2");
-		}
-	}
-
-	public static function getInstance(Server $server) : WorldEditArt{
-		/** @noinspection PhpIncompatibleReturnTypeInspection */
-		return $server->getPluginManager()->getPlugin(Consts::PLUGIN_NAME);
-	}
-
-	public static function requireVersion(Server $server, int $edition, int $major, int $minor) {
+	public static function requireVersion(Server $server, int $edition, int $major, int $minor){
 		$instance = WorldEditArt::getInstance($server);
 		list($a, $b, $c,) = array_map("intval", explode(".", $instance->getDescription()->getVersion()));
 		if(!($a === $edition && $major === $b && $minor < $c)){
@@ -80,20 +55,40 @@ class WorldEditArt extends PluginBase{
 	}
 
 
+	/**
+	 * Returns all active construction zones on the server
+	 *
+	 * The keys of the array are the names of the construction zones in lowercase. The case-preserved name can be obtained from
+	 * {@see ConstructionZone::getName()}
+	 *
+	 * @return ConstructionZone[]
+	 */
+	public function getConstructionZones() : array{
+		return $this->constructionZones;
+	}
+
+	public function getWandManager() : WandManager{
+		return $this->wandManager;
+	}
+
+	public function getCacheFolder() : string{
+		return $this->getDataFolder() . "cache" . DIRECTORY_SEPARATOR;
+	}
+
 	private function loadConstructionZones(){
 		if(is_file($fn = $this->getDataFolder() . "constructionZones.dat")){
 			try{
-				$stream = new LibgeomBinaryStream(file_get_contents($fn));
-				$version = $stream->getShort();
+				$stream = new LibgeomLittleEndianDataReader(new StreamInputStream(fopen($fn, "rb")));
+				$version = $stream->readShort();
 				if($version !== 1){
 					throw new UnsupportedOperationException("Unsupported constructionZones.dat version ($version, only supports 1)");
 				}
-				$count = $stream->getUnsignedVarInt();
+				$count = $stream->readVarInt(false);
 				$this->constructionZones = [];
 				for($i = 0; $i < $count; ++$i){
-					$name = $stream->getString();
+					$name = $stream->readString();
 					/** @var string|\sofe\libgeom\Shape $class */
-					$class = $stream->getString();
+					$class = $stream->readString();
 					$shape = $class::fromBinary($this->getServer(), $stream);
 					$wrappedShape = new ShapeWrapper($shape);
 					$this->constructionZones[mb_strtolower($name)] = new ConstructionZone($name, $wrappedShape);
@@ -121,21 +116,66 @@ class WorldEditArt extends PluginBase{
 		file_put_contents($this->getDataFolder() . "constructionZones.dat", $stream->getBuffer());
 	}
 
-	/**
-	 * Returns all active construction zones on the server
-	 *
-	 * The keys of the array are the names of the construction zones in lowercase. The case-preserved name can be obtained from
-	 * {@see ConstructionZone::getName()}
-	 *
-	 * @return ConstructionZone[]
-	 */
-	public function getConstructionZones() : array{
-		return $this->constructionZones;
+	public function onEnable(){
+		if(!\Phar::running()){
+			/** @noinspection SpellCheckingInspection */
+			$this->getLogger()->critical(base64_decode("RG8gbm90IHJ1biBXb3JsZEVkaXRBcnQtRXBzaWxvbiBmcm9tIHNvdXJjZS4="));
+			return;
+		}
+		if(!$this->getServer()->getConfigBoolean("worldeditart.allow-non-poggit", false)){
+			$phar = new \Phar(\Phar::running(false));
+			$this->metadata = $phar->getMetadata();
+			if(is_array($this->metadata) && isset($this->metadata["builderName"]) && $this->metadata["builderName"] === "poggit" && $this->metadata["class"] === "Dev" && $this->metadata["projectId"] === 724){
+				$this->saveDefaultConfig();
+				if(!isset($this->metadata["poggitRelease"])){
+					$this->getLogger()->warning("You are using a development build from Poggit. You are strongly recommended to download the latest release from https://poggit.pmmp.io/p/WorldEditArt instead, as development builds are unstable.");
+				}
+			}else{
+				/** @noinspection SpellCheckingInspection */
+				$this->getLogger()->critical(base64_decode("UGxlYXNlIG9ubHkgdXNlIERldiBCdWlsZHMgb2YgV29ybGRFZGl0QXJ0IGRvd25sb2FkZWQgZnJvbSBQb2dnaXQuCg=="));
+				return;
+			}
+		}
+		if(!class_exists(LibgeomBinaryStream::class)){
+			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without libgeom v2");
+		}
+		if(!class_exists(SchematicFile::class)){
+			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without pschemlib v0");
+		}
+		if(!class_exists(SpoonDetector::class)){
+			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without spoondetector v0");
+		}
+		if(!interface_exists(Closeable::class)){
+			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without toomuchbuffer v0");
+		}
+		SpoonDetector::printSpoon($this);
+
+		$this->builderSessionMap = [];
+		if(!is_dir($this->getDataFolder() . "cache")){
+			mkdir($this->getDataFolder() . "cache");
+		}
+		if(!is_file($this->getDataFolder() . "config.yml")){
+			throw new PluginException("config.yml missing");
+		}
+		$this->getConfig();
+		$this->loadConstructionZones();
+
+		$this->builderSessionMap = [];
+		$this->wandManager = new WandManager($this);
+		WorldEditArtCommand::registerAll($this, $this->wandManager->getCommands());
+
+		new PlayerEventListener($this);
 	}
 
+	public function onDisable(){
+		if(isset($this->constructionZones)){
+			$this->saveConstructionZones();
+		}
+	}
 
-	public function getWandManager() : WandManager{
-		return $this->wandManager;
+	public static function getInstance(Server $server) : WorldEditArt{
+		/** @noinspection PhpIncompatibleReturnTypeInspection */
+		return $server->getPluginManager()->getPlugin(Consts::PLUGIN_NAME);
 	}
 
 
