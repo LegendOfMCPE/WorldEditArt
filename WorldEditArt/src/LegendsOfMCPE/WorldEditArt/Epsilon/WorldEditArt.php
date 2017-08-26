@@ -34,8 +34,6 @@ use sofe\libgeom\LibgeomMathUtils;
 use sofe\libgeom\UnsupportedOperationException;
 use sofe\pschemlib\SchematicFile;
 use sofe\toomuchbuffer\Closeable;
-use sofe\toomuchbuffer\StreamInputStream;
-use sofe\toomuchbuffer\StreamOutputStream;
 use spoondetector\SpoonDetector;
 
 class WorldEditArt extends PluginBase{
@@ -79,7 +77,7 @@ class WorldEditArt extends PluginBase{
 
 	private function loadConstructionZones(){
 		if(is_file($fn = $this->getDataFolder() . "constructionZones.dat")){
-			$stream = new LibgeomLittleEndianDataReader(new StreamInputStream(fopen($fn, "rb")));
+			$stream = LibgeomLittleEndianDataReader::fromFile($fn);
 			try{
 				$version = $stream->readShort();
 				if($version !== 1){
@@ -108,7 +106,7 @@ class WorldEditArt extends PluginBase{
 	}
 
 	private function saveConstructionZones(){
-		$stream = new LibgeomLittleEndianDataWriter(new StreamOutputStream(fopen($this->getDataFolder() . "constructionZones.dat", "wb")));
+		$stream = LibgeomLittleEndianDataWriter::toFile($this->getDataFolder() . "constructionZones.dat");
 		$stream->writeShort(1); // version
 		$stream->writeVarInt(count($this->constructionZones), false);
 		foreach($this->constructionZones as $zone){
