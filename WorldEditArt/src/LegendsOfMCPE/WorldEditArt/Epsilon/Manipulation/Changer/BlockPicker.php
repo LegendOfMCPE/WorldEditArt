@@ -110,13 +110,9 @@ final class BlockPicker{
 			assert($type->weight > 0);
 		}
 		do{
-			$rand = random_int(0, PHP_EOL);
+			$rand = random_int(0, PHP_INT_MAX - 1);
 			try{
-				if($rand === PHP_EOL){
-					yield $types[0];
-					continue;
-				}
-				$rand *= $sum / PHP_EOL;
+				$rand *= $sum / PHP_INT_MAX;
 				foreach($types as $type){
 					$rand -= $type->weight;
 					if($rand < 0){
