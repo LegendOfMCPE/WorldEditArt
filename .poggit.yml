@@ -7,10 +7,14 @@ projects:
     libs:
       - src: BlockHorizons/libgeom/libgeom
         version: "^2.0"
+        epitope: .sha
       - src: Falkirks/spoondetector/spoondetector
         version: "^0.0"
+        epitope: .sha
       - src: SOF3/pschemlib/pschemlib
         version: "^0.0"
+        epitope: .sha
       - src: SOF3/toomuchbuffer/toomuchbuffer
         version: "^1.0"
+        epitope: .sha
 ...
