@@ -129,7 +129,7 @@ class WorldEditArt extends PluginBase{
 		if(!$this->getServer()->getConfigBoolean("worldeditart.allow-non-poggit", false)){
 			$phar = new \Phar(\Phar::running(false));
 			$this->metadata = $phar->getMetadata();
-			if(is_array($this->metadata) && isset($this->metadata["builderName"]) && $this->metadata["builderName"] === "poggit" && $this->metadata["class"] === "Dev" && $this->metadata["projectId"] === 724){
+			if(is_array($this->metadata) && isset($this->metadata["builderName"]) && $this->metadata["builderName"] === "poggit" && $this->metadata["buildClass"] === "Dev" && $this->metadata["projectId"] === 724){
 				$this->saveDefaultConfig();
 				if(!isset($this->metadata["poggitRelease"])){
 					$this->getLogger()->warning("You are using a development build from Poggit. You are strongly recommended to download the latest release from https://poggit.pmmp.io/p/WorldEditArt instead, as development builds are unstable.");
