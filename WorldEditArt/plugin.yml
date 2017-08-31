@@ -1,7 +1,7 @@
 name: WorldEditArt
 version: 4.1.0.0 # {code name (rewrite)}.{major version (API change)}.{minor version (API addition)}.{patch version (identical API)}
 website: https://legendofmcpe.github.io/WorldEditArt/v4.1.0.html # this is used in StatusCommand.php, TODO update this every release
-author: SOFe
+author: SOFe...
 
 main: LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt
 api:
