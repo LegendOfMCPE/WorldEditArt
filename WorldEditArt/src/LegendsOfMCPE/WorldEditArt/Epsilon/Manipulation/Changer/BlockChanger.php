@@ -23,21 +23,31 @@ use pocketmine\math\Vector3;
 class BlockChanger{
 	/** @var BlockType[] */
 	private $fromTypes;
-	/** @var \Generator */
+	/** @var BlockPicker */
 	private $toTypes;
 
-	public function __construct(array $toTypes, Vector3 $center, BlockType ...$fromTypes){
+	/**
+	 * BlockChanger constructor.
+	 *
+	 * @param BlockPicker $picker
+	 * @param BlockType[] $fromTypes
+	 */
+	public function __construct(BlockPicker $picker, array $fromTypes){
 		$this->fromTypes = $fromTypes;
-		$c = $toTypes[0];
-		$this->toTypes = $c($toTypes[1]);
+		$this->toTypes = $picker;
 	}
 
-	public function change(Block $from){
+	public function reset() : void{
+		$this->toTypes->reset();
+	}
+
+	public function change(Block $from) : ?BlockType{
+		if(count($this->fromTypes) === 0){
+			return $this->toTypes->feed();
+		}
 		foreach($this->fromTypes as $type){
 			if($type->matches($from)){
-				$current = $this->toTypes->current();
-				$this->toTypes->next();
-				return $current;
+				return $this->toTypes->feed();
 			}
 		}
 		return null;

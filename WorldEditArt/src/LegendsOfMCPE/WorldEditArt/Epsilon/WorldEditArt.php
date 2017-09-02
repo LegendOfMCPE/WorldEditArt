@@ -119,6 +119,11 @@ class WorldEditArt extends PluginBase{
 	}
 
 	public function onEnable(){
+		if(PHP_MAJOR_VERSION !== 7 || PHP_MINOR_VERSION < 2){
+			/** @noinspection SpellCheckingInspection */
+			$this->getLogger()->critical(base64_decode("V29ybGRFZGl0QXJ0LUVwc2lsb24gb25seSBzdXBwb3J0cyBQSFAgNy4yIG9yIGFib3ZlLiBQbGVhc2UgdXBncmFkZSB5b3VyIFBIUCBiaW5hcmllcyBhbmQgUG9ja2V0TWluZSB2ZXJzaW9uLiBTZWUgdGhpcyB0d2VldCAoYW5kIGl0cyByZXBsaWVzKSBmb3IgZGV0YWlsczogaHR0cHM6Ly90d2l0dGVyLmNvbS9ka3RhcHBzL3N0YXR1cy85MDMzNTk4ODk3OTEyMTM1Njg="));
+			return;
+		}
 		if(!\Phar::running()){
 			/** @noinspection SpellCheckingInspection */
 			$this->getLogger()->critical(base64_decode("RG8gbm90IHJ1biBXb3JsZEVkaXRBcnQtRXBzaWxvbiBmcm9tIHNvdXJjZS4="));

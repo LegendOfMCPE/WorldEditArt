@@ -19,6 +19,7 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Manipulation
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockChanger;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockPicker;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
@@ -82,6 +83,7 @@ class SetCommand extends SessionCommand{
 			$this->sendBlocksUsage($session);
 			return;
 		}
+		$changer = new BlockChanger($picker,[]);
 
 		$shape = $session->getSelection($selName);
 		if($shape === null){

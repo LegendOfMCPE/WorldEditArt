@@ -17,7 +17,11 @@ declare(strict_types=1);
 
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer;
 
-use Generator;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\Picker\RandomLinearBlockPicker;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\Picker\RandomWeightedBlockPicker;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\Picker\RepeatingLinearBlockPicker;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\Picker\RepeatingWeightedBlockPicker;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\Picker\SingleBlockPicker;
 
 /**
  * An utility class providing several Generator methods for picking blocks.
@@ -26,18 +30,15 @@ use Generator;
  * - Within an *action*, use a <code>foreach</code> loop to get as many blocks
  * - To *finalize/invalidate/close* a Generator when it is not used anymore: <pre>$generator->send(false);</pre>
  */
-final class BlockPicker{
-	private function __construct(){
-	}
-
+abstract class BlockPicker{
 	/**
-	 * @param array  $args
-	 * @param bool   $random
-	 * @param string &$error
+	 * @param string[] $args
+	 * @param bool     $random
+	 * @param string   &$error
 	 *
-	 * @return array|null
+	 * @return BlockPicker|null
 	 */
-	public static function parseArgs(array $args, bool $random, string &$error){
+	public static function parseArgs(array $args, bool $random, string &$error) : ?BlockPicker{
 		/** @var WeightedBlockType[] $types */
 		$types = [];
 		/** @var WeightedBlockType $currentType */
@@ -70,92 +71,13 @@ final class BlockPicker{
 			return null;
 		}
 		if(count($types) === 1){
-			return [[BlockPicker::class, "yieldSingle"], [$types[0]]];
+			return new SingleBlockPicker($types[0]);
 		}
-		$func = $random ?
-			($weighted ? "yieldRandomWeighted" : "yieldRandomLinear") :
-			($weighted ? "yieldRepeatingWeighted" : "yieldRepeatingLinear");
-		return [[BlockPicker::class, $func], $types];
+		return $random ? ($weighted ? new RandomWeightedBlockPicker($types) : new RandomLinearBlockPicker($types)) : ($weighted ? new RepeatingWeightedBlockPicker($types) : new RepeatingLinearBlockPicker($types));
 	}
 
-	public static function yieldSingle(BlockType $type) : Generator{
-		do{
-			try{
-				$continue = yield $type;
-				if($continue === false){
-					return;
-				}
-			}catch(ResetBlockPickerException $e){
-			}
-		}while(true);
+	public function reset() : void{
 	}
 
-	public static function yieldRandomLinear(BlockType ...$types) : Generator{
-		do{
-			try{
-				$continue = yield $types[array_rand($types)];
-				if($continue === false){
-					return;
-				}
-			}catch(ResetBlockPickerException $e){
-			}
-		}while(true);
-	}
-
-	public static function yieldRandomWeighted(WeightedBlockType ...$types) : Generator{
-		assert($types !== []);
-		$sum = 0.0;
-		foreach($types as $type){
-			$sum += $type->weight;
-			assert($type->weight > 0);
-		}
-		do{
-			$rand = random_int(0, PHP_INT_MAX - 1);
-			try{
-				$rand *= $sum / PHP_INT_MAX;
-				foreach($types as $type){
-					$rand -= $type->weight;
-					if($rand < 0){
-						$continue = yield $type;
-						if(!$continue){
-							return;
-						}
-
-						break;
-					}
-				}
-			}catch(ResetBlockPickerException $e){
-			}
-		}while(true);
-	}
-
-	public static function yieldRepeatingLinear(BlockType ...$types) : Generator{
-		do{
-			try{
-				foreach($types as $type){
-					$continue = yield $type;
-					if($continue === false){
-						return;
-					}
-				}
-			}catch(ResetBlockPickerException $e){
-			}
-		}while(true);
-	}
-
-	public static function yieldRepeatingWeighted(WeightedBlockType ...$types) : Generator{
-		do{
-			try{
-				foreach($types as $type){
-					for($i = 0; $i < $type->weight; ++$i){
-						$continue = yield $type;
-						if($continue === false){
-							return;
-						}
-					}
-				}
-			}catch(ResetBlockPickerException $e){
-			}
-		}while(true);
-	}
+	public abstract function feed() : ?BlockType;
 }
