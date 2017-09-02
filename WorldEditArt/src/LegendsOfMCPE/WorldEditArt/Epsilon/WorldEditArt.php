@@ -48,7 +48,7 @@ class WorldEditArt extends PluginBase{
 
 	public static function requireVersion(Server $server, int $edition, int $major, int $minor){
 		$instance = WorldEditArt::getInstance($server);
-		list($a, $b, $c,) = array_map("intval", explode(".", $instance->getDescription()->getVersion()));
+		[$a, $b, $c] = array_map("intval", explode(".", $instance->getDescription()->getVersion()));
 		if(!($a === $edition && $major === $b && $minor < $c)){
 			throw new PluginException("Depends on unsupported WorldEditArt version (provided $a.$b.$c, dependent uses $edition.$major.$minor)");
 		}
@@ -129,7 +129,7 @@ class WorldEditArt extends PluginBase{
 			$this->getLogger()->critical(base64_decode("RG8gbm90IHJ1biBXb3JsZEVkaXRBcnQtRXBzaWxvbiBmcm9tIHNvdXJjZS4="));
 			return;
 		}
-		if(!$this->getServer()->getConfigBoolean("worldeditart.allow-non-poggit", false)){
+		if(!$this->getServer()->getConfigBoolean("worldeditart.allow-non-poggit")){
 			$phar = new \Phar(\Phar::running(false));
 			$this->metadata = $phar->getMetadata();
 			if(is_array($this->metadata) && isset($this->metadata["builderName"]) && $this->metadata["builderName"] === "poggit" && $this->metadata["buildClass"] === "Dev" && $this->metadata["projectId"] === 724){

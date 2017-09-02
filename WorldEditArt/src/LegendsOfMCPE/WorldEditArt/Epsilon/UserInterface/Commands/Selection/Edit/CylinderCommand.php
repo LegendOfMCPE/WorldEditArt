@@ -178,7 +178,7 @@ class CylinderCommand extends SessionCommand{
 			]);
 	}
 
-	public function run(BuilderSession $session, array $args){
+	public function run(BuilderSession $session, array $args) : void{
 		if(!isset($args[0])){
 			$this->sendUsage($session);
 			return;

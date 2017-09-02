@@ -59,7 +59,7 @@ class WandConfigCommand extends SessionCommand{
 			]);
 	}
 
-	public function run(BuilderSession $session, array $args){
+	public function run(BuilderSession $session, array $args) : void{
 		$wands = $this->getPlugin()->getWandManager()->getWands();
 		if(!isset($args[0])){
 			// list

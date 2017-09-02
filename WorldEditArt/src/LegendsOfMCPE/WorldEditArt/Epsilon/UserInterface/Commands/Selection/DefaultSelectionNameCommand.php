@@ -35,7 +35,7 @@ class DefaultSelectionNameCommand extends SessionCommand{
 		]);
 	}
 
-	public function run(BuilderSession $session, array $args){
+	public function run(BuilderSession $session, array $args) : void{
 		if(isset($args[0])){
 			$session->setDefaultSelectionName($args[0]);
 			$session->msg("Set your default selection to $args[0]", BuilderSession::MSG_CLASS_SUCCESS);

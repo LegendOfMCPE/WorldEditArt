@@ -49,7 +49,7 @@ abstract class SessionCommand extends WorldEditArtCommand{
 	 *
 	 * @return void
 	 */
-	public abstract function run(BuilderSession $session, array $args);
+	public abstract function run(BuilderSession $session, array $args) : void;
 
 	public function sendUsage(BuilderSession $session, int $class = BuilderSession::MSG_CLASS_ERROR){
 		$session->msg("Usage: " . $this->getUsage(), $class);

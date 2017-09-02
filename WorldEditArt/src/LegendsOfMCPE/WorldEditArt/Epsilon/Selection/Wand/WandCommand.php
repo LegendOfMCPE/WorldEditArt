@@ -42,7 +42,7 @@ class WandCommand extends SessionCommand{
 		]);
 	}
 
-	public function run(BuilderSession $session, array $args){
+	public function run(BuilderSession $session, array $args) : void{
 		$this->wand->execute($session, $session->getLocation()->asPosition(), $args[0] ?? $session->getDefaultSelectionName());
 	}
 }

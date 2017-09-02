@@ -51,7 +51,7 @@ class PlayerBuilderSession extends BuilderSession{
 		return $this->player;
 	}
 
-	public function msg(string $message, int $class = BuilderSession::MSG_CLASS_INFO, string $title = null){
+	public function msg(string $message, int $class = BuilderSession::MSG_CLASS_INFO, string $title = null) : void{
 		$color = BuilderSession::MSG_CLASS_COLOR_MAP[$class];
 		if($class === BuilderSession::MSG_CLASS_LOADING || $class === BuilderSession::MSG_CLASS_UPDATE){
 			if($title !== null){

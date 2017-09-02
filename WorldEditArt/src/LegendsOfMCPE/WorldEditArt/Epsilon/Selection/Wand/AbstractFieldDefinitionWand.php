@@ -27,7 +27,7 @@ use sofe\libgeom\Shape;
  * @internal This class should not be used by non-WorldEditArt code.
  */
 abstract class AbstractFieldDefinitionWand implements Wand{
-	public function execute(BuilderSession $session, Position $position, string $selectionName){
+	public function execute(BuilderSession $session, Position $position, string $selectionName) : void{
 		$shape = $session->getSelection($selectionName);
 		if($shape !== null){
 			$shape = $shape->getBaseShape();

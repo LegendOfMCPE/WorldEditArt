@@ -48,7 +48,7 @@ class WandManager{
 		$this->addWand(new CylinderCircumRotateWand(false, false));
 	}
 
-	public function addWand(Wand $wand){
+	public function addWand(Wand $wand) : void{
 		$this->wands[$wand->getName()] = $wand;
 		$this->plugin->getServer()->getCommandMap()->register("wand",
 			$this->cmds[] = new WandCommand($this->plugin, $wand));

@@ -35,7 +35,7 @@ class DeselectCommand extends SessionCommand{
 		]);
 	}
 
-	public function run(BuilderSession $session, array $args){
+	public function run(BuilderSession $session, array $args) : void{
 		if(!$session->hasSelection($name = $args[0] ?? $session->getDefaultSelectionName())){
 			$session->msg("You don't have a selection called \"$name\"", BuilderSession::MSG_CLASS_ERROR);
 			return;

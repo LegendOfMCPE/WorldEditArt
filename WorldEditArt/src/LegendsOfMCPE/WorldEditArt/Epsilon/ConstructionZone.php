@@ -65,7 +65,7 @@ class ConstructionZone{
 		return $this->shape;
 	}
 
-	public function setShape(IShape $shape){
+	public function setShape(IShape $shape) : void{
 		$this->shape = $shape;
 	}
 
@@ -77,7 +77,7 @@ class ConstructionZone{
 		return $this->lockMode ?? 0;
 	}
 
-	public function lock(BuilderSession $lockingSession, int $lockMode){
+	public function lock(BuilderSession $lockingSession, int $lockMode) : void{
 		if(isset($this->lockingSession)){
 			throw new \InvalidStateException("Zone already locked!");
 		}
@@ -85,7 +85,7 @@ class ConstructionZone{
 		$this->lockMode = $lockMode;
 	}
 
-	public function unlock(){
+	public function unlock() : void{
 		unset($this->lockingSession, $this->lockMode);
 	}
 }

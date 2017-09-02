@@ -63,7 +63,7 @@ abstract class BuilderSession{
 		// TODO load wand triggers
 	}
 
-	public function close(){
+	public function close() : void{
 		// TODO save bookmarks
 		// TODO save selections
 		// TODO save wand triggers
@@ -93,14 +93,14 @@ abstract class BuilderSession{
 		return ($this->overridingLocation ?? $this->getRealLocation())->asLocation();
 	}
 
-	public function executeAtLocation(Location $location, callable $function){
+	public function executeAtLocation(Location $location, callable $function) : void{
 		$old = $this->overridingLocation;
 		$this->overridingLocation = $location;
 		$function();
 		$this->overridingLocation = $old;
 	}
 
-	public function msg(string $message, int $class = BuilderSession::MSG_CLASS_INFO, string $title = null){
+	public function msg(string $message, int $class = BuilderSession::MSG_CLASS_INFO, string $title = null) : void{
 		if($title !== null){
 			$this->getOwner()->sendMessage(TextFormat::BOLD . BuilderSession::MSG_CLASS_COLOR_MAP[$class] . $title);
 		}
@@ -126,7 +126,7 @@ abstract class BuilderSession{
 	 *
 	 * @return null|Location
 	 */
-	public function getBookmark(string $name){
+	public function getBookmark(string $name) : ?Location{
 		return $this->bookmarks[mb_strtolower($name)] ?? null;
 	}
 
@@ -134,11 +134,11 @@ abstract class BuilderSession{
 		return isset($this->bookmarks[mb_strtolower($name)]);
 	}
 
-	public function setBookmark(string $name, Location $location){
+	public function setBookmark(string $name, Location $location) : void{
 		$this->bookmarks[mb_strtolower($name)] = $location;
 	}
 
-	public function removeBookmark(string $name){
+	public function removeBookmark(string $name) : void{
 		unset($this->bookmarks[mb_strtolower($name)]);
 	}
 
@@ -155,7 +155,7 @@ abstract class BuilderSession{
 	 *
 	 * @return IShape|null
 	 */
-	public function getSelection(string $name){
+	public function getSelection(string $name) : ?IShape{
 		return $this->selections[mb_strtolower($name)] ?? null;
 	}
 
@@ -163,11 +163,11 @@ abstract class BuilderSession{
 		return isset($this->selections[mb_strtolower($name)]);
 	}
 
-	public function setSelection(string $name, IShape $shape){
+	public function setSelection(string $name, IShape $shape) : void{
 		$this->selections[mb_strtolower($name)] = $shape;
 	}
 
-	public function removeSelection(string $name){
+	public function removeSelection(string $name) : void{
 		unset($this->selections[mb_strtolower($name)]);
 	}
 
@@ -175,7 +175,7 @@ abstract class BuilderSession{
 		return $this->defaultSelectionName;
 	}
 
-	public function setDefaultSelectionName(string $defaultSelectionName){
+	public function setDefaultSelectionName(string $defaultSelectionName) : void{
 		$this->defaultSelectionName = $defaultSelectionName;
 	}
 
@@ -183,15 +183,15 @@ abstract class BuilderSession{
 		return $this->wandEnabled;
 	}
 
-	public function setWandEnabled(bool $wandEnabled){
+	public function setWandEnabled(bool $wandEnabled) : void{
 		$this->wandEnabled = $wandEnabled;
 	}
 
-	public function addWandTrigger(WandTrigger $trigger){
+	public function addWandTrigger(WandTrigger $trigger) : void{
 		$this->wandTriggers[$trigger->getClickId()] = $trigger;
 	}
 
-	public function getWandTrigger(int $itemId, int $actionType){
+	public function getWandTrigger(int $itemId, int $actionType) : ?WandTrigger{
 		return $this->wandTriggers[WandTrigger::clickId($itemId, $actionType)] ?? null;
 	}
 

@@ -37,7 +37,7 @@ class SetCommand extends SessionCommand{
 		]);
 	}
 
-	public function run(BuilderSession $session, array $args){
+	public function run(BuilderSession $session, array $args) : void{
 		$hollow = false;
 		/** @var float|null $padding
 		 * @var float|null $margin
@@ -83,7 +83,7 @@ class SetCommand extends SessionCommand{
 			$this->sendBlocksUsage($session);
 			return;
 		}
-		$changer = new BlockChanger($picker,[]);
+		$changer = new BlockChanger($picker, []);
 
 		$shape = $session->getSelection($selName);
 		if($shape === null){

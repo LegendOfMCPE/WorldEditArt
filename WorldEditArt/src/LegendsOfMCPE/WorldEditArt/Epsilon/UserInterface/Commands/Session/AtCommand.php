@@ -129,7 +129,7 @@ class AtCommand extends SessionCommand{
 			"//at {<x> <y> <z>}|{s <world>}|{b <bookmark>}|{p <player>}{$warp} <command...>", ["/@"], implode(";", Consts::PERM_AT_ANY), $formats);
 	}
 
-	public function run(BuilderSession $session, array $args){
+	public function run(BuilderSession $session, array $args) : void{
 		if(!isset($args[2])){
 			$this->sendUsage($session);
 			return;
@@ -247,7 +247,7 @@ class AtCommand extends SessionCommand{
 	 *
 	 * @return null|Vector3
 	 */
-	private function toValidCoords(array $coords, Vector3 $rel, bool &$usesAbsolute, bool &$usesRelative){
+	private function toValidCoords(array $coords, Vector3 $rel, bool &$usesAbsolute, bool &$usesRelative) : ?Vector3{
 		assert(count($coords) === 3);
 		$usesAbsolute = false;
 		$usesRelative = false;

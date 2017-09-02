@@ -47,7 +47,7 @@ class BookmarkCommand extends SessionCommand{
 		]);
 	}
 
-	public function run(BuilderSession $session, array $args){
+	public function run(BuilderSession $session, array $args) : void{
 		if(isset($args[0])){
 			$action = mb_strtolower($args[0]);
 			if(!isset($args[1])){

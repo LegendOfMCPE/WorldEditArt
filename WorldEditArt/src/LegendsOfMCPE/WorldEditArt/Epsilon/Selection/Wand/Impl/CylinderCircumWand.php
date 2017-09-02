@@ -72,7 +72,7 @@ abstract class CylinderCircumWand extends AbstractFieldDefinitionWand{
 	 *
 	 * @return float|null
 	 */
-	protected function getRadius(CircularFrustumShape $shape, bool $differentAxis, bool $differentFace){
+	protected function getRadius(CircularFrustumShape $shape, bool $differentAxis, bool $differentFace) : ?float{
 		// the !== used below are equivalent to the XOR operator
 		if($this->isTop !== $differentFace){
 			if($this->isFront !== $differentAxis){

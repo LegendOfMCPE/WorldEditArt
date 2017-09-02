@@ -38,7 +38,7 @@ class ShowSelectionCommand extends SessionCommand{
 		]);
 	}
 
-	public function run(BuilderSession $session, array $args){
+	public function run(BuilderSession $session, array $args) : void{
 		if(isset($args[0])){
 			if(!$session->hasSelection($name = $args[0])){
 				$session->msg("You don't have a selection called $name. Use //sel to show all selections", BuilderSession::MSG_CLASS_ERROR);
