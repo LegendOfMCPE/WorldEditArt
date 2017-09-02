@@ -20,6 +20,7 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl;
 use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
 use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
+use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeWrapper;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\AbstractFieldDefinitionWand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
 use pocketmine\level\Position;
@@ -51,11 +52,7 @@ class CylinderBaseCenterWand extends AbstractFieldDefinitionWand{
 	}
 
 	protected function createNew(Position $position) : IShape{
-		$shape = new class($position->getLevel(), $position) extends CircularFrustumShape implements IShape{
-			public function getBaseShape() : Shape{
-				return $this;
-			}
-		};
+		$shape = new ShapeWrapper(new CircularFrustumShape($position->getLevel(), $position));
 		return $shape;
 	}
 }

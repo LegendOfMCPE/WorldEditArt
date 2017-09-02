@@ -19,14 +19,13 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\Ed
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
-use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
+use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeWrapper;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\WEAMath;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
-use sofe\libgeom\Shape;
 use sofe\libgeom\shapes\CuboidShape;
 
 class CuboidCommand extends SessionCommand{
@@ -98,11 +97,7 @@ class CuboidCommand extends SessionCommand{
 				$distance = (float) $args[1];
 				$from = $session->getLocation();
 				$to = $from->add(WEAMath::yawPitchToVector($from->yaw, $from->pitch)->multiply($distance));
-				$shape = new class($from->getLevel(), $from, $to) extends CuboidShape implements IShape{
-					public function getBaseShape() : Shape{
-						return $this;
-					}
-				};
+				$shape = new ShapeWrapper(new CuboidShape($from->getLevel(), $from, $to));
 				$session->setSelection($selName = $args[2] ?? $session->getDefaultSelectionName(), $shape);
 				break;
 			case "grow":
@@ -126,11 +121,7 @@ class CuboidCommand extends SessionCommand{
 			grow_create_new_cuboid:
 				//@formatter:on
 				$loc = $session->getLocation();
-				$shape = new class($loc->getLevel(), $loc, $loc) extends CuboidShape implements IShape{
-					public function getBaseShape() : Shape{
-						return $this;
-					}
-				};
+				$shape = new ShapeWrapper(new CuboidShape($loc->getLevel(), $loc, $loc));
 				$session->setSelection($selName, $shape);
 				break;
 			case "skybed":

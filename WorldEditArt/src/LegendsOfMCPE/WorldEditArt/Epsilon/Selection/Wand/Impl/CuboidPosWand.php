@@ -20,6 +20,7 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl;
 use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
 use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
+use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeWrapper;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\AbstractFieldDefinitionWand;
 use pocketmine\level\Position;
 use sofe\libgeom\Shape;
@@ -59,15 +60,11 @@ class CuboidPosWand extends AbstractFieldDefinitionWand{
 	}
 
 	protected function createNew(Position $position) : IShape{
-		$shape = new class($position->getLevel()) extends CuboidShape implements IShape{
-			public function getBaseShape() : Shape{
-				return $this;
-			}
-		};
+		$shape = new ShapeWrapper($base = new CuboidShape($position->getLevel()));
 		if($this->one){
-			$shape->setFrom($position);
+			$base->setFrom($position);
 		}else{
-			$shape->setTo($position);
+			$base->setTo($position);
 		}
 		return $shape;
 	}

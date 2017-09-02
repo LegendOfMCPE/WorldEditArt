@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer;
 
 use pocketmine\block\Block;
-use pocketmine\math\Vector3;
 
 class BlockChanger{
 	/** @var BlockType[] */

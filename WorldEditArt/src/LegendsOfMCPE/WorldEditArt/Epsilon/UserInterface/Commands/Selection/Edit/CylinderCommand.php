@@ -19,13 +19,12 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\Ed
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
-use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
+use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeWrapper;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\WEAMath;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 use pocketmine\math\Vector3;
-use sofe\libgeom\Shape;
 use sofe\libgeom\shapes\CircularFrustumShape;
 
 class CylinderCommand extends SessionCommand{
@@ -256,12 +255,8 @@ class CylinderCommand extends SessionCommand{
 		}
 
 		$loc = $session->getLocation();
-		$shape = new class($loc->getLevel(), $loc, $loc->add($axis->multiply($height)), $axis,
-			$loc->add($right->multiply($radius)), $radius, $radius, $radius) extends CircularFrustumShape implements IShape{
-			public function getBaseShape() : Shape{
-				return $this;
-			}
-		};
+		$shape = new ShapeWrapper(new CircularFrustumShape($loc->getLevel(), $loc, $loc->add($axis->multiply($height)), $axis,
+			$loc->add($right->multiply($radius)), $radius, $radius, $radius));
 		$session->setSelection($selName, $shape);
 		return 1;
 	}
@@ -374,11 +369,7 @@ class CylinderCommand extends SessionCommand{
 				}
 				return 2;
 			}
-			$shape = new class($session->getLocation()->getLevel(), $session->getLocation()) extends CircularFrustumShape implements IShape{
-				public function getBaseShape() : Shape{
-					return $this;
-				}
-			};
+			$shape = new ShapeWrapper(new CircularFrustumShape($session->getLocation()->getLevel(), $session->getLocation()));
 		}
 
 		if($whichRight){
@@ -550,11 +541,7 @@ class CylinderCommand extends SessionCommand{
 			}
 			$oldShape = $shape;
 			/** @noinspection NullPointerExceptionInspection */
-			$shape = new class($oldShape->getLevel($session->getPlugin()->getServer()), $oldShape->getTop(), $oldShape->getBase(), $oldShape->getNormal(), $oldShape->getTop()->add($oldShape->getRightDir()->multiply($oldShape->getTopRightRadius())), $oldShape->getTopFrontRadius(), 0.0, 0.0) extends CircularFrustumShape implements IShape{
-				public function getBaseShape() : Shape{
-					return $this;
-				}
-			};
+			$shape = new ShapeWrapper(new CircularFrustumShape($oldShape->getLevel($session->getPlugin()->getServer()), $oldShape->getTop(), $oldShape->getBase(), $oldShape->getNormal(), $oldShape->getTop()->add($oldShape->getRightDir()->multiply($oldShape->getTopRightRadius())), $oldShape->getTopFrontRadius(), 0.0, 0.0));
 			$session->setSelection($selName, $shape);
 		}
 		return 1;

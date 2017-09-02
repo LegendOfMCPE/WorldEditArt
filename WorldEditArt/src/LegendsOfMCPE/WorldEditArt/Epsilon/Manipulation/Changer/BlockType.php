@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer;
 
 use pocketmine\block\Block;
+use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockIds;
 use pocketmine\item\Item;
 use pocketmine\item\ItemIds;
@@ -91,7 +92,7 @@ class BlockType{
 			}elseif(is_numeric($parts[1])){
 				$instance->blockDamage = ((int) $parts[1]) & 15;
 			}else{
-				$class = Block::$list[$instance->blockId];
+				$class = get_class(BlockFactory::get($instance->blockId));
 				if(defined($class . "::" . strtoupper($parts[1]))){
 					$instance->blockDamage = constant($class . "::" . strtoupper($parts[1]));
 				}else{
