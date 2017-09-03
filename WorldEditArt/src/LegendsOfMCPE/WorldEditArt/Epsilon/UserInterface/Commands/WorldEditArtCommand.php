@@ -25,6 +25,7 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\DefaultS
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\DeselectCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\Edit\CuboidCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\Edit\CylinderCommand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\Edit\SphereCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\ShowSelectionCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\AtCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\BookmarkCommand;
@@ -84,6 +85,7 @@ abstract class WorldEditArtCommand extends Command implements PluginIdentifiable
 		$cmds[] = new DefaultSelectionNameCommand($plugin);
 		$cmds[] = new CuboidCommand($plugin);
 		$cmds[] = new CylinderCommand($plugin);
+		$cmds[] = new SphereCommand($plugin);
 		$cmds[] = new WandConfigCommand($plugin);
 		$cmds[] = new SetCommand($plugin);
 		$cmds[] = new ReplaceCommand($plugin);

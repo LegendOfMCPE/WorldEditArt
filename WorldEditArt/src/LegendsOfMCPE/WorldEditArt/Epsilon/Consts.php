@@ -72,6 +72,7 @@ class Consts{
 	const PERM_SELECT_DESEL = "worldeditart.builder.select.desel";
 	const PERM_SELECT_SET_CUBOID = "worldeditart.builder.select.set.cuboid";
 	const PERM_SELECT_SET_CYLINDER = "worldeditart.builder.select.set.cylinder";
+	const PERM_SELECT_SET_SPHERE = "worldeditart.builder.select.set.sphere";
 	const PERM_WAND_TOGGLE = "worldeditart.builder.wand.toggle";
 	const PERM_WAND_CONFIGURE = "worldeditart.builder.wand.configure";
 	const PERM_SET = "worldeditart.builder.manipulate.set";

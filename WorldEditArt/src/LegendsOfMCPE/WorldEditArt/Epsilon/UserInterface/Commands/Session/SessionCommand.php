@@ -40,6 +40,9 @@ abstract class SessionCommand extends WorldEditArtCommand{
 			$sender->sendMessage("Please start a builder session with `//session start` to use this command.");
 			return;
 		}
+		$args = array_filter($args, function($value){
+			return $value !== "";
+		});
 		$this->run($sessions[PlayerBuilderSession::SESSION_KEY], $args);
 	}
 

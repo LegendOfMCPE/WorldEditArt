@@ -24,7 +24,7 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 
 class DefaultSelectionNameCommand extends SessionCommand{
 	public function __construct(WorldEditArt $plugin){
-		parent::__construct($plugin, "/selname", "Change your default selection", "/seln [defaultSelectionName]", ["/seln"], Consts::PERM_SELECT_DEFAULT, [
+		parent::__construct($plugin, "/selname", "Change your default selection", "/seln [defaultSelectionName]", ["/seln", "/use"], Consts::PERM_SELECT_DEFAULT, [
 			"default" => [
 				[
 					"type" => "string",

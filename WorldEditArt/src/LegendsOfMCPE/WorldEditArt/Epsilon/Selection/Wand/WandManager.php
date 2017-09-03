@@ -23,6 +23,8 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl\CylinderCircumProject
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl\CylinderCircumRotateWand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl\CylinderShiftWand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl\CylinderTopCenterWand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl\SphereCenterWand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\Impl\SphereRadiusWand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 
 class WandManager{
@@ -46,6 +48,11 @@ class WandManager{
 		$this->addWand(new CylinderCircumRotateWand(true, false));
 		$this->addWand(new CylinderCircumRotateWand(false, true));
 		$this->addWand(new CylinderCircumRotateWand(false, false));
+		$this->addWand(new SphereCenterWand);
+		$this->addWand(new SphereRadiusWand(SphereRadiusWand::AXIS_ALL));
+		$this->addWand(new SphereRadiusWand(SphereRadiusWand::AXIS_X));
+		$this->addWand(new SphereRadiusWand(SphereRadiusWand::AXIS_Y));
+		$this->addWand(new SphereRadiusWand(SphereRadiusWand::AXIS_Z));
 	}
 
 	public function addWand(Wand $wand) : void{
