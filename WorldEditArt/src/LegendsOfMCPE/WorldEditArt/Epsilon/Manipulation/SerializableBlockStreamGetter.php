@@ -35,8 +35,8 @@ class SerializableBlockStreamGetter implements \Serializable{
 	 * @return \Generator
 	 */
 	public function getValue(Vector3 $vector) : \Generator{
-		$c = $this->callable;
-		return $c($vector, ...$this->args);
+		$c = unserialize($this->callable);
+		return $c($vector, ...unserialize($this->args));
 	}
 
 	/**
