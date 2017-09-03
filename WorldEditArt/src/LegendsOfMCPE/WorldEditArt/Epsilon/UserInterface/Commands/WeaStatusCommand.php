@@ -33,7 +33,7 @@ class WeaStatusCommand extends WorldEditArtCommand{
 			return;
 		}
 		$sender->sendMessage("Using " . $this->getPlugin()->getFullName());
-		$sender->sendMessage("You may find documentation for this version of WorldEditArt at {$this->getPlugin()->getDescription()->getWebsite()}/README.md");
+		$sender->sendMessage("You may find documentation for this version of WorldEditArt at {$this->getPlugin()->getDescription()->getWebsite()}");
 		$sessions = $this->getPlugin()->getSessionsOf($sender);
 		/** @noinspection PhpIllegalArrayKeyTypeInspection */
 		if(count($sessions) > 0){

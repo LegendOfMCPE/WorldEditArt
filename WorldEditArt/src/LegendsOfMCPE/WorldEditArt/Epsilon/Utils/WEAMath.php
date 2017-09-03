@@ -23,7 +23,7 @@ use pocketmine\math\Vector3;
  * A 3x3 matrix is represented as a Vector3[3] array, and a 1x3 matrix is represented as a Vector3 object.
  */
 class WEAMath{
-	public static function vectorToYawPitch(Vector3 $vector, float &$yaw, float &$pitch) : void{
+	public static function vectorToYawPitch(Vector3 $vector, &$yaw, &$pitch) : void{
 		if(((float) $vector->lengthSquared()) !== 1.0){
 			$vector = $vector->normalize();
 		}

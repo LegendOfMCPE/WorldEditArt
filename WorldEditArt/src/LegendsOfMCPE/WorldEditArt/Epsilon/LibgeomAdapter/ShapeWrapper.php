@@ -18,7 +18,9 @@ declare(strict_types=1);
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
+use pocketmine\level\Level;
 use pocketmine\math\Vector3;
+use pocketmine\Server;
 use sofe\libgeom\Shape;
 
 class ShapeWrapper implements IShape{
@@ -121,5 +123,13 @@ class ShapeWrapper implements IShape{
 
 	public function getMaxZ() : int{
 		return $this->baseShape->getMaxZ();
+	}
+
+	public function getLevel(Server $server) : ?Level{
+		return $this->baseShape->getLevel($server);
+	}
+
+	public function getLevelName() : string{
+		return $this->baseShape->getLevelName();
 	}
 }

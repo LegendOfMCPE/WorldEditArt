@@ -90,7 +90,7 @@ class SetCommand extends SessionCommand{
 			$session->msg("You don't have a selection called \"$selName\"", BuilderSession::MSG_CLASS_ERROR);
 			return;
 		}
-		if($shape->isComplete()){
+		if(!$shape->isComplete()){
 			$session->msg("Your \"$selName\" selection is incomplete!", BuilderSession::MSG_CLASS_ERROR);
 			return;
 		}
@@ -112,8 +112,9 @@ class SetCommand extends SessionCommand{
 			"The default weighting (relative probability to get chosen) for each block type is 1.\n" .
 			"If you want to specify weighting, write it behind the block type, e.g.\n" .
 			"stone 4 glowstone wood 3 glass 2\n" .
-			"If you chose the \"r\" (repeating) mode,\n",
+			"If you chose the \"r\" (repeating) mode,\n" .
+			"the weighting will be the number of times the block type repeats.",
 			$class, /** @lang text */
-			"Usage for <blocks>\n");
+			"Usage for <blocks>");
 	}
 }

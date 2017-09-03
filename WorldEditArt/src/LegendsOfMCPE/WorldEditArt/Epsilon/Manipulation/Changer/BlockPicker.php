@@ -38,7 +38,7 @@ abstract class BlockPicker{
 	 *
 	 * @return BlockPicker|null
 	 */
-	public static function parseArgs(array $args, bool $random, string &$error) : ?BlockPicker{
+	public static function parseArgs(array $args, bool $random, &$error) : ?BlockPicker{
 		/** @var WeightedBlockType[] $types */
 		$types = [];
 		/** @var WeightedBlockType $currentType */

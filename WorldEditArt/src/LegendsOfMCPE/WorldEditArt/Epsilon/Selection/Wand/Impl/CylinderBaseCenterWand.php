@@ -52,7 +52,6 @@ class CylinderBaseCenterWand extends AbstractFieldDefinitionWand{
 	}
 
 	protected function createNew(Position $position) : IShape{
-		$shape = new ShapeWrapper(new CircularFrustumShape($position->getLevel(), $position));
-		return $shape;
+		return new ShapeWrapper(new CircularFrustumShape($position->getLevel(), $position));
 	}
 }

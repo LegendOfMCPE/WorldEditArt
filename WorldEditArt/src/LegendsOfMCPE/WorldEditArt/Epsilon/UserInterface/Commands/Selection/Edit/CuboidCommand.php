@@ -24,7 +24,6 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCom
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\WEAMath;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
-use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use sofe\libgeom\shapes\CuboidShape;
 
@@ -52,6 +51,12 @@ class CuboidCommand extends SessionCommand{
 					"name" => "action",
 					"type" => "stringenum",
 					"enum_values" => ["grow", "g"],
+				],
+				[
+					"name" => "new",
+					"type" => "stringenum",
+					"enum_values" => ["new"],
+					"optional" => true,
 				],
 				[
 					"name" => "minus",
@@ -102,16 +107,29 @@ class CuboidCommand extends SessionCommand{
 				break;
 			case "grow":
 			case "g":
+				if($new = mb_strtolower($args[1]) === "new"){
+					array_shift($args);
+				}
 				$minus = new Vector3((float) $args[1], (float) $args[2], (float) $args[3]);
 				$plus = new Vector3((float) $args[4], (float) $args[5], (float) $args[6]);
 				$selName = $args[7] ?? $session->getDefaultSelectionName();
 				$shape = $session->getSelection($selName);
-				if($shape === null){
+				if($new || $shape === null){
 					goto grow_create_new_cuboid;
 				}
 				$shape = $shape->getBaseShape();
 				if(!($shape instanceof CuboidShape)){
+					$session->msg("Your prior \"$selName\" selection was not a cuboid. A new cuboid growing from your location will be created.", BuilderSession::MSG_CLASS_WARN);
 					goto grow_create_new_cuboid;
+				}
+				if($shape->getLevel($this->getPlugin()->getServer()) === null){
+					$session->msg("Your prior \"$selName\" selection was in an unloaded level, so your selection is reset.", BuilderSession::MSG_CLASS_WARN);
+					goto grow_create_new_cuboid;
+				}
+				if($shape->getLevelName() !== $session->getLocation()->getLevel()->getFolderName()){
+					$session->msg("Reminder: Your \"$selName\" selection is in world \"{$shape->getLevelName()}\", " .
+						"not your current world (\"{$session->getLocation()->getLevel()->getFolderName()}\")!",
+						BuilderSession::MSG_CLASS_WARN);
 				}
 				$min = $shape->getMin();
 				$max = $shape->getMax();
@@ -121,7 +139,7 @@ class CuboidCommand extends SessionCommand{
 			grow_create_new_cuboid:
 				//@formatter:on
 				$loc = $session->getLocation();
-				$shape = new ShapeWrapper(new CuboidShape($loc->getLevel(), $loc, $loc));
+				$shape = new ShapeWrapper(new CuboidShape($loc->getLevel(), $loc->subtract($minus), $loc->add($plus)));
 				$session->setSelection($selName, $shape);
 				break;
 			case "skybed":
@@ -137,11 +155,19 @@ class CuboidCommand extends SessionCommand{
 					$session->msg("Selection $selName is not a cuboid", BuilderSession::MSG_CLASS_ERROR);
 					return;
 				}
-				// HACK: Must be immediately followed by a setter call
+				$level = $shape->getLevel($this->getPlugin()->getServer());
+				if($level === null){
+					$session->msg("Your \"$selName\" selection is in an unloaded level, so //cub skybed cannot be executed.", BuilderSession::MSG_CLASS_ERROR);
+					return;
+				}
+				if($level !== $session->getLocation()->getLevel()){
+					$session->msg("Reminder: Your \"$selName\" selection is in a different world (\"{$level->getFolderName()}\") from your current world ({$session->getLocation()->getLevel()->getFolderName()})", BuilderSession::MSG_CLASS_WARN);
+				}
 				$from = $shape->getFrom();
 				$to = $shape->getTo();
+				// HACK: Must be immediately followed by a setter call
 				$from->y = 0;
-				$to->y = Level::Y_MAX;
+				$to->y = $shape->getLevel($this->getPlugin()->getServer())->getWorldHeight();
 				$shape->setFrom($from)->setTo($to);
 				break;
 			default:

@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
 use pocketmine\math\Vector3;
+use pocketmine\Server;
 use sofe\libgeom\Shape;
 
 /**
@@ -43,4 +44,8 @@ interface IShape{
 	public function getCenter();
 
 	public function getBaseShape() : Shape;
+
+	public function getLevel(Server $server);
+
+	public function getLevelName() : string;
 }

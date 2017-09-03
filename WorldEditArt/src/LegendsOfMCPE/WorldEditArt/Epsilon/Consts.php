@@ -23,6 +23,9 @@ class Consts{
 	const CONFIG_SESSION_IMPLICIT = "implicit builder session";
 	const CONFIG_SESSION_GLOBAL_PASSPHRASE = "builder session global passphrase";
 
+	const CONFIG_CONSTRUCTION_ZONE_CHECK = "construction zone check";
+	const CONFIG_CONSTRUCTION_ZONE_WORLDS = "construction zone worlds";
+
 	const CONFIG_ASYNC_THRESHOLD = "blocks-per-chunk threshold for asynchronous editing";
 
 	const CONFIG_VERSION = "DO NOT EDIT THIS LINE";

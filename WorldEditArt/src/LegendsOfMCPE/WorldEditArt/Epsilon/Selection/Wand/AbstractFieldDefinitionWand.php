@@ -28,22 +28,20 @@ use sofe\libgeom\Shape;
  */
 abstract class AbstractFieldDefinitionWand implements Wand{
 	public function execute(BuilderSession $session, Position $position, string $selectionName) : void{
-		$shape = $session->getSelection($selectionName);
-		if($shape !== null){
-			$shape = $shape->getBaseShape();
-		}
+		$ishape = $session->getSelection($selectionName);
+		$shape = $ishape !== null ? $ishape->getBaseShape() : null;
 		try{
 			/** @noinspection NullPointerExceptionInspection */
-			if($shape !== null and $shape->getLevelName() === $position->getLevel()->getName() and $this->canModify($shape)){
+			if($shape !== null and $shape->getLevelName() === $position->getLevel()->getFolderName() and $this->canModify($shape)){
 				$this->modify($session, $shape, $position);
 			}else{
 				if(!$this->canCreateNoisy($session)){
 					return;
 				}
-				$shape = $this->createNew($position);
-				$session->setSelection($selectionName, $shape);
+				$ishape = $this->createNew($position);
+				$session->setSelection($selectionName, $ishape);
 			}
-			$session->msg(UserFormat::describeShape($session->getPlugin()->getServer(), $shape, UserFormat::FORMAT_USER_DEFINITION), BuilderSession::MSG_CLASS_SUCCESS, "Your \"$selectionName\" selection has been changed.");
+			$session->msg(UserFormat::describeShape($session->getPlugin()->getServer(), $ishape, UserFormat::FORMAT_USER_DEFINITION), BuilderSession::MSG_CLASS_SUCCESS, "Your \"$selectionName\" selection has been changed.");
 		}catch(WandException $ex){
 			$session->msg($ex->getMessage(), BuilderSession::MSG_CLASS_ERROR);
 		}

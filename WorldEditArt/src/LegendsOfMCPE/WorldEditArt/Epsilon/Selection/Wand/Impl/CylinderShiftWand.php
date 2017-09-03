@@ -41,8 +41,7 @@ class CylinderShiftWand extends AbstractFieldDefinitionWand{
 	}
 
 	public function createNew(Position $position) : IShape{
-		$shape = new ShapeWrapper(new CircularFrustumShape($position->getLevel(), $position));
-		return $shape;
+		return new ShapeWrapper(new CircularFrustumShape($position->getLevel(), $position));
 	}
 
 	public function canModify(Shape $shape) : bool{

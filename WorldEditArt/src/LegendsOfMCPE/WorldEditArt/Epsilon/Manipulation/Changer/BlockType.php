@@ -62,12 +62,14 @@ class BlockType{
 	 *
 	 * @return BlockType|null
 	 */
-	public static function parse(string $string, string &$error, bool $weighted = false) : ?BlockType{
+	public static function parse(string $string, &$error, bool $weighted = false) : ?BlockType{
 		$parts = explode(":", str_replace([" ", "minecraft:"], ["_", ""], trim($string)), 2);
 
 		$instance = $weighted ? new WeightedBlockType(0, 0, 1.0) : new BlockType(0, 0);
 
-		if(strtoupper($parts[0]) === "AIR"){
+		if(is_numeric($parts[0]) and ($blockId = (int) $parts[0]) >= 0 and $blockId < 256){
+			$instance->blockId = $blockId;
+		}elseif(strtoupper($parts[0]) === "AIR"){
 			$instance->blockId = BlockIds::AIR;
 		}elseif(defined(ItemIds::class . "::" . strtoupper($parts[0]))){
 			$itemId = constant(ItemIds::class . "::" . strtoupper($parts[0]));

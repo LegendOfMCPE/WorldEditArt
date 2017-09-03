@@ -6,7 +6,8 @@ builder session global passphrase: ""
 
 construction zone check: false
 construction zone worlds:
-  - list world names here
+  - list world name here
+  - more world names here
 
 blocks-per-chunk threshold for asynchronous editing: 200
 

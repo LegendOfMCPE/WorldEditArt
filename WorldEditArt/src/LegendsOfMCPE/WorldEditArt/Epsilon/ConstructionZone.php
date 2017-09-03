@@ -69,8 +69,12 @@ class ConstructionZone{
 		$this->shape = $shape;
 	}
 
-	public function getLockingSession(){
+	public function getLockingSession() : ?BuilderSession{
 		return $this->lockingSession ?? null;
+	}
+
+	public function isLocked() : bool{
+		return isset($this->lockingSession);
 	}
 
 	public function getLockMode() : int{
