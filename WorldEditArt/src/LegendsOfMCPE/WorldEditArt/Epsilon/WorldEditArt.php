@@ -19,11 +19,11 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockChanger;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\SerializableBlockStreamGetter;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\WandManager;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Session\PlayerBuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\WorldEditArtCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\PlayerEventListener;
-use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\SerializableGetter;
 use pocketmine\command\CommandSender;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
@@ -192,5 +192,31 @@ class WorldEditArt extends PluginBase{
 			}
 			unset($this->builderSessionMap[$sender instanceof Player ? $sender->getId() : $sender->getName()]);
 		}
+	}
+
+
+	public function quickExecute(Level $level, string $doerHash, SerializableBlockStreamGetter $getter, BlockChanger $changer, Vector3 $center, &$badBlocks) : int{
+		$goodBlocks = 0;
+		$badBlocks = 0;
+		$manager = $this->getConstructionZoneManager();
+		$ccz = $manager->calcCczValue($level->getFolderName());
+		$vector = new Vector3;
+		$generator = $getter->getValue($vector);
+		assert($generator instanceof \Generator);
+		foreach($generator as $valid){
+			if(!$valid){
+				continue;
+			}
+			if(!$manager->canDoEdit($vector, $level->getFolderName(),$doerHash , $ccz)){
+				++$badBlocks;
+				continue;
+			}
+			$target = $changer->change($level->getBlock($vector));
+			if($target !== null){
+				$level->setBlock($vector, $target->toBlock($center->subtract($vector)), false, false);
+				++$goodBlocks;
+			}
+		}
+		return $goodBlocks;
 	}
 }
