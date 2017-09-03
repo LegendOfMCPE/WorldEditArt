@@ -23,8 +23,8 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockChanger;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockPicker;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockType;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\Picker\SingleBlockPicker;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\SerializableBlockStreamGetter;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
-use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\SerializableGetter;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 
 class ReplaceCommand extends SessionCommand{
@@ -139,10 +139,10 @@ class ReplaceCommand extends SessionCommand{
 		}
 
 		if($hollowConfig !== null){
-			$stream = new SerializableGetter([$selection, "getHollowStream"], $hollowConfig);
+			$stream = new SerializableBlockStreamGetter([$selection, "getHollowStream"], $hollowConfig);
 			$size = $selection->getEstimatedSurfaceSize($hollowConfig[0], $hollowConfig[1]);
 		}else{
-			$stream = new SerializableGetter([$selection, "getSolidStream"], []);
+			$stream = new SerializableBlockStreamGetter([$selection, "getSolidStream"], []);
 			$size = $selection->getEstimatedSize();
 		}
 

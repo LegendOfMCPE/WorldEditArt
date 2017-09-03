@@ -15,19 +15,28 @@
 
 declare(strict_types=1);
 
-namespace LegendsOfMCPE\WorldEditArt\Epsilon\Utils;
+namespace LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation;
 
-class SerializableGetter implements \Serializable{
+use pocketmine\math\Vector3;
+
+class SerializableBlockStreamGetter implements \Serializable{
 	private $callable;
 	/** @var string (serialized array) */
 	private $args;
-	/** @var mixed The non-serializable value */
-	private $value;
 
 	public function __construct(callable $callable, array $args){
 		$this->callable = serialize($callable);
 		$this->args = serialize($args);
-		$this->value = $callable(...$args);
+	}
+
+	/** @noinspection PhpInconsistentReturnPointsInspection
+	 * @param Vector3 $vector
+	 *
+	 * @return \Generator
+	 */
+	public function getValue(Vector3 $vector) : \Generator{
+		$c = $this->callable;
+		return $c($vector, ...$this->args);
 	}
 
 	/**
@@ -58,6 +67,5 @@ class SerializableGetter implements \Serializable{
 		$callable = unserialize($this->callable, true);
 		$args = unserialize($this->args, true);
 		// We are accepting all classes here because $serialized should not reasonably contain invalid data unless from other badly written plugins
-		$this->value = $callable(...$args);
 	}
 }
