@@ -146,7 +146,7 @@ class ReplaceCommand extends SessionCommand{
 			$size = $selection->getEstimatedSize();
 		}
 
-		$goodBlocks = $this->getPlugin()->quickExecute($level, spl_object_hash($session->getOwner()), $stream, $changer, $selName->getCenter(), $badBlocks);
+		$goodBlocks = $this->getPlugin()->quickExecute($level, spl_object_hash($session->getOwner()), $stream, $changer, $selection->getCenter(), $badBlocks);
 		$session->msg("Done! Changed $goodBlocks blocks", BuilderSession::MSG_CLASS_SUCCESS);
 		if($badBlocks > 0){
 			$session->msg("$badBlocks blocks should have been changed but could not be changed due to construction zone constraints. Please check your settings.", BuilderSession::MSG_CLASS_WARN);
