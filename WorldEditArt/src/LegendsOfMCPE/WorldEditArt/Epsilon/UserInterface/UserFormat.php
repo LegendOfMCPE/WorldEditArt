@@ -26,6 +26,7 @@ use pocketmine\math\Vector3;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use sofe\libgeom\Shape;
+use sofe\libgeom\shapes\CuboidShape;
 
 abstract class UserFormat{
 	const FORMAT_USER_DEFINITION = 1;
@@ -69,7 +70,8 @@ abstract class UserFormat{
 //			throw UserFormat::unknownFormat($format);
 //		}
 
-		return var_export($shape, true); // TODO will be fixed in multi-lang support
+		$namespace = (new \ReflectionClass(Shape::class))->getNamespaceName();
+		return str_replace($namespace, "", serialize($shape)); // TODO will be fixed in multi-lang support
 		// TODO handle incomplete shapes
 	}
 

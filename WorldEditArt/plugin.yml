@@ -105,11 +105,8 @@ permissions: # default for permission.default is "op"
             children:
               worldeditart.builder.manipulate.set:
                 description: Permission to use //set
-                children:
-                  worldeditart.builder.manipulate.set.hollow:
-                    description: Allows using //set with hollow=true
-                  worldeditart.builder.manipulate.set.solid:
-                    description: Allows using //set with hollow=false
+              worldeditart.builder.manipulate.replace:
+                description: Permission to use //replace
       worldeditart.admin:
         description: Permissions for admins
         children:

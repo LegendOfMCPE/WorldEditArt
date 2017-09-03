@@ -19,6 +19,7 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\WandCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\ConstructionZone\ConstructionZoneCommand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Manipulation\ReplaceCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Manipulation\SetCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\DefaultSelectionNameCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Selection\DeselectCommand;
@@ -85,6 +86,7 @@ abstract class WorldEditArtCommand extends Command implements PluginIdentifiable
 		$cmds[] = new CylinderCommand($plugin);
 		$cmds[] = new WandConfigCommand($plugin);
 		$cmds[] = new SetCommand($plugin);
+		$cmds[] = new ReplaceCommand($plugin);
 		// then //@
 		$at = new AtCommand($plugin, $cmds);
 		$cmds[] = $at;

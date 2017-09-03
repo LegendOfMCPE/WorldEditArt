@@ -22,13 +22,14 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockChanger;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockPicker;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\SerializableGetter;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 
 class SetCommand extends SessionCommand{
 	public function __construct(WorldEditArt $plugin){
 		parent::__construct($plugin, "/set", "Sets all blocks in an area", $usage = /** @lang text */
-			"//set [s <selectionName>]  [h [padding] [margin]] <blocks>", ["/s"], Consts::PERM_SET, [
-			"namedWeighted" => [
+			"//set [s <selectionName>]  [h [padding] [margin]] [r] <blocks>", ["/s"], Consts::PERM_SET, [
+			"default" => [
 				[
 					"name" => $usage,
 					"type" => "rawtext",
@@ -87,18 +88,28 @@ class SetCommand extends SessionCommand{
 
 		$shape = $session->getSelection($selName);
 		if($shape === null){
-			$session->msg("You don't have a selection called \"$selName\"", BuilderSession::MSG_CLASS_ERROR);
+			$session->msg("You don't have a selection called \"$selName\"!", BuilderSession::MSG_CLASS_ERROR);
 			return;
 		}
 		if(!$shape->isComplete()){
 			$session->msg("Your \"$selName\" selection is incomplete!", BuilderSession::MSG_CLASS_ERROR);
 			return;
 		}
+		if(($level = $shape->getLevel($this->getPlugin()->getServer())) === null){
+			$session->msg("Your \"$selName\" selection is in an unloaded world!", BuilderSession::MSG_CLASS_ERROR);
+			return;
+		}
+		if($level !== $session->getLocation()->getLevel()){
+			$session->msg("Reminder: Your \"$selName\" is in a different world (\"{$level->getFolderName()}\") from your current world (\"{$session->getLocation()->getLevel()->getFolderName()}\").", BuilderSession::MSG_CLASS_WARN);
+		}
 
-		$stream = [$shape, $hollow ? "getHollowStream" : "getSolidStream"];
-		$size = $hollow ? $shape->getEstimatedSurfaceSize($padding, $margin) : $shape->getEstimatedSize();
-		$chunks = $shape->getChunksInvolved();
-		$shouldUseAsync = $size / count($chunks);
+		if($hollow){
+			$stream = new SerializableGetter([$shape, "getHollowStream"], [$padding, $margin]);
+			$size = $shape->getEstimatedSurfaceSize($padding, $margin);
+		}else{
+			$stream = new SerializableGetter([$shape, "getSolidStream"], []);
+			$size = $shape->getEstimatedSize();
+		}
 
 		// TODO implement synchronization logic
 	}
