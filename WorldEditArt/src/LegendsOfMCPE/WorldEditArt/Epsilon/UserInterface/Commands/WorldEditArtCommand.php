@@ -37,6 +37,7 @@ use pocketmine\command\PluginIdentifiableCommand;
 use pocketmine\plugin\Plugin;
 use stdClass;
 
+/** @noinspection EfferentObjectCouplingInspection */
 abstract class WorldEditArtCommand extends Command implements PluginIdentifiableCommand{
 	/** @var WorldEditArt */
 	private $plugin;

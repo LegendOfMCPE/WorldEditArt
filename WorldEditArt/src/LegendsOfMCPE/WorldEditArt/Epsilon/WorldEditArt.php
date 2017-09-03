@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
-use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeWrapper;
+
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\WandManager;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Session\PlayerBuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\WorldEditArtCommand;
@@ -27,24 +27,25 @@ use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\plugin\PluginException;
 use pocketmine\Server;
-use pocketmine\utils\Binary;
-use sofe\libgeom\io\LibgeomLittleEndianDataReader;
-use sofe\libgeom\io\LibgeomLittleEndianDataWriter;
+
+
 use sofe\libgeom\LibgeomMathUtils;
-use sofe\libgeom\UnsupportedOperationException;
+
 use sofe\pschemlib\SchematicFile;
 use sofe\toomuchbuffer\Closeable;
 use spoondetector\SpoonDetector;
 
+/** @noinspection EfferentObjectCouplingInspection */
 class WorldEditArt extends PluginBase{
 	/** @var array */
 	private $metadata;
-	/** @var ConstructionZone[] */
-	private $constructionZones;
+	/** @var ConstructionZoneManager */
+	private $czManager;
 	/** @var BuilderSession[][] */
 	private $builderSessionMap;
 	/** @var WandManager */
 	private $wandManager;
+
 
 	public static function requireVersion(Server $server, int $edition, int $major, int $minor){
 		$instance = WorldEditArt::getInstance($server);
@@ -55,16 +56,8 @@ class WorldEditArt extends PluginBase{
 	}
 
 
-	/**
-	 * Returns all active construction zones on the server
-	 *
-	 * The keys of the array are the names of the construction zones in lowercase. The case-preserved name can be obtained from
-	 * {@see ConstructionZone::getName()}
-	 *
-	 * @return ConstructionZone[]
-	 */
-	public function getConstructionZones() : array{
-		return $this->constructionZones;
+	public function getConstructionZoneManager():ConstructionZoneManager{
+		return $this->czManager;
 	}
 
 	public function getWandManager() : WandManager{
@@ -75,48 +68,6 @@ class WorldEditArt extends PluginBase{
 		return $this->getDataFolder() . "cache" . DIRECTORY_SEPARATOR;
 	}
 
-	private function loadConstructionZones(){
-		if(is_file($fn = $this->getDataFolder() . "constructionZones.dat")){
-			$stream = LibgeomLittleEndianDataReader::fromFile($fn);
-			try{
-				$version = $stream->readShort();
-				if($version !== 1){
-					throw new UnsupportedOperationException("Unsupported constructionZones.dat version ($version, only supports 1)");
-				}
-				$count = $stream->readVarInt(false);
-				$this->constructionZones = [];
-				for($i = 0; $i < $count; ++$i){
-					$name = $stream->readString();
-					/** @var string|\sofe\libgeom\Shape $class */
-					$class = $stream->readString();
-					$shape = $class::fromBinary($this->getServer(), $stream);
-					$wrappedShape = new ShapeWrapper($shape);
-					$this->constructionZones[mb_strtolower($name)] = new ConstructionZone($name, $wrappedShape);
-				}
-			}catch(\UnderflowException $e){
-				$this->getLogger()->error("Corrupted constructionZones.dat, resetting to empty...");
-				file_put_contents($fn, Binary::writeUnsignedVarInt(0));
-				$this->constructionZones = [];
-			}finally{
-				$stream->close();
-			}
-		}else{
-			$this->constructionZones = [];
-		}
-	}
-
-	private function saveConstructionZones(){
-		$stream = LibgeomLittleEndianDataWriter::toFile($this->getDataFolder() . "constructionZones.dat");
-		$stream->writeShort(1); // version
-		$stream->writeVarInt(count($this->constructionZones), false);
-		foreach($this->constructionZones as $zone){
-			$shape = $zone->getShape()->getBaseShape();
-			$stream->writeString($zone->getName());
-			$stream->writeString(get_class($shape));
-			$shape->toBinary($stream);
-		}
-		$stream->close();
-	}
 
 	public function onEnable(){
 		if(PHP_MAJOR_VERSION !== 7 || PHP_MINOR_VERSION < 2){
@@ -165,7 +116,7 @@ class WorldEditArt extends PluginBase{
 			throw new PluginException("config.yml missing");
 		}
 		$this->getConfig();
-		$this->loadConstructionZones();
+		$this->czManager = new ConstructionZoneManager($this);
 
 		$this->builderSessionMap = [];
 		$this->wandManager = new WandManager($this);
@@ -175,8 +126,8 @@ class WorldEditArt extends PluginBase{
 	}
 
 	public function onDisable(){
-		if(isset($this->constructionZones)){
-			$this->saveConstructionZones();
+		if(isset($this->czManager)){
+			$this->czManager->save();
 		}
 	}
 

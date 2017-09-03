@@ -67,8 +67,9 @@ abstract class BuilderSession{
 		// TODO save bookmarks
 		// TODO save selections
 		// TODO save wand triggers
-		foreach($this->plugin->getConstructionZones() as $zone){
-			if($zone->getLockingSession() === $this){
+		$this->plugin->getConstructionZoneManager()->releaseBySession($this);
+		foreach($this->plugin->getConstructionZoneManager()->getConstructionZones() as $zone){
+			if($zone->getLockingSession() === spl_object_hash($this)){
 				$zone->unlock();
 			}
 		}

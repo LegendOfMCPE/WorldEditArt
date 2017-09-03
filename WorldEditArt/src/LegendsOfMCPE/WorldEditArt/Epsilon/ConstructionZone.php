@@ -36,10 +36,12 @@ class ConstructionZone{
 	private $name;
 	/** @var IShape */
 	private $shape;
-	/** @var BuilderSession|void */
-	private $lockingSession;
-	/** @var int|void */
-	private $lockMode;
+	/** @var string|null */
+	private $lockingSession = null;
+	/** @var string|null */
+	private $lockingSessionName = null;
+	/** @var int */
+	private $lockMode = 0;
 
 	/**
 	 * ConstructionZone constructor.
@@ -69,27 +71,33 @@ class ConstructionZone{
 		$this->shape = $shape;
 	}
 
-	public function getLockingSession() : ?BuilderSession{
-		return $this->lockingSession ?? null;
+	public function getLockingSession(&$name = null) : ?string{
+		if(isset($this->lockingSession, $this->lockingSessionName)){
+			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
+			$name = $this->lockingSessionName;
+			return $this->lockingSession;
+		}
+		return null;
 	}
 
 	public function isLocked() : bool{
-		return isset($this->lockingSession);
+		return $this->lockingSession !== null;
 	}
 
 	public function getLockMode() : int{
-		return $this->lockMode ?? 0;
+		return $this->lockMode;
 	}
 
 	public function lock(BuilderSession $lockingSession, int $lockMode) : void{
-		if(isset($this->lockingSession)){
+		if($this->isLocked()){
 			throw new \InvalidStateException("Zone already locked!");
 		}
-		$this->lockingSession = $lockingSession;
+		$this->lockingSession = spl_object_hash($lockingSession->getOwner());
+		$this->lockingSessionName = $lockingSession->getOwner()->getName();
 		$this->lockMode = $lockMode;
 	}
 
 	public function unlock() : void{
-		unset($this->lockingSession, $this->lockMode);
+		unset($this->lockingSession, $this->lockingSessionName, $this->lockMode);
 	}
 }

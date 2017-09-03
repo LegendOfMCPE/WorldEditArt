@@ -88,7 +88,7 @@ class ReplaceCommand extends SessionCommand{
 				return;
 			}
 			$toType = BlockType::parse($args[1], $error);
-			if($toType=== null){
+			if($toType === null){
 				$session->msg("Error parsing <to type>: $error", BuilderSession::MSG_CLASS_ERROR);
 				return;
 			}
@@ -132,8 +132,10 @@ class ReplaceCommand extends SessionCommand{
 			$session->msg("Your \"$selName\" selection is in an unloaded world!", BuilderSession::MSG_CLASS_ERROR);
 			return;
 		}
-		if($level !== $session->getLocation()->getLevel()){
-			$session->msg("Reminder: Your \"$selName\" is in a different world (\"{$level->getFolderName()}\") from your current world (\"{$session->getLocation()->getLevel()->getFolderName()}\").", BuilderSession::MSG_CLASS_WARN);
+		$myLevel = $session->getLocation()->getLevel();
+		if($level !== $myLevel){
+			assert($myLevel !== null);
+			$session->msg("Reminder: Your \"$selName\" is in a different world (\"{$level->getFolderName()}\") from your current world (\"{$myLevel->getFolderName()}\").", BuilderSession::MSG_CLASS_WARN);
 		}
 
 		if($hollowConfig !== null){

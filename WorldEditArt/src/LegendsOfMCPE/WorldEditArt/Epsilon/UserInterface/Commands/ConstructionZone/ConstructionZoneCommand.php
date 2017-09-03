@@ -84,7 +84,7 @@ class ConstructionZoneCommand extends SessionCommand{
 			$args = ["view"];
 		}
 
-		$allZones = $this->getPlugin()->getConstructionZones();
+		$allZones = $this->getPlugin()->getConstructionZoneManager()->getConstructionZones();
 		/** @var ConstructionZone[] $zones */
 		$zones = [];
 		if(isset($args[1]) && mb_strtolower($args[1]) !== "here"){
@@ -105,7 +105,7 @@ class ConstructionZoneCommand extends SessionCommand{
 				if(count($zones) > 1){
 					$session->msg("You are standing in " . count($zones) . " zones! Which one do you wish to lock?", BuilderSession::MSG_CLASS_WARN);
 					$session->msg(implode(", ", array_map(function(ConstructionZone $zone) : string{
-						return $zone->getName() . ($zone->getLockingSession() === null ? "" : " (locked by {$zone->getLockingSession()->getOwner()->getName()})");
+						return $zone->getName() . ($zone->getLockingSession($ownerName) === null ? "" : " (locked by $ownerName)");
 					}, $zones)), BuilderSession::MSG_CLASS_WARN);
 					$session->msg("Please run the command with the name: //cz lock <zone> " . ($args[2] ?? ""), BuilderSession::MSG_CLASS_WARN);
 					return;
@@ -118,8 +118,8 @@ class ConstructionZoneCommand extends SessionCommand{
 
 				$zone = $zones[0];
 
-				if($zone->getLockingSession() !== null){
-					$session->msg("The construction zone {$zone->getName()} has already been locked by {$zone->getLockingSession()->getOwner()->getName()}", BuilderSession::MSG_CLASS_ERROR);
+				if($zone->getLockingSession($ownerName) !== null){
+					$session->msg("The construction zone {$zone->getName()} has already been locked by $ownerName", BuilderSession::MSG_CLASS_ERROR);
 					return;
 				}
 
@@ -141,7 +141,7 @@ class ConstructionZoneCommand extends SessionCommand{
 				if(count($zones) > 1){
 					$session->msg("You are standing in " . count($zones) . " zones! Which one do you wish to unlock?", BuilderSession::MSG_CLASS_WARN);
 					$session->msg(implode(", ", array_map(function(ConstructionZone $zone) : string{
-						return $zone->getName() . ($zone->getLockingSession() === null ? "" : " (locked by {$zone->getLockingSession()->getOwner()->getName()})");
+						return $zone->getName() . ($zone->getLockingSession($ownerName) === null ? "" : " (locked by $ownerName)");
 					}, $zones)), BuilderSession::MSG_CLASS_WARN);
 					$session->msg("Please run the command with the name: //cz unlock <zone>", BuilderSession::MSG_CLASS_WARN);
 					return;
@@ -153,7 +153,7 @@ class ConstructionZoneCommand extends SessionCommand{
 				}
 
 				$zone = $zones[0];
-				if($zone->getLockingSession()->getOwner() === $session->getOwner()){
+				if($zone->getLockingSession($ownerName) === spl_object_hash($session->getOwner())){
 					if(!$session->hasPermission(Consts::PERM_CZONE_BUILDER_UNLOCK_SELF)){
 						$session->msg("You don't have permission to unlock construction zones!", BuilderSession::MSG_CLASS_ERROR);
 						return;
@@ -161,7 +161,7 @@ class ConstructionZoneCommand extends SessionCommand{
 					$zone->unlock();
 				}else{
 					if(!$session->hasPermission(Consts::PERM_CZONE_BUILDER_UNLOCK_OTHER)){
-						$session->msg("You don't have permission to unlock construction zones locked by others ({$zone->getLockingSession()->getOwner()->getName()})!", BuilderSession::MSG_CLASS_ERROR);
+						$session->msg("You don't have permission to unlock construction zones locked by others ($ownerName)!", BuilderSession::MSG_CLASS_ERROR);
 						return;
 					}
 					$zone->unlock();
@@ -184,10 +184,10 @@ class ConstructionZoneCommand extends SessionCommand{
 	private function showZoneInfo(BuilderSession $session, ConstructionZone $zone){
 		$session->msg(implode("\n", [
 			"Range: " . UserFormat::describeShape($this->getPlugin()->getServer(), $zone->getShape(), UserFormat::FORMAT_USER_RANGE),
-			"State: " . TextFormat::GOLD . ($zone->getLockingSession() === null ? "Not locked" :
+			"State: " . TextFormat::GOLD . ($zone->getLockingSession($ownerName) === null) ? "Not locked" :
 				sprintf("Locked by %s%s%s with mode %s\"%s\"",
-					TextFormat::AQUA, $zone->getLockingSession()->getOwner()->getName(), TextFormat::GOLD,
-					TextFormat::LIGHT_PURPLE, array_search($zone->getLockMode(), ConstructionZone::LOCK_STRING_TO_ID, true))),
+					TextFormat::AQUA, $ownerName, TextFormat::GOLD,
+					TextFormat::LIGHT_PURPLE, array_search($zone->getLockMode(), ConstructionZone::LOCK_STRING_TO_ID, true)),
 		]), BuilderSession::MSG_CLASS_INFO, "Construction Zone \"" . $zone->getName() . "\"");
 	}
 }

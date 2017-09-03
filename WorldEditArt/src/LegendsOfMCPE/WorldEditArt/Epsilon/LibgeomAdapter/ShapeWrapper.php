@@ -97,7 +97,7 @@ class ShapeWrapper implements IShape{
 		return $this->baseShape->isComplete();
 	}
 
-	public function getCenter(){
+	public function getCenter() : ?Vector3{
 		return $this->baseShape->getCenter();
 	}
 

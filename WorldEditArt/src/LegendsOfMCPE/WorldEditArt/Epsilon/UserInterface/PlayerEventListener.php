@@ -63,12 +63,13 @@ class PlayerEventListener implements Listener{
 		if($event->getPlayer()->hasPermission(Consts::PERM_CZONE_BUILDER_ENTRY)){
 			return;
 		}
-		foreach($this->plugin->getConstructionZones() as $zone){
-			if($zone->getLockMode() === ConstructionZone::LOCK_MODE_ENTRY){
-				if($zone->getShape()->isInside($event->getTo())){
-					$event->setCancelled();
-					break;
-				}
+		foreach($this->plugin->getConstructionZoneManager()->getConstructionZones() as $zone){
+			/** @noinspection NullPointerExceptionInspection */
+			if($zone->getLockMode() === ConstructionZone::LOCK_MODE_ENTRY &&
+				$zone->getLockingSession() !== spl_object_hash($event->getPlayer()) &&
+				$zone->getShape()->isInside($event->getTo())){
+				$event->setCancelled();
+				break;
 			}
 		}
 	}
@@ -97,12 +98,13 @@ class PlayerEventListener implements Listener{
 		if($player->hasPermission(Consts::PERM_CZONE_BUILDER_BLOCKS)){
 			return;
 		}
-		foreach($this->plugin->getConstructionZones() as $zone){
-			if($zone->getLockMode() >= ConstructionZone::LOCK_MODE_BLOCKS){
-				if($zone->getShape()->isInside($block)){
-					$event->setCancelled();
-					break;
-				}
+		foreach($this->plugin->getConstructionZoneManager()->getConstructionZones() as $zone){
+			/** @noinspection NullPointerExceptionInspection */
+			if($zone->getLockMode() >= ConstructionZone::LOCK_MODE_BLOCKS
+				&& $zone->getLockingSession() !== spl_object_hash($player)
+				&& $zone->getShape()->isInside($block)){
+				$event->setCancelled();
+				break;
 			}
 		}
 	}

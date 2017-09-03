@@ -126,9 +126,11 @@ class CuboidCommand extends SessionCommand{
 					$session->msg("Your prior \"$selName\" selection was in an unloaded level, so your selection is reset.", BuilderSession::MSG_CLASS_WARN);
 					goto grow_create_new_cuboid;
 				}
-				if($shape->getLevelName() !== $session->getLocation()->getLevel()->getFolderName()){
+				$myLevel = $session->getLocation()->getLevel();
+				assert($myLevel !== null);
+				if($shape->getLevelName() !== $myLevel->getFolderName()){
 					$session->msg("Reminder: Your \"$selName\" selection is in world \"{$shape->getLevelName()}\", " .
-						"not your current world (\"{$session->getLocation()->getLevel()->getFolderName()}\")!",
+						"not your current world (\"{$myLevel->getFolderName()}\")!",
 						BuilderSession::MSG_CLASS_WARN);
 				}
 				$min = $shape->getMin();
@@ -160,8 +162,10 @@ class CuboidCommand extends SessionCommand{
 					$session->msg("Your \"$selName\" selection is in an unloaded level, so //cub skybed cannot be executed.", BuilderSession::MSG_CLASS_ERROR);
 					return;
 				}
-				if($level !== $session->getLocation()->getLevel()){
-					$session->msg("Reminder: Your \"$selName\" selection is in a different world (\"{$level->getFolderName()}\") from your current world ({$session->getLocation()->getLevel()->getFolderName()})", BuilderSession::MSG_CLASS_WARN);
+				$myLevel = $session->getLocation()->getLevel();
+				if($level !== $myLevel){
+					assert($myLevel !== null);
+					$session->msg("Reminder: Your \"$selName\" selection is in a different world (\"{$level->getFolderName()}\") from your current world ({$myLevel->getFolderName()})", BuilderSession::MSG_CLASS_WARN);
 				}
 				$from = $shape->getFrom();
 				$to = $shape->getTo();

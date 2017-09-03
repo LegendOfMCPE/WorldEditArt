@@ -17,12 +17,11 @@ declare(strict_types=1);
 
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\Selection;
 
-use LegendsOfMCPE\WorldEditArt\Epsilon\IShape;
 use pocketmine\math\Vector3;
 use sofe\libgeom\io\LibgeomDataWriter;
 use sofe\libgeom\Shape;
 
-class PolygonFrustumShapeBuilder extends Shape implements IShape{
+class PolygonFrustumShapeBuilder extends Shape{
 	public function getBaseShape() : Shape{
 		return $this;
 	}
