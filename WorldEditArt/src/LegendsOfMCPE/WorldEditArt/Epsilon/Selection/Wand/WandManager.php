@@ -56,7 +56,7 @@ class WandManager{
 	}
 
 	public function addWand(Wand $wand) : void{
-		$this->wands[$wand->getName()] = $wand;
+		$this->wands[mb_strtolower($wand->getName())] = $wand;
 		$this->plugin->getServer()->getCommandMap()->register("wand",
 			$this->cmds[] = new WandCommand($this->plugin, $wand));
 	}
@@ -66,7 +66,7 @@ class WandManager{
 	}
 
 	public function getWand(string $wandName) : Wand{
-		return $this->wands[$wandName];
+		return $this->wands[mb_strtolower($wandName)];
 	}
 
 	/**

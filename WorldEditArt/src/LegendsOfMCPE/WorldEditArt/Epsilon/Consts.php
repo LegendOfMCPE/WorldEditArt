@@ -28,6 +28,8 @@ class Consts{
 
 	const CONFIG_ASYNC_THRESHOLD = "blocks-per-chunk threshold for asynchronous editing";
 
+	const CONFIG_WAND_ITEM_PREFIX = "wand item prefix";
+
 	const CONFIG_VERSION = "DO NOT EDIT THIS LINE";
 	const CONFIG_VERSION_VALUE = 1;
 

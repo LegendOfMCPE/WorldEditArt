@@ -119,11 +119,29 @@ class PlayerEventListener implements Listener{
 			return;
 		}
 		$session = $sessions[PlayerBuilderSession::SESSION_KEY];
-		$trigger = $session->getWandTrigger($event->getItem()->getId(), $event->getAction());
-		if($trigger === null){
-			return;
+		$item = $event->getItem();
+		$itemName = trim($item->getCustomName(), " \n\t\r/");
+
+		$prefixes = $this->plugin->getConfig()->get(Consts::CONFIG_WAND_ITEM_PREFIX, null);
+		if($itemName && $prefixes){
+			foreach((array) $prefixes as $prefix){
+				$prefix = trim((string) $prefix, " \n\t\r/");
+				if(strpos($itemName, $prefix) === 0){
+					$wandName = ltrim(substr($itemName, $prefix), " \n\t\r/");
+					break;
+				}
+			}
+			if(isset($wandName)){
+				$wand = $this->plugin->getWandManager()->getWand($wandName);
+			}
 		}
-		$wand = $this->plugin->getWandManager()->getWand($trigger->wandName);
+		if(!isset($wand)){
+			$trigger = $session->getWandTrigger($item->getId(), $event->getAction());
+			if($trigger === null){
+				return;
+			}
+			$wand = $this->plugin->getWandManager()->getWand($trigger->wandName);
+		}
 		$wand->execute($session, $event->getBlock(), $session->getDefaultSelectionName());
 	}
 }
