@@ -18,22 +18,24 @@ declare(strict_types=1);
 namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
 
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockChanger;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\WandManager;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Session\PlayerBuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\WorldEditArtCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\PlayerEventListener;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\SerializableGetter;
 use pocketmine\command\CommandSender;
+use pocketmine\level\Level;
+use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\plugin\PluginException;
 use pocketmine\Server;
-
-
 use sofe\libgeom\LibgeomMathUtils;
-
 use sofe\pschemlib\SchematicFile;
 use sofe\toomuchbuffer\Closeable;
 use spoondetector\SpoonDetector;
+
 
 /** @noinspection EfferentObjectCouplingInspection */
 class WorldEditArt extends PluginBase{
@@ -56,7 +58,7 @@ class WorldEditArt extends PluginBase{
 	}
 
 
-	public function getConstructionZoneManager():ConstructionZoneManager{
+	public function getConstructionZoneManager() : ConstructionZoneManager{
 		return $this->czManager;
 	}
 
@@ -69,6 +71,7 @@ class WorldEditArt extends PluginBase{
 	}
 
 
+	/** @noinspection SpellCheckingInspection */
 	public function onEnable(){
 		if(PHP_MAJOR_VERSION !== 7 || PHP_MINOR_VERSION < 2){
 			/** @noinspection SpellCheckingInspection */
@@ -107,6 +110,9 @@ class WorldEditArt extends PluginBase{
 			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without toomuchbuffer v0");
 		}
 		SpoonDetector::printSpoon($this);
+		// You are using WorldEditArt-Lite. This is a §l§ndemo version§r§e of WorldEditArt-Epsilon, where many features have still not been completed. WorldEditArt-Lite is released to satisfy the urgent demand for world editing plugins, and is not the planned version of WorldEditArt. You are still welcome to report any issues by commenting on §nhttps://github.com/LegendOfMCPE/WorldEditArt/issues/30§r§e, but please refer to the Project Proposal of WorldEditArt (https://legendofmcpe.github.io/WorldEditArt/ProjectProposal.html) if you are requesting features.
+		/** @noinspection SpellCheckingInspection */
+		$this->getLogger()->warning(base64_decode("WW91IGFyZSB1c2luZyBXb3JsZEVkaXRBcnQtTGl0ZS4gVGhpcyBpcyBhIMKnbMKnbmRlbW8gdmVyc2lvbsKncsKnZSBvZiBXb3JsZEVkaXRBcnQtRXBzaWxvbiwgd2hlcmUgbWFueSBmZWF0dXJlcyBoYXZlIHN0aWxsIG5vdCBiZWVuIGNvbXBsZXRlZC4gV29ybGRFZGl0QXJ0LUxpdGUgaXMgcmVsZWFzZWQgdG8gc2F0aXNmeSB0aGUgdXJnZW50IGRlbWFuZCBmb3Igd29ybGQgZWRpdGluZyBwbHVnaW5zLCBhbmQgaXMgbm90IHRoZSBwbGFubmVkIHZlcnNpb24gb2YgV29ybGRFZGl0QXJ0LiBZb3UgYXJlIHN0aWxsIHdlbGNvbWUgdG8gcmVwb3J0IGFueSBpc3N1ZXMgYnkgY29tbWVudGluZyBvbiDCp25odHRwczovL2dpdGh1Yi5jb20vTGVnZW5kT2ZNQ1BFL1dvcmxkRWRpdEFydC9pc3N1ZXMvMzDCp3LCp2UsIGJ1dCBwbGVhc2UgcmVmZXIgdG8gdGhlIFByb2plY3QgUHJvcG9zYWwgb2YgV29ybGRFZGl0QXJ0IChodHRwczovL2xlZ2VuZG9mbWNwZS5naXRodWIuaW8vV29ybGRFZGl0QXJ0L1Byb2plY3RQcm9wb3NhbC5odG1sKSBpZiB5b3UgYXJlIHJlcXVlc3RpbmcgZmVhdHVyZXMu"));
 
 		$this->builderSessionMap = [];
 		if(!is_dir($this->getDataFolder() . "cache")){

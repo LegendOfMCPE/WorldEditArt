@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
 class Consts{
-	const PLUGIN_NAME = "WorldEditArt";
+	const PLUGIN_NAME = "WorldEditArt-Lite";
 
 	const CONFIG_SESSION_IMPLICIT = "implicit builder session";
 	const CONFIG_SESSION_GLOBAL_PASSPHRASE = "builder session global passphrase";
