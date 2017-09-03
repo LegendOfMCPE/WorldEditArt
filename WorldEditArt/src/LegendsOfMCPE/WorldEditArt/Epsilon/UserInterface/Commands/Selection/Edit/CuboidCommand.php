@@ -113,11 +113,11 @@ class CuboidCommand extends SessionCommand{
 				$minus = new Vector3((float) $args[1], (float) $args[2], (float) $args[3]);
 				$plus = new Vector3((float) $args[4], (float) $args[5], (float) $args[6]);
 				$selName = $args[7] ?? $session->getDefaultSelectionName();
-				$shape = $session->getSelection($selName);
-				if($new || $shape === null){
+				$wrapper = $session->getSelection($selName);
+				if($new || $wrapper === null){
 					goto grow_create_new_cuboid;
 				}
-				$shape = $shape->getBaseShape();
+				$shape = $wrapper->getBaseShape();
 				if(!($shape instanceof CuboidShape)){
 					$session->msg("Your prior \"$selName\" selection was not a cuboid. A new cuboid growing from your location will be created.", BuilderSession::MSG_CLASS_WARN);
 					goto grow_create_new_cuboid;
@@ -136,6 +136,7 @@ class CuboidCommand extends SessionCommand{
 				$min = $shape->getMin();
 				$max = $shape->getMax();
 				$shape->setFrom($min->subtract($minus))->setTo($max->add($plus));
+				$shape = $wrapper;
 				break;
 				//@formatter:off
 			grow_create_new_cuboid:
@@ -147,12 +148,12 @@ class CuboidCommand extends SessionCommand{
 			case "skybed":
 			case "sb":
 				$selName = $args[1] ?? $session->getDefaultSelectionName();
-				$shape = $session->getSelection($selName);
-				if($shape === null){
+				$wrapper = $session->getSelection($selName);
+				if($wrapper === null){
 					$session->msg("No selection named $selName", BuilderSession::MSG_CLASS_ERROR);
 					return;
 				}
-				$shape = $shape->getBaseShape();
+				$shape = $wrapper->getBaseShape();
 				if(!($shape instanceof CuboidShape)){
 					$session->msg("Selection $selName is not a cuboid", BuilderSession::MSG_CLASS_ERROR);
 					return;
@@ -173,6 +174,7 @@ class CuboidCommand extends SessionCommand{
 				$from->y = 0;
 				$to->y = $shape->getLevel($this->getPlugin()->getServer())->getWorldHeight();
 				$shape->setFrom($from)->setTo($to);
+				$shape = $wrapper;
 				break;
 			default:
 				$this->sendUsage($session);
