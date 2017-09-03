@@ -1,0 +1,4 @@
+[submodule "ghpage"]
+	path = docs
+	url = https://github.com/LegendOfMCPE/WorldEditArt.git
+	branch = gh-pages
