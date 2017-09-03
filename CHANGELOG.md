@@ -33,10 +33,10 @@ WorldEditArt::requireVersion($this->getServer(), 4, 1, 0);
   - Ellipsoid selection (commands and wands)
   - Manipulation commands
     - //set
-      - Only command prsing implemented
+      - Only command parsing implemented
       - **UNDOCUMENTED**
     - //replace
-      - Only command prsing implemented
+      - Only command parsing implemented
       - **UNDOCUMENTED**
 
 [Unreleased]: https://github.com/LegendOfMCPE/WorldEditArt/compare/delta/v3.0...HEAD
