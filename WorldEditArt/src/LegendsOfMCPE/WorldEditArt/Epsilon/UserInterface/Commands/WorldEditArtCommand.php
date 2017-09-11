@@ -39,6 +39,8 @@ use stdClass;
 
 /** @noinspection EfferentObjectCouplingInspection */
 abstract class WorldEditArtCommand extends Command implements PluginIdentifiableCommand{
+	const SEND_COMMAND_USAGE = false;
+	
 	/** @var WorldEditArt */
 	private $plugin;
 	/** @var array[] */
@@ -49,15 +51,17 @@ abstract class WorldEditArtCommand extends Command implements PluginIdentifiable
 		parent::__construct($name, $description, $usageMessage, $aliases);
 		$this->plugin = $plugin;
 		$this->setPermission($permission);
-		if(count($formats) > 0){
-			$arr = new stdClass();
-			foreach($formats as $formatName => $format){
-				$arr->{$formatName} = [
-					"input" => ["parameters" => $format],
-					"output" => new stdClass(),
-				];
+		if(WorldEditArtCommand::SEND_COMMAND_USAGE){
+			if(count($formats) > 0){
+				$arr = new stdClass();
+				foreach($formats as $formatName => $format){
+					$arr->{$formatName} = [
+						"input" => ["parameters" => $format],
+						"output" => new stdClass(),
+					];
+				}
+				$this->commandData["overloads"] = $arr;
 			}
-			$this->commandData["overloads"] = $arr;
 		}
 		$this->formats = $formats;
 	}
