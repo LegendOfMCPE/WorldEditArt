@@ -66,6 +66,35 @@ class ConstructionZoneManager implements \Serializable{
 		return $this->constructionZones;
 	}
 
+	public function getConstructionZone(string $name) : ?ConstructionZone{
+		return $this->constructionZones[mb_strtolower($name)] ?? null;
+	}
+
+	public function add(ConstructionZone $zone) : void{
+		$this->constructionZones[mb_strtolower($zone->getName())] = $zone;
+	}
+
+	public function remove(string $name) : ?ConstructionZone{
+		if(isset($this->constructionZones[$lowName = mb_strtolower($name)])){
+			$zone = $this->constructionZones[$lowName];
+			unset($this->constructionZones[$lowName]);
+			return $zone;
+		}
+		return null;
+	}
+
+	public function rename(ConstructionZone $zone, string $name){
+		if(!isset($this->constructionZones[$oldName = mb_strtolower($zone->getName())])){
+			throw new \UnexpectedValueException("The construction zone was not added");
+		}
+		if($this->constructionZones[$oldName] !== $zone){
+			throw new \UnexpectedValueException("Different instances of ConstructionZone with the same name");
+		}
+		unset($this->constructionZones[$oldName]);
+		$zone->setName($name);
+		$this->constructionZones[mb_strtolower($name)] = $zone;
+	}
+
 	/**
 	 * @return bool
 	 */

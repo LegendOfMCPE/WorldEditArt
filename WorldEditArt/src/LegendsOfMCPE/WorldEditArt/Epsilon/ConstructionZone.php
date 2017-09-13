@@ -63,6 +63,15 @@ class ConstructionZone{
 		return $this->name;
 	}
 
+	/**
+	 * @internal Use {@see ConstructionZoneManager::rename} instead.
+	 *
+	 * @param string $name
+	 */
+	public function setName(string $name) : void{
+		$this->name = $name;
+	}
+
 	public function getShape() : IShape{
 		return $this->shape;
 	}

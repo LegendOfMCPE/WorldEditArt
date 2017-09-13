@@ -33,7 +33,7 @@ class ConstructionZoneCommand extends SessionCommand{
 				[
 					"name" => "action",
 					"type" => "stringenum",
-					"enum_values" => ["add"],
+					"enum_values" => ["add", "change"],
 				],
 				[
 					"name" => "constructionZoneName",
@@ -44,12 +44,12 @@ class ConstructionZoneCommand extends SessionCommand{
 					"type" => "string",
 					"optional" => true,
 				],
-			],
+			], // done
 			"remove" => [
 				[
 					"name" => "action",
 					"type" => "stringenum",
-					"enum_values" => ["remove", "delete", "del"],
+					"enum_values" => ["remove", "rm", "delete", "del"],
 				],
 				[
 					"name" => "constructionZoneName",
@@ -76,7 +76,7 @@ class ConstructionZoneCommand extends SessionCommand{
 					"type" => "target",
 					"optional" => true,
 				],
-			],
+			], // done
 			"lock" => [
 				[
 					"name" => "action",
@@ -94,7 +94,7 @@ class ConstructionZoneCommand extends SessionCommand{
 					"enum_values" => ["edit", "blocks", "entry"],
 					"optional" => true,
 				],
-			],
+			], // done
 			"lock_here" => [
 				[
 					"name" => "action",
@@ -111,7 +111,7 @@ class ConstructionZoneCommand extends SessionCommand{
 					"type" => "stringenum",
 					"enum_values" => ["edit", "blocks", "entry"],
 				],
-			],
+			], // done
 			"other" => [
 				[
 					"name" => "action",
@@ -124,7 +124,7 @@ class ConstructionZoneCommand extends SessionCommand{
 					"type" => "string",
 					"optional" => true,
 				],
-			],
+			], // done
 		]);
 	}
 
@@ -245,10 +245,11 @@ class ConstructionZoneCommand extends SessionCommand{
 			$target = $session;
 			if(isset($args[3])){
 				$targetPlayer = $this->getPlugin()->getServer()->getPlayer($args[3]);
-				if($targetPlayer===null){
+				if($targetPlayer === null){
 					$session->msg("Player $args[3] not found", BuilderSession::MSG_CLASS_ERROR);
 					return;
-				}$targets=$this->getPlugin()->getSessionsOf($targetPlayer);
+				}
+				$targets = $this->getPlugin()->getSessionsOf($targetPlayer);
 				if($targets === []){
 					$session->msg("Player $args[3] does not have a builder session started", BuilderSession::MSG_CLASS_ERROR);
 					return;
@@ -256,13 +257,97 @@ class ConstructionZoneCommand extends SessionCommand{
 				$target = $targets[PlayerBuilderSession::SESSION_KEY]; // TODO minion sessions
 			}
 			if($isLock){
+				if(!$session->hasPermission(Consts::PERM_CZONE_ADMIN_LOCK_BYPASS)){
+					$session->msg("You don't have permission to use this command", BuilderSession::MSG_CLASS_ERROR);
+					return;
+				}
 				$target->setBypassLock($bool);
 				$session->msg(($bool ? "Allowed" : "Disallowed") . " {$target->getOwner()->getName()} to ignore whether construction zones are locked", BuilderSession::MSG_CLASS_SUCCESS);
 			}else{
+				if(!$session->hasPermission(Consts::PERM_CZONE_ADMIN_BYPASS)){
+					$session->msg("You don't have permission to use this command", BuilderSession::MSG_CLASS_ERROR);
+					return;
+				}
 				$target->setBypassZone($bool);
 				$session->msg(($bool ? "Allowed" : "Disallowed") . " {$target->getOwner()->getName()} to edit outside construction zones", BuilderSession::MSG_CLASS_SUCCESS);
 			}
 			return;
+		}elseif($action === "add" || $action === "change" || $action === "ch"){
+			if(!$session->hasPermission(Consts::PERM_CZONE_ADMIN_CHANGE)){
+				$session->msg("You don't have permission to use this command", BuilderSession::MSG_CLASS_ERROR);
+				return;
+			}
+			if(!isset($args[1])){
+				$this->sendUsage($session);
+				return;
+			}
+			$name = $args[1];
+			$lowName = mb_strtolower($name);
+			if($lowName === "here"){
+				$session->msg("\"here\" is not an acceptable name for construction zones!", BuilderSession::MSG_CLASS_ERROR);
+				return;
+			}
+			$selName = $args[2] ?? $session->getDefaultSelectionName();
+			if(!$session->hasSelection($selName)){
+				$session->msg("Your \"$selName\" selection has not been set!", BuilderSession::MSG_CLASS_ERROR);
+				return;
+			}
+			$shape = $session->getSelection($selName);
+			if(!$shape->isComplete()){
+				$session->msg("Your \"$selName\" selection is not complete!", BuilderSession::MSG_CLASS_ERROR);
+				return;
+			}
+			$mgr = $this->getPlugin()->getConstructionZoneManager();
+			if($action === "add"){
+				if($mgr->getConstructionZone($name) !== null){
+					$session->msg("There is already a construction zone called \"$name\"! Use \"//cz change\" instead if you want to change the shape of a construction zone.", BuilderSession::MSG_CLASS_ERROR);
+					return;
+				}
+				$zone = new ConstructionZone($name, $shape);
+				$mgr->add($zone);
+				$session->msg("Created construction zone \"$name\" based on your selection \"$selName\"", BuilderSession::MSG_CLASS_SUCCESS);
+			}else{
+				$zone = $mgr->getConstructionZone($name);
+				if($zone === null){
+					$session->msg("There isn't a construction zone called \"$name\"! Use \"//cz add\" insetad if you want to add a construction zone.", BuilderSession::MSG_CLASS_ERROR);
+					return;
+				}
+				$zone->setShape($shape);
+				$session->msg("Changed shape of construction zone \"{$zone->getName()}\" based on your selection \"$selName\"", BuilderSession::MSG_CLASS_SUCCESS);
+				// TODO present shape of selection
+			}
+		}elseif($action === "rename"){
+			if(!$session->hasPermission(Consts::PERM_CZONE_ADMIN_CHANGE)){
+				$session->msg("You don't have permission to use this command", BuilderSession::MSG_CLASS_ERROR);
+				return;
+			}
+			if(!isset($args[2])){
+				$this->sendUsage($session);
+				return;
+			}
+			[, $old, $new] = $args;
+			$mgr = $this->getPlugin()->getConstructionZoneManager();
+			$zone = $mgr->getConstructionZone($old);
+			if($zone === null){
+				$session->msg("There isn't a construction zone called \"$old\".", BuilderSession::MSG_CLASS_ERROR);
+				return;
+			}
+			$mgr->rename($zone, $new);
+			$session->msg("Renamed construction zone \"$old\" to \"$new\"", BuilderSession::MSG_CLASS_SUCCESS);
+		}elseif($action === "remove" || $action === "rm" || $action === "del" || $action === "delete"){
+			if(!$session->hasPermission(Consts::PERM_CZONE_ADMIN_CHANGE)){
+				$session->msg("You don't have permission to use this command", BuilderSession::MSG_CLASS_ERROR);
+				return;
+			}
+			if(!isset($args[1])){
+				$this->sendUsage($session);
+				return;
+			}
+			if(($zone = $this->getPlugin()->getConstructionZoneManager()->remove($args[1])) !== null){
+				$session->msg("Removed the construction zone \"{$zone->getName()}", BuilderSession::MSG_CLASS_SUCCESS);
+			}else{
+				$session->msg("There isn't a construction zone called \"$args[1]\"!", BuilderSession::MSG_CLASS_ERROR);
+			}
 		}
 	}
 
