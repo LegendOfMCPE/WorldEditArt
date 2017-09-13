@@ -35,37 +35,16 @@ class SerializableBlockStreamGetter implements \Serializable{
 	 * @return \Generator
 	 */
 	public function getValue(Vector3 $vector) : \Generator{
-		$c = unserialize($this->callable);
-		return $c($vector, ...unserialize($this->args));
+		$c = unserialize($this->callable, true);
+		return $c($vector, ...unserialize($this->args, true));
 	}
 
-	/**
-	 * String representation of object
-	 *
-	 * @link  http://php.net/manual/en/serializable.serialize.php
-	 * @return string the string representation of the object or null
-	 * @since 5.1.0
-	 */
 	public function serialize() : string{
 		return serialize([$this->callable, $this->args]);
 	}
 
-	/**
-	 * Constructs the object
-	 *
-	 * @link  http://php.net/manual/en/serializable.unserialize.php
-	 *
-	 * @param string $serialized <p>
-	 *                           The string representation of the object.
-	 *                           </p>
-	 *
-	 * @return void
-	 * @since 5.1.0
-	 */
 	public function unserialize($serialized) : void{
 		[$this->callable, $this->args] = unserialize($serialized, false);
-		$callable = unserialize($this->callable, true);
-		$args = unserialize($this->args, true);
 		// We are accepting all classes here because $serialized should not reasonably contain invalid data unless from other badly written plugins
 	}
 }

@@ -185,7 +185,6 @@ class ConstructionZoneCommand extends SessionCommand{
 
 				$zone->lock($session, $modeId);
 				$session->msg("Locked construction zone \"{$zone->getName()}\" with mode \"$modeName\"");
-				return;
 			}elseif($action === "unlock"){
 				if(count($zones) > 1){
 					$session->msg("You are standing in " . count($zones) . " zones! Which one do you wish to unlock?", BuilderSession::MSG_CLASS_WARN);
@@ -216,7 +215,6 @@ class ConstructionZoneCommand extends SessionCommand{
 					$zone->unlock();
 				}
 				$session->msg("Unlocked construction zone \"{$zone->getName()}\"", BuilderSession::MSG_CLASS_SUCCESS);
-				return;
 			}elseif($action === "view"){
 				if(isset($args[1])){
 					$this->showZoneInfo($session, $zones[0]);
@@ -309,7 +307,7 @@ class ConstructionZoneCommand extends SessionCommand{
 			}else{
 				$zone = $mgr->getConstructionZone($name);
 				if($zone === null){
-					$session->msg("There isn't a construction zone called \"$name\"! Use \"//cz add\" insetad if you want to add a construction zone.", BuilderSession::MSG_CLASS_ERROR);
+					$session->msg("There isn't a construction zone called \"$name\"! Use \"//cz add\" instead if you want to add a construction zone.", BuilderSession::MSG_CLASS_ERROR);
 					return;
 				}
 				$zone->setShape($shape);
