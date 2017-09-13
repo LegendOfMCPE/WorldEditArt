@@ -56,6 +56,11 @@ abstract class BuilderSession{
 	/** @var WandTrigger[] */
 	private $wandTriggers = [];
 
+	/** @var bool */
+	private $bypassLock = false;
+	/** @var bool */
+	private $bypassZone = false;
+
 	public function __construct(WorldEditArt $plugin){
 		$this->plugin = $plugin;
 		// TODO load bookmarks
@@ -201,5 +206,21 @@ abstract class BuilderSession{
 	 */
 	public function getWandTriggers() : array{
 		return $this->wandTriggers;
+	}
+
+	public function canBypassLock() : bool{
+		return $this->bypassLock;
+	}
+
+	public function canBypassZone() : bool{
+		return $this->bypassZone;
+	}
+
+	public function setBypassLock(bool $bypassLock) : void{
+		$this->bypassLock = $bypassLock;
+	}
+
+	public function setBypassZone(bool $bypassZone) : void{
+		$this->bypassZone = $bypassZone;
 	}
 }

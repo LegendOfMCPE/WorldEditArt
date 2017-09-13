@@ -89,36 +89,51 @@ class ConstructionZoneManager implements \Serializable{
 		}
 	}
 
+	/**
+	 * Returns the $cczValue used in {@link ConstructionZoneManager::canDoEdit}.
+	 *
+	 *
+	 * @param string $levelName
+	 *
+	 * @return bool whether editing in the level is limited by construction zones
+	 */
 	public function calcCczValue(string $levelName) : bool{
 		return !($this->configCheck && !in_array($levelName, $this->configWorlds, true));
 	}
 
-	public function canDoEdit(Vector3 $vector, string $levelName, string $sessionOwnerHash, bool $cczValue){
+	/**
+	 * @param Vector3 $vector
+	 * @param string  $levelName
+	 * @param string  $sessionOwnerHash
+	 * @param bool    $cczValue
+	 * @param bool    $canBypassLock
+	 * @param bool    $canBypassZone
+	 *
+	 * @return bool
+	 */
+	public function canDoEdit(Vector3 $vector, string $levelName, string $sessionOwnerHash, bool $cczValue, bool $canBypassLock, bool $canBypassZone) : bool{
 		foreach($this->constructionZones as $zone){
 			if($zone->getShape()->getLevelName() !== $levelName){
 				continue;
 			}
-			$inState = 0; // cache isInside() result
-			if($zone->isLocked() && $sessionOwnerHash !== $zone->getLockingSession()){
-				$inState = $zone->getShape()->isInside($vector) ? 2 : 1;
-				if($inState !== 2){
+			$isInside = null;
+			if(!$canBypassLock && $zone->isLocked() && $sessionOwnerHash !== $zone->getLockingSession()){
+				$isInside = $zone->getShape()->isInside($vector);
+				if($isInside){
 					return false;
 				}
 			}
-			if(!$cczValue){
-				if($inState === 0){
-					$inState = $zone->getShape()->isInside($vector);
-				}
-				if($inState === 2){
-					$cczValue = true;
-				}
-
-				if($inState !== 0 && $zone->getShape()->isInside($vector)){
-					$cczValue = true;
-				}
+			if($canBypassZone || !$cczValue){ // no need checking if inside construction zone
+				continue;
+			}
+			if($isInside === null){
+				$isInside = $zone->getShape()->isInside($vector);
+			}
+			if($isInside === true || ($isInside === null && $zone->getShape()->isInside($vector))){
+				return false;
 			}
 		}
-		return $cczValue;
+		return true;
 	}
 
 

@@ -20,6 +20,7 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Construction
 use LegendsOfMCPE\WorldEditArt\Epsilon\BuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\ConstructionZone;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Session\PlayerBuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
@@ -27,7 +28,55 @@ use pocketmine\utils\TextFormat;
 
 class ConstructionZoneCommand extends SessionCommand{
 	public function __construct(WorldEditArt $plugin){
-		parent::__construct($plugin, "/czone", "Use construction zones for building", "/cz lock|unlock|check [construction zone name] [edit|blocks|entry]", ["/cz"], implode(";", Consts::PERM_CZONE_BUILDER_MANAGE_ANY), [
+		parent::__construct($plugin, "/czone", "Use construction zones for building", "/cz lock|unlock|check [construction zone name] [edit|blocks|entry]", ["/cz"], implode(";", Consts::PERM_CZONE_COMMAND_ANY), [
+			"add" => [
+				[
+					"name" => "action",
+					"type" => "stringenum",
+					"enum_values" => ["add"],
+				],
+				[
+					"name" => "constructionZoneName",
+					"type" => "string",
+				],
+				[
+					"name" => "selectionName",
+					"type" => "string",
+					"optional" => true,
+				],
+			],
+			"remove" => [
+				[
+					"name" => "action",
+					"type" => "stringenum",
+					"enum_values" => ["remove", "delete", "del"],
+				],
+				[
+					"name" => "constructionZoneName",
+					"type" => "string",
+				],
+			],
+			"bypass" => [
+				[
+					"name" => "action",
+					"type" => "stringenum",
+					"enum_values" => ["bypass"],
+				],
+				[
+					"name" => "type",
+					"type" => "stringenum",
+					"enum_values" => ["lock", "zone"],
+				],
+				[
+					"name" => "enableBypass",
+					"type" => "bool",
+				],
+				[
+					"name" => "player",
+					"type" => "target",
+					"optional" => true,
+				],
+			],
 			"lock" => [
 				[
 					"name" => "action",
@@ -84,24 +133,25 @@ class ConstructionZoneCommand extends SessionCommand{
 			$args = ["view"];
 		}
 
-		$allZones = $this->getPlugin()->getConstructionZoneManager()->getConstructionZones();
-		/** @var ConstructionZone[] $zones */
-		$zones = [];
-		if(isset($args[1]) && mb_strtolower($args[1]) !== "here"){
-			if(!isset($allZones[mb_strtolower($args[1])])){
-				$session->msg("No such zone called $args[1]", BuilderSession::MSG_CLASS_ERROR);
-				return;
-			}
-			$zones[] = $allZones[mb_strtolower($args[1])];
-		}else{
-			foreach($allZones as $zone){
-				if($zone->getShape()->isInside($session->getLocation())){
-					$zones[] = $zone;
+		$action = mb_strtolower($args[0]);
+		if($action === "lock" || $action === "unlock" || $action === "view"){
+			$allZones = $this->getPlugin()->getConstructionZoneManager()->getConstructionZones();
+			/** @var ConstructionZone[] $zones */
+			$zones = [];
+			if(isset($args[1]) && mb_strtolower($args[1]) !== "here"){
+				if(!isset($allZones[mb_strtolower($args[1])])){
+					$session->msg("No such zone called $args[1]", BuilderSession::MSG_CLASS_ERROR);
+					return;
+				}
+				$zones[] = $allZones[mb_strtolower($args[1])];
+			}else{
+				foreach($allZones as $zone){
+					if($zone->getShape()->isInside($session->getLocation())){
+						$zones[] = $zone;
+					}
 				}
 			}
-		}
-		switch(mb_strtolower($args[0])){
-			case "lock":
+			if($action === "lock"){
 				if(count($zones) > 1){
 					$session->msg("You are standing in " . count($zones) . " zones! Which one do you wish to lock?", BuilderSession::MSG_CLASS_WARN);
 					$session->msg(implode(", ", array_map(function(ConstructionZone $zone) : string{
@@ -136,8 +186,7 @@ class ConstructionZoneCommand extends SessionCommand{
 				$zone->lock($session, $modeId);
 				$session->msg("Locked construction zone \"{$zone->getName()}\" with mode \"$modeName\"");
 				return;
-
-			case "unlock":
+			}elseif($action === "unlock"){
 				if(count($zones) > 1){
 					$session->msg("You are standing in " . count($zones) . " zones! Which one do you wish to unlock?", BuilderSession::MSG_CLASS_WARN);
 					$session->msg(implode(", ", array_map(function(ConstructionZone $zone) : string{
@@ -160,7 +209,7 @@ class ConstructionZoneCommand extends SessionCommand{
 					}
 					$zone->unlock();
 				}else{
-					if(!$session->hasPermission(Consts::PERM_CZONE_BUILDER_UNLOCK_OTHER)){
+					if(!$session->hasPermission(Consts::PERM_CZONE_ADMIN_UNLOCK_OTHER)){
 						$session->msg("You don't have permission to unlock construction zones locked by others ($ownerName)!", BuilderSession::MSG_CLASS_ERROR);
 						return;
 					}
@@ -168,7 +217,7 @@ class ConstructionZoneCommand extends SessionCommand{
 				}
 				$session->msg("Unlocked construction zone \"{$zone->getName()}\"", BuilderSession::MSG_CLASS_SUCCESS);
 				return;
-			case "view":
+			}elseif($action === "view"){
 				if(isset($args[1])){
 					$this->showZoneInfo($session, $zones[0]);
 				}else{
@@ -178,10 +227,46 @@ class ConstructionZoneCommand extends SessionCommand{
 					}
 				}
 				return;
+			}
+		}elseif($action === "bypass"){
+			if(!isset($args[2])){
+				$this->sendUsage($session);
+				return;
+			}
+			$type = mb_strtolower($args[1]);
+			$isLock = false;
+			if($type === "lock"){
+				$isLock = true;
+			}elseif($type !== "zone"){
+				$this->sendUsage($session);
+				return;
+			}
+			$bool = in_array(mb_strtolower($args[2]), ["true", "yes", "on", "1"], true);
+			$target = $session;
+			if(isset($args[3])){
+				$targetPlayer = $this->getPlugin()->getServer()->getPlayer($args[3]);
+				if($targetPlayer===null){
+					$session->msg("Player $args[3] not found", BuilderSession::MSG_CLASS_ERROR);
+					return;
+				}$targets=$this->getPlugin()->getSessionsOf($targetPlayer);
+				if($targets === []){
+					$session->msg("Player $args[3] does not have a builder session started", BuilderSession::MSG_CLASS_ERROR);
+					return;
+				}
+				$target = $targets[PlayerBuilderSession::SESSION_KEY]; // TODO minion sessions
+			}
+			if($isLock){
+				$target->setBypassLock($bool);
+				$session->msg(($bool ? "Allowed" : "Disallowed") . " {$target->getOwner()->getName()} to ignore whether construction zones are locked", BuilderSession::MSG_CLASS_SUCCESS);
+			}else{
+				$target->setBypassZone($bool);
+				$session->msg(($bool ? "Allowed" : "Disallowed") . " {$target->getOwner()->getName()} to edit outside construction zones", BuilderSession::MSG_CLASS_SUCCESS);
+			}
+			return;
 		}
 	}
 
-	private function showZoneInfo(BuilderSession $session, ConstructionZone $zone){
+	private function showZoneInfo(BuilderSession $session, ConstructionZone $zone) : void{
 		$session->msg(implode("\n", [
 			"Range: " . UserFormat::describeShape($this->getPlugin()->getServer(), $zone->getShape(), UserFormat::FORMAT_USER_RANGE),
 			"State: " . TextFormat::GOLD . ($zone->getLockingSession($ownerName) === null) ? "Not locked" :

@@ -39,6 +39,8 @@ use spoondetector\SpoonDetector;
 class WorldEditArt extends PluginBase{
 	/** @var array */
 	private $metadata;
+	/** @var string[] */
+	private $libs;
 	/** @var ConstructionZoneManager */
 	private $czManager;
 	/** @var BuilderSession[][] */
@@ -94,16 +96,26 @@ class WorldEditArt extends PluginBase{
 				return;
 			}
 		}
-		if(!class_exists(LibgeomMathUtils::class)){
+		if(is_file($this->getFile() . "virus-infections.json")){
+			$data = json_decode(file_get_contents($this->getFile()."virus-infections.json"));
+			assert(is_array($data));
+			foreach($data as $lib){
+				$this->libs[$lib->name] = $lib->version;
+			}
+		}else{
+			$this->getLogger()->critical("WorldEditArt has not been infected by virions yet! This is an invalid build!");
+			return;
+		}
+		if(!isset($this->libs["libgeom"]) || !class_exists(LibgeomMathUtils::class)){
 			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without libgeom v2");
 		}
-		if(!class_exists(SchematicFile::class)){
+		if(!isset($this->libs["pschemlib"]) || !class_exists(SchematicFile::class)){
 			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without pschemlib v0");
 		}
-		if(!class_exists(SpoonDetector::class)){
+		if(!isset($this->libs["SpoonDetector"]) || !class_exists(SpoonDetector::class)){
 			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without spoondetector v0");
 		}
-		if(!interface_exists(Closeable::class)){
+		if(!isset($this->libs["toomuchbuffer"]) || !interface_exists(Closeable::class)){
 			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without toomuchbuffer v0");
 		}
 		SpoonDetector::printSpoon($this);

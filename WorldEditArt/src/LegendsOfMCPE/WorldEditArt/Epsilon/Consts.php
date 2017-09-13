@@ -58,14 +58,20 @@ class Consts{
 	const PERM_CZONE_BUILDER_LOCK_BLOCKS = "worldeditart.builder.czone.lock.blocks";
 	const PERM_CZONE_BUILDER_LOCK_ENTRY = "worldeditart.builder.czone.lock.entry";
 	const PERM_CZONE_BUILDER_UNLOCK_SELF = "worldeditart.builder.czone.unlockself";
-	const PERM_CZONE_BUILDER_UNLOCK_OTHER = "worldeditart.builder.czone.unlockother";
-	const PERM_CZONE_BUILDER_MANAGE_ANY = [
+	const PERM_CZONE_ADMIN_UNLOCK_OTHER = "worldeditart.admin.czone.unlockother";
+	const PERM_CZONE_ADMIN_CHANGE = "worldeditart.admin.czone.change";
+	const PERM_CZONE_ADMIN_BYPASS = "worldeditart.admin.czone.bypass";
+	const PERM_CZONE_ADMIN_LOCK_BYPASS = "worldeditart.admin.czone.lockbypass";
+	const PERM_CZONE_COMMAND_ANY = [
 		Consts::PERM_CZONE_BUILDER_VIEW,
 		Consts::PERM_CZONE_BUILDER_LOCK_EDIT,
 		Consts::PERM_CZONE_BUILDER_LOCK_BLOCKS,
 		Consts::PERM_CZONE_BUILDER_LOCK_EDIT,
 		Consts::PERM_CZONE_BUILDER_UNLOCK_SELF,
-		Consts::PERM_CZONE_BUILDER_UNLOCK_OTHER,
+		Consts::PERM_CZONE_ADMIN_UNLOCK_OTHER,
+		Consts::PERM_CZONE_ADMIN_CHANGE,
+		Consts::PERM_CZONE_ADMIN_BYPASS,
+		Consts::PERM_CZONE_ADMIN_LOCK_BYPASS,
 	];
 	const PERM_CZONE_BUILDER_BLOCKS = "worldeditart.builder.czone.blocks";
 	const PERM_CZONE_BUILDER_ENTRY = "worldeditart.builder.czone.entry";
