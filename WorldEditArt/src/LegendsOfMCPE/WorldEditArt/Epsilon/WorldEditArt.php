@@ -41,6 +41,8 @@ use spoondetector\SpoonDetector;
 class WorldEditArt extends PluginBase{
 	/** @var array */
 	private $metadata;
+	/** @var string[] */
+	private $libs;
 	/** @var ConstructionZoneManager */
 	private $czManager;
 	/** @var BuilderSession[][] */
@@ -97,16 +99,26 @@ class WorldEditArt extends PluginBase{
 				return;
 			}
 		}
-		if(!class_exists(LibgeomMathUtils::class)){
+		if(is_file($this->getFile() . "virus-infections.json")){
+			$data = json_decode(file_get_contents($this->getFile() . "virus-infections.json"));
+			assert(is_array($data));
+			foreach($data as $lib){
+				$this->libs[$lib->name] = $lib->version;
+			}
+		}else{
+			$this->getLogger()->critical("WorldEditArt has not been infected by virions yet! This is an invalid build!");
+			return;
+		}
+		if(!isset($this->libs["libgeom"]) || !class_exists(LibgeomMathUtils::class)){
 			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without libgeom v2");
 		}
-		if(!class_exists(SchematicFile::class)){
+		if(!isset($this->libs["pschemlib"]) || !class_exists(SchematicFile::class)){
 			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without pschemlib v0");
 		}
-		if(!class_exists(SpoonDetector::class)){
+		if(!isset($this->libs["SpoonDetector"]) || !class_exists(SpoonDetector::class)){
 			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without spoondetector v0");
 		}
-		if(!interface_exists(Closeable::class)){
+		if(!isset($this->libs["toomuchbuffer"]) || !interface_exists(Closeable::class)){
 			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without toomuchbuffer v0");
 		}
 		SpoonDetector::printSpoon($this);
@@ -195,7 +207,10 @@ class WorldEditArt extends PluginBase{
 	}
 
 
-	public function quickExecute(Level $level, string $doerHash, SerializableBlockStreamGetter $getter, BlockChanger $changer, Vector3 $center, &$badBlocks) : int{
+	public function quickExecute(Level $level, BuilderSession $session, SerializableBlockStreamGetter $getter, BlockChanger $changer, Vector3 $center, &$badBlocks) : int{
+		$doerHash = spl_object_hash($session->getOwner());
+		$canBypassLock = $session->canBypassLock();
+		$canBypassZone = $session->canBypassZone();
 		$goodBlocks = 0;
 		$badBlocks = 0;
 		$manager = $this->getConstructionZoneManager();
@@ -207,7 +222,7 @@ class WorldEditArt extends PluginBase{
 			if(!$valid){
 				continue;
 			}
-			if(!$manager->canDoEdit($vector, $level->getFolderName(),$doerHash , $ccz)){
+			if(!$manager->canDoEdit($vector, $level->getFolderName(), $doerHash, $ccz, $canBypassLock, $canBypassZone)){
 				++$badBlocks;
 				continue;
 			}

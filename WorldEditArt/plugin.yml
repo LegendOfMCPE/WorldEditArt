@@ -13,7 +13,7 @@ softdepend:
 
 permissions: # default for permission.default is "op"
   worldeditart:
-    description: Full control over WorldEditArt. Please consult the documentation at https://github.com/LegendOfMCPE/WorldEditArt/blob/epsilon/v4.1.0/README.md for details.
+    description: Full control over WorldEditArt. Please consult the documentation at https://legendofmcpe.github.io/WorldEditArt/wiki/Permissions.html for details.
     children:
       worldeditart.status:
         description: Allows using //status
@@ -69,8 +69,6 @@ permissions: # default for permission.default is "op"
                 description: Allows viewing information of construction zones
               worldeditart.builder.czone.unlockself:
                 description: Allows unlocking a construction zone previously locked for oneself
-              worldeditart.builder.czone.unlockother:
-                description: Allows unlocking a construction zone previously locked for others
               worldeditart.builder.czone.entry:
                 description: Allows entering a construction zone entry-locked by others
               worldeditart.builder.czone.blocks:
@@ -119,3 +117,7 @@ permissions: # default for permission.default is "op"
                 description: Allows creation/deletion of construction zones
               worldeditart.admin.czone.bypass:
                 description: Allows construction outside construction zones
+              worldeditart.admin.czone.lockbypass:
+                description: Allows construction in construction zones locked by other builders
+              worldeditart.admin.czone.unlockother:
+                description: Allows unlocking a construction zone previously locked for others

@@ -60,13 +60,14 @@ class PlayerEventListener implements Listener{
 	 * @ignoreCancelled true
 	 */
 	public function onMove(PlayerMoveEvent $event){
-		if($event->getPlayer()->hasPermission(Consts::PERM_CZONE_BUILDER_ENTRY)){
+		$player = $event->getPlayer();
+		if($player->hasPermission(Consts::PERM_CZONE_BUILDER_ENTRY)){
 			return;
 		}
 		foreach($this->plugin->getConstructionZoneManager()->getConstructionZones() as $zone){
 			/** @noinspection NullPointerExceptionInspection */
 			if($zone->getLockMode() === ConstructionZone::LOCK_MODE_ENTRY &&
-				$zone->getLockingSession() !== spl_object_hash($event->getPlayer()) &&
+				$zone->getLockingSession() !== spl_object_hash($player) &&
 				$zone->getShape()->isInside($event->getTo())){
 				$event->setCancelled();
 				break;
