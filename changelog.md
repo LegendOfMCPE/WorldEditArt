@@ -10,6 +10,8 @@ The plugin version comprises four numbers:
 - Minor version: Bumped every time WorldEditArt's API has backward-compatible forward-incompatible changes
 - Patch version: Bumped every time WorldEditArt is released without API changes (backward-compatible and forward-compatible)
 
+There will not be changelog for WorldEditArt-Lite versions.
+
 ## [Unreleased] (Epsilon 4.1.0.0)
 Dependencies should validate WorldEditArt version:
 
