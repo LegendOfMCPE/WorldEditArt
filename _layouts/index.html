@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# object: http://ogp.me/ns/object# article: http://ogp.me/ns/article# profile: http://ogp.me/ns/profile#">
+	{% include head.html %}
+	<title>{{ site.description }}</title>
+	<meta property="og:title" content="WorldEditArt"/>
+	<meta name="twitter:title" content="WorldEditArt"/>
+	<meta name="description" content="{{ site.description }}"/>
+	<meta name="twitter:description" content="{{ site.description }}"/>
+</head>
+<body>
+<div class="container-lg px-3 my-5 markdown-body">
+	{{ content }}
+	{% include footer.html %}
+</div>
+</body>
+</html>

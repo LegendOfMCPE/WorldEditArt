@@ -29,7 +29,7 @@ edit it with WorldEditArt. See more details about locking [below](#construction-
 ## Managing construction zones
 To create a construction zone:
 
-1. [Select](Selection.md) the zone you want to mark as construction zone. All shapes are acceptable.
+1. [Select](Selection) the zone you want to mark as construction zone. All shapes are acceptable.
 2. Use the command `//cz add <czName> [selName]`.
   - `<czName>` is the name of the construction zone. It can be anything, of language, except "here" (case-insensitive).
   - `[selName]` is your selection name. If omitted, the default selection is used.

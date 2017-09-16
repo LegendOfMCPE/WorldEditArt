@@ -9,7 +9,7 @@ In WorldEditArt, _blocks_ are selected instead. After you make a selection, you 
 
 - viewing block statistics inside
 - changing all/some blocks inside
-- creating [construction zones](Construction_zone.md)
+- creating [construction zones](Construction_zone)
 
 ## Default Selection vs Multiple Selections
 > Warning: This section is slightly complicated. If you don't understand it, you can safely skip it and ignore all
@@ -20,7 +20,7 @@ WorldEditArt allows you to manage multiple selections at the same time by giving
 
 Most commands that use your selection will have a `[selectionName]` argument. You may put the name (case-insensitive) of
 the selection you wish to be used. If this argument is skipped, your _default selection name_ will be used.
-[Wands](Wand.md), a special form of commands, will also use the default selection name.
+[Wands](Wand), a special form of commands, will also use the default selection name.
 
 Normally, your default selection name is `default`. You may change it to other names using the `//use` command, e.g.
 `//use castle` will change your default selection name to `castle`.
@@ -34,5 +34,5 @@ Normally, your default selection name is `default`. You may change it to other n
 ### Creating selections
 
 ### Displaying selections
-You may see what selections are available.
+You may see what selections are available using the
 
