@@ -21,5 +21,5 @@ WorldEditArt ![](plugin_icon.png)
   * epsilon/lite: Code on this branch are patched from epsilon/indev to create temporarily working versions of WorldEditArt, i.e. Lite Version.
 
 ## Miscellaneous
-* [Change Log](CHANGELOG)
+* [Change Log](changelog)
 * [Project Proposal](ProjectProposal)

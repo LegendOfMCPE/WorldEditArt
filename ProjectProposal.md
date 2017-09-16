@@ -1,7 +1,10 @@
-> This was the initial project proposal for WorldEditArt-Epsilon. It is served here for legacy purposes.
+---
+layout: misc
+title: Project Proposal for a World Edit Plugin
+excerpt: This was the initial project proposal for WorldEditArt-Epsilon. It is served here for legacy purposes.
+keywords: project proposal
+---
 
-Project Proposal for a World Edit Plugin
-===
 This proposal describes a world edit plugin largely based on WorldEditArt's originally-intended features, along with some new ideas.
 
 # Plugin Name
