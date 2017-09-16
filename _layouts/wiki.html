@@ -2,10 +2,20 @@
 <html lang="en">
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# object: http://ogp.me/ns/object# article: http://ogp.me/ns/article# profile: http://ogp.me/ns/profile#">
 	{% include head.html %}
-	<title>{{ site.description }}</title>
+	<title>{{ page.title }} - WorldEditArt wiki</title>
 	<meta property="og:title" content="{{ page.title }} - WorldEditArt wiki"/>
 	<meta name="twitter:title" content="{{ page.title }} - WorldEditArt wiki"/>
-	<meta name="description" content="{{ page.description }}"/>
-	<meta name="twitter:description" content="{{ page.description }}"/>
+	<meta name="description" content="{{ page.excerpt }}"/>
+	<meta name="twitter:description" content="{{ page.excerpt }}"/>
 </head>
+<body>
+<div class="container-lg px-3 my-5 markdown-body">
+	<h1>{{ page.title }}</h1>
+	<p style="font-size: 14px; line-height: 20px; color: #586069;">
+		{{ page.excerpt }}
+	</p>
+	{{ content }}
+	{% include footer.html %}
+</div>
+</body>
 </html>

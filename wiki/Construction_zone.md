@@ -1,5 +1,9 @@
-Construction zone
-=================
+---
+layout: wiki
+title: Construction Zone
+excerpt: Prevent industrial accidents from hurting your players!
+keywords: construction zone
+---
 
 Construction zones prevent your constructions from causing accidents, such as:
 

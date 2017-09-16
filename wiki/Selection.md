@@ -1,5 +1,9 @@
-Selection
-=========
+---
+layout: wiki
+title: Selection
+excerpt: Select blocks of any shapes and do magic with them!
+keywords: selection,shape
+---
 
 A selection is like selecting text in a document editor. In a document editor, you can do different things on a text
 selection, e.g. changing text color, deleting the text, searching words inside the text, copying/moving the text to
