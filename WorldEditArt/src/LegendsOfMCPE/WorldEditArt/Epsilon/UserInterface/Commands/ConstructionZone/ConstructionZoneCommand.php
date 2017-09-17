@@ -134,7 +134,7 @@ class ConstructionZoneCommand extends SessionCommand{
 		}
 
 		$action = mb_strtolower($args[0]);
-		if($action === "lock" || $action === "unlock" || $action === "view"){
+		if(in_array($action, ["lock", "unlock", "view"], true)){
 			$allZones = $this->getPlugin()->getConstructionZoneManager()->getConstructionZones();
 			/** @var ConstructionZone[] $zones */
 			$zones = [];
@@ -151,6 +151,7 @@ class ConstructionZoneCommand extends SessionCommand{
 					}
 				}
 			}
+
 			if($action === "lock"){
 				if(count($zones) > 1){
 					$session->msg("You are standing in " . count($zones) . " zones! Which one do you wish to lock?", BuilderSession::MSG_CLASS_WARN);
@@ -160,7 +161,6 @@ class ConstructionZoneCommand extends SessionCommand{
 					$session->msg("Please run the command with the name: //cz lock <zone> " . ($args[2] ?? ""), BuilderSession::MSG_CLASS_WARN);
 					return;
 				}
-
 				if(count($zones) === 0){
 					$session->msg("You are not standing in any zones! Please either run this command again when you are standing in a zone, or specify the zone you wish to lock: //cz lock <zone> " . ($args[2] ?? ""), BuilderSession::MSG_CLASS_WARN);
 					return;
@@ -172,7 +172,6 @@ class ConstructionZoneCommand extends SessionCommand{
 					$session->msg("The construction zone {$zone->getName()} has already been locked by $ownerName", BuilderSession::MSG_CLASS_ERROR);
 					return;
 				}
-
 				if(!isset(ConstructionZone::LOCK_STRING_TO_ID[$modeName = mb_strtolower($args[2] ?? "edit")])){
 					$session->msg("Unknown lock type \"$modeName\"! Possible values: edit (default), blocks, entry", BuilderSession::MSG_CLASS_ERROR);
 					return;
@@ -185,7 +184,10 @@ class ConstructionZoneCommand extends SessionCommand{
 
 				$zone->lock($session, $modeId);
 				$session->msg("Locked construction zone \"{$zone->getName()}\" with mode \"$modeName\"");
-			}elseif($action === "unlock"){
+				return;
+			}
+
+			if($action === "unlock"){
 				if(count($zones) > 1){
 					$session->msg("You are standing in " . count($zones) . " zones! Which one do you wish to unlock?", BuilderSession::MSG_CLASS_WARN);
 					$session->msg(implode(", ", array_map(function(ConstructionZone $zone) : string{
@@ -194,39 +196,38 @@ class ConstructionZoneCommand extends SessionCommand{
 					$session->msg("Please run the command with the name: //cz unlock <zone>", BuilderSession::MSG_CLASS_WARN);
 					return;
 				}
-
 				if(count($zones) === 0){
 					$session->msg("You are not standing in any zones! Please either run this command again when you are standing in a zone, or specify the zone you wish to unlock: //cz unlock <zone>", BuilderSession::MSG_CLASS_WARN);
 					return;
 				}
 
 				$zone = $zones[0];
-				if($zone->getLockingSession($ownerName) === spl_object_hash($session->getOwner())){
-					if(!$session->hasPermission(Consts::PERM_CZONE_BUILDER_UNLOCK_SELF)){
-						$session->msg("You don't have permission to unlock construction zones!", BuilderSession::MSG_CLASS_ERROR);
-						return;
-					}
-					$zone->unlock();
-				}else{
-					if(!$session->hasPermission(Consts::PERM_CZONE_ADMIN_UNLOCK_OTHER)){
-						$session->msg("You don't have permission to unlock construction zones locked by others ($ownerName)!", BuilderSession::MSG_CLASS_ERROR);
-						return;
-					}
-					$zone->unlock();
+				$self = $zone->getLockingSession($ownerName) === spl_object_hash($session->getOwner());
+				if(!$session->hasPermission($self ?
+					Consts::PERM_CZONE_BUILDER_UNLOCK_SELF : Consts::PERM_CZONE_ADMIN_UNLOCK_OTHER)){
+					$session->msg("You don't have permission to unlock construction zones locked by " .
+						($self ? "yourself!" : "others!"), BuilderSession::MSG_CLASS_ERROR);
+					return;
 				}
+				$zone->unlock();
 				$session->msg("Unlocked construction zone \"{$zone->getName()}\"", BuilderSession::MSG_CLASS_SUCCESS);
-			}elseif($action === "view"){
+				return;
+			}
+
+			if($action === "view"){
 				if(isset($args[1])){
 					$this->showZoneInfo($session, $zones[0]);
-				}else{
-					$session->msg("You are standing in " . count($zones) . " zones.");
-					foreach($zones as $zone){
-						$this->showZoneInfo($session, $zone);
-					}
+					return;
+				}
+				$session->msg("You are standing in " . count($zones) . " zones.");
+				foreach($zones as $zone){
+					$this->showZoneInfo($session, $zone);
 				}
 				return;
 			}
-		}elseif($action === "bypass"){
+		}
+
+		if($action === "bypass"){
 			if(!isset($args[2])){
 				$this->sendUsage($session);
 				return;
@@ -270,7 +271,9 @@ class ConstructionZoneCommand extends SessionCommand{
 				$session->msg(($bool ? "Allowed" : "Disallowed") . " {$target->getOwner()->getName()} to edit outside construction zones", BuilderSession::MSG_CLASS_SUCCESS);
 			}
 			return;
-		}elseif($action === "add" || $action === "change" || $action === "ch"){
+		}
+
+		if(in_array($action, ["add", "change", "ch"], true)){
 			if(!$session->hasPermission(Consts::PERM_CZONE_ADMIN_CHANGE)){
 				$session->msg("You don't have permission to use this command", BuilderSession::MSG_CLASS_ERROR);
 				return;
@@ -295,8 +298,9 @@ class ConstructionZoneCommand extends SessionCommand{
 				$session->msg("Your \"$selName\" selection is not complete!", BuilderSession::MSG_CLASS_ERROR);
 				return;
 			}
-			$mgr = $this->getPlugin()->getConstructionZoneManager();
+
 			if($action === "add"){
+				$mgr = $this->getPlugin()->getConstructionZoneManager();
 				if($mgr->getConstructionZone($name) !== null){
 					$session->msg("There is already a construction zone called \"$name\"! Use \"//cz change\" instead if you want to change the shape of a construction zone.", BuilderSession::MSG_CLASS_ERROR);
 					return;
@@ -305,7 +309,7 @@ class ConstructionZoneCommand extends SessionCommand{
 				$mgr->add($zone);
 				$session->msg("Created construction zone \"$name\" based on your selection \"$selName\"", BuilderSession::MSG_CLASS_SUCCESS);
 			}else{
-				$zone = $mgr->getConstructionZone($name);
+				$zone = $this->getPlugin()->getConstructionZoneManager()->getConstructionZone($name);
 				if($zone === null){
 					$session->msg("There isn't a construction zone called \"$name\"! Use \"//cz add\" instead if you want to add a construction zone.", BuilderSession::MSG_CLASS_ERROR);
 					return;
@@ -314,7 +318,10 @@ class ConstructionZoneCommand extends SessionCommand{
 				$session->msg("Changed shape of construction zone \"{$zone->getName()}\" based on your selection \"$selName\"", BuilderSession::MSG_CLASS_SUCCESS);
 				// TODO present shape of selection
 			}
-		}elseif($action === "rename"){
+			return;
+		}
+
+		if($action === "rename"){
 			if(!$session->hasPermission(Consts::PERM_CZONE_ADMIN_CHANGE)){
 				$session->msg("You don't have permission to use this command", BuilderSession::MSG_CLASS_ERROR);
 				return;
@@ -332,7 +339,10 @@ class ConstructionZoneCommand extends SessionCommand{
 			}
 			$mgr->rename($zone, $new);
 			$session->msg("Renamed construction zone \"$old\" to \"$new\"", BuilderSession::MSG_CLASS_SUCCESS);
-		}elseif($action === "remove" || $action === "rm" || $action === "del" || $action === "delete"){
+			return;
+		}
+
+		if(in_array($action, ["remove", "rm", "del", "delete"], true)){
 			if(!$session->hasPermission(Consts::PERM_CZONE_ADMIN_CHANGE)){
 				$session->msg("You don't have permission to use this command", BuilderSession::MSG_CLASS_ERROR);
 				return;
@@ -346,6 +356,7 @@ class ConstructionZoneCommand extends SessionCommand{
 			}else{
 				$session->msg("There isn't a construction zone called \"$args[1]\"!", BuilderSession::MSG_CLASS_ERROR);
 			}
+			return;
 		}
 	}
 

@@ -50,7 +50,7 @@ class ConstructionZoneManager implements \Serializable{
 		$this->file = $this->plugin->getDataFolder() . "constructionZones.dat";
 		$this->configCheck = $this->plugin->getConfig()->get(Consts::CONFIG_CONSTRUCTION_ZONE_CHECK);
 		/** @noinspection UnnecessaryCastingInspection */
-		$this->configWorlds = (array) ($this->plugin->getConfig()->get(Consts::CONFIG_CONSTRUCTION_ZONE_WORLDS) ?: []);
+		$this->configWorlds = array_map("mb_strtolower", (array) ($this->plugin->getConfig()->get(Consts::CONFIG_CONSTRUCTION_ZONE_WORLDS) ?: []));
 		$this->load();
 	}
 
@@ -127,7 +127,7 @@ class ConstructionZoneManager implements \Serializable{
 	 * @return bool whether editing in the level is limited by construction zones
 	 */
 	public function calcCczValue(string $levelName) : bool{
-		return !($this->configCheck && !in_array($levelName, $this->configWorlds, true));
+		return !($this->configCheck && !in_array(mb_strtolower($levelName), $this->configWorlds, true));
 	}
 
 	/**

@@ -15,6 +15,6 @@ projects:
         version: "^0.0"
         epitope: .random
       - src: SOF3/toomuchbuffer/toomuchbuffer
-        version: "^1.0"
+        version: "^1.1"
         epitope: .random
 ...
