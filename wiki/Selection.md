@@ -35,8 +35,25 @@ Normally, your default selection name is `default`. You may change it to other n
 <!-- TODO: Implement sending selection to another builder -->
 
 ## Managing selections
-### Creating selections
+### Selecting
+Selections can be in different shapes, such as cuboids, spheres, cylinders, cones, etc.
+
+Different shapes can be created in different ways, through commands and/or wands. See the documentation for different
+shapes:
+
+* [Cuboid](Shapes/Cuboid)
+* [Circular frustum](Shapes/CCC)
+  * [Cylinder](Shapes/CCC#cylinder)
+  * [Cone](Shapes/CCC#cone)
+* [Sphere](Shapes/Sphere)
+* [Polygon frustum](Shapes/Polygon_frustum)
 
 ### Displaying selections
-You may see what selections are available using the
+You may list all your selections using the `//sel` command, or view information of a certain selection using
+`//sel <selectionName>`, where `<selectionName>` is the name of the selection of interest (case-insensitive).
 
+### Deselecting
+Sometimes it might be useful to deselect your selections, i.e. empty your selections as if you had never selected
+anything. Accidentally doing things with your selection can be prevented if you aren't selecting anything.
+
+Deselection can be done via a very simple command: `//desel` (or `//desel <selectionName>`).
