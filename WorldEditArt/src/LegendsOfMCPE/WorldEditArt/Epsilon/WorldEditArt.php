@@ -36,8 +36,6 @@ use sofe\pschemlib\SchematicFile;
 use sofe\toomuchbuffer\Closeable;
 use spoondetector\SpoonDetector;
 
-
-/** @noinspection EfferentObjectCouplingInspection */
 class WorldEditArt extends PluginBase{
 	/** @var array */
 	private $metadata;
