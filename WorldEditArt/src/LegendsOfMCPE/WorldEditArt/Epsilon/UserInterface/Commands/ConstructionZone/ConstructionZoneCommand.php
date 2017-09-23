@@ -294,6 +294,7 @@ class ConstructionZoneCommand extends SessionCommand{
 				return;
 			}
 			$shape = $session->getSelection($selName);
+			assert($shape !== null);
 			if(!$shape->isComplete()){
 				$session->msg("Your \"$selName\" selection is not complete!", BuilderSession::MSG_CLASS_ERROR);
 				return;

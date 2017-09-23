@@ -17,7 +17,6 @@ declare(strict_types=1);
 
 namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
-
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\WandManager;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Session\PlayerBuilderSession;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\WorldEditArtCommand;
@@ -27,10 +26,7 @@ use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\plugin\PluginException;
 use pocketmine\Server;
-
-
 use sofe\libgeom\LibgeomMathUtils;
-
 use sofe\pschemlib\SchematicFile;
 use sofe\toomuchbuffer\Closeable;
 use spoondetector\SpoonDetector;
@@ -57,7 +53,7 @@ class WorldEditArt extends PluginBase{
 	}
 
 
-	public function getConstructionZoneManager():ConstructionZoneManager{
+	public function getConstructionZoneManager() : ConstructionZoneManager{
 		return $this->czManager;
 	}
 
@@ -96,7 +92,7 @@ class WorldEditArt extends PluginBase{
 			}
 		}
 		if(is_file($this->getFile() . "virus-infections.json")){
-			$data = json_decode(file_get_contents($this->getFile()."virus-infections.json"));
+			$data = json_decode(file_get_contents($this->getFile() . "virus-infections.json"));
 			assert(is_array($data));
 			foreach($data as $lib){
 				$this->libs[$lib->name] = $lib->version;
@@ -126,7 +122,6 @@ class WorldEditArt extends PluginBase{
 		if(!is_file($this->getDataFolder() . "config.yml")){
 			throw new PluginException("config.yml missing");
 		}
-		$this->getConfig();
 		$this->czManager = new ConstructionZoneManager($this);
 
 		$this->builderSessionMap = [];
