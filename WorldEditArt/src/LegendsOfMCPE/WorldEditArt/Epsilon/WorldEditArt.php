@@ -88,9 +88,6 @@ class WorldEditArt extends PluginBase{
 			$this->metadata = $phar->getMetadata();
 			if(is_array($this->metadata) && isset($this->metadata["builderName"]) && $this->metadata["builderName"] === "poggit" && $this->metadata["buildClass"] === "Dev" && $this->metadata["projectId"] === 724){
 				$this->saveDefaultConfig();
-				if(!isset($this->metadata["poggitRelease"])){
-					$this->getLogger()->warning("You are using a development build from Poggit. You are strongly recommended to download the latest release from https://poggit.pmmp.io/p/WorldEditArt instead, as development builds are unstable.");
-				}
 			}else{
 				/** @noinspection SpellCheckingInspection */
 				$this->getLogger()->critical(base64_decode("UGxlYXNlIG9ubHkgdXNlIERldiBCdWlsZHMgb2YgV29ybGRFZGl0QXJ0IGRvd25sb2FkZWQgZnJvbSBQb2dnaXQuCg=="));
@@ -120,9 +117,12 @@ class WorldEditArt extends PluginBase{
 			throw new \ClassNotFoundException("WorldEditArt-Epsilon was compiled without toomuchbuffer v0");
 		}
 		SpoonDetector::printSpoon($this);
-		// You are using WorldEditArt-Lite. This is a §l§ndemo version§r§e of WorldEditArt-Epsilon, where many features have still not been completed. WorldEditArt-Lite is released to satisfy the urgent demand for world editing plugins, and is not the planned version of WorldEditArt. You are still welcome to report any issues by commenting on §nhttps://github.com/LegendOfMCPE/WorldEditArt/issues/30§r§e, but please refer to the Project Proposal of WorldEditArt (https://legendofmcpe.github.io/WorldEditArt/ProjectProposal.html) if you are requesting features.
+		// You are using WorldEditArt-Lite. This is a §l§ndemo version§r§e of WorldEditArt-Epsilon, where many features have still not been completed.
+		// WorldEditArt-Lite is a "temporary release" to satisfy the urgent demand for world editing plugins, but the most important features, e.g. lagless editing, undo/redo, etc., will not be included in WorldEditArt-Lite.
 		/** @noinspection SpellCheckingInspection */
-		$this->getLogger()->warning(base64_decode("WW91IGFyZSB1c2luZyBXb3JsZEVkaXRBcnQtTGl0ZS4gVGhpcyBpcyBhIMKnbMKnbmRlbW8gdmVyc2lvbsKncsKnZSBvZiBXb3JsZEVkaXRBcnQtRXBzaWxvbiwgd2hlcmUgbWFueSBmZWF0dXJlcyBoYXZlIHN0aWxsIG5vdCBiZWVuIGNvbXBsZXRlZC4gV29ybGRFZGl0QXJ0LUxpdGUgaXMgcmVsZWFzZWQgdG8gc2F0aXNmeSB0aGUgdXJnZW50IGRlbWFuZCBmb3Igd29ybGQgZWRpdGluZyBwbHVnaW5zLCBhbmQgaXMgbm90IHRoZSBwbGFubmVkIHZlcnNpb24gb2YgV29ybGRFZGl0QXJ0LiBZb3UgYXJlIHN0aWxsIHdlbGNvbWUgdG8gcmVwb3J0IGFueSBpc3N1ZXMgYnkgY29tbWVudGluZyBvbiDCp25odHRwczovL2dpdGh1Yi5jb20vTGVnZW5kT2ZNQ1BFL1dvcmxkRWRpdEFydC9pc3N1ZXMvMzDCp3LCp2UsIGJ1dCBwbGVhc2UgcmVmZXIgdG8gdGhlIFByb2plY3QgUHJvcG9zYWwgb2YgV29ybGRFZGl0QXJ0IChodHRwczovL2xlZ2VuZG9mbWNwZS5naXRodWIuaW8vV29ybGRFZGl0QXJ0L1Byb2plY3RQcm9wb3NhbC5odG1sKSBpZiB5b3UgYXJlIHJlcXVlc3RpbmcgZmVhdHVyZXMu"));
+		$this->getLogger()->warning(base64_decode("WW91IGFyZSB1c2luZyBXb3JsZEVkaXRBcnQtTGl0ZS4gVGhpcyBpcyBhIMKnbMKnbmRlbW8gdmVyc2lvbsKncsKnZSBvZiBXb3JsZEVkaXRBcnQtRXBzaWxvbiwgd2hlcmUgbWFueSBmZWF0dXJlcyBoYXZlIHN0aWxsIG5vdCBiZWVuIGNvbXBsZXRlZC4="));
+		/** @noinspection SpellCheckingInspection */
+		$this->getLogger()->warning(base64_decode("V29ybGRFZGl0QXJ0LUxpdGUgaXMgYSAidGVtcG9yYXJ5IHJlbGVhc2UiIHRvIHNhdGlzZnkgdGhlIHVyZ2VudCBkZW1hbmQgZm9yIHdvcmxkIGVkaXRpbmcgcGx1Z2lucywgYnV0IHRoZSBtb3N0IGltcG9ydGFudCBmZWF0dXJlcywgZS5nLiBsYWdsZXNzIGVkaXRpbmcsIHVuZG8vcmVkbywgZXRjLiwgd2lsbCBub3QgYmUgaW5jbHVkZWQgaW4gV29ybGRFZGl0QXJ0LUxpdGUu"));
 
 		$this->builderSessionMap = [];
 		if(!is_dir($this->getDataFolder() . "cache")){
