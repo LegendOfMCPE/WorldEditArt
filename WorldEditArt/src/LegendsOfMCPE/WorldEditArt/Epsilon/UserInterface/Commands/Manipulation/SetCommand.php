@@ -28,7 +28,7 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 class SetCommand extends SessionCommand{
 	public function __construct(WorldEditArt $plugin){
 		parent::__construct($plugin, "/set", "Sets all blocks in an area", $usage = /** @lang text */
-			"//set [s <selectionName>]  [h [padding] [margin]] [r] <blocks>", ["/s"], Consts::PERM_SET, [
+			"//set [s <selectionName>] [h[=<padding>[,<margin>]]] [r] <blocks>", ["/s"], Consts::PERM_SET, [
 			"default" => [
 				[
 					"name" => $usage,
@@ -63,14 +63,16 @@ class SetCommand extends SessionCommand{
 		}
 		if($arg0 === "h"){
 			$hollow = true;
-			if(!isset($args[2])){
-				$this->sendUsage($session);
-				return;
-			}
-			$padding = (float) $args[1];
-			$margin = (float) $args[2];
-			$args = array_slice($args, 3);
+			$padding = 1;
+			$margin = 0;
+			array_shift($args);
 			goto start_parse;
+		}
+		if(strpos($arg0, "h=") === 0 || strpos($arg0, "h:") === 0){
+			$hollow = true;
+			$arg0Dimen = explode(",", substr($arg0, 2), 2);
+			$padding = (float) $arg0Dimen[0];
+			$margin = (float) ($arg0Dimen[1] ?? 0);
 		}
 		if($arg0 === "r"){
 			array_shift($args);
@@ -78,7 +80,7 @@ class SetCommand extends SessionCommand{
 			goto start_parse;
 		}
 
-		$picker = BlockPicker::parseArgs($args, $random, $error);
+		$picker = BlockPicker::parseArgs($this->getPlugin()->getPresetManager(), $args, $random, $error);
 		if($picker === null){
 			$session->msg($error, BuilderSession::MSG_CLASS_ERROR);
 			$this->sendBlocksUsage($session);

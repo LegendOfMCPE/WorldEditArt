@@ -24,7 +24,7 @@ use pocketmine\item\Item;
 use pocketmine\item\ItemIds;
 use pocketmine\math\Vector3;
 
-class BlockType{
+class BlockType implements BlockTypeFeeder{
 	const DAMAGE_ANY = -1;
 	const DAMAGE_ROTATE_TOWARDS_CENTER = -2;
 	const DAMAGE_ROTATE_AWAY_FROM_CENTER = -2;
@@ -42,6 +42,19 @@ class BlockType{
 		$this->blockDamage = $blockDamage;
 	}
 
+	/**
+	 * @param BlockTypeFeeder $feeder
+	 *
+	 * @return BlockType[]
+	 */
+	public static function getAllTypes(BlockTypeFeeder $feeder) : array{
+		if($feeder instanceof BlockType){
+			return [$feeder];
+		}
+		assert($feeder instanceof BlockPicker);
+		return $feeder->getAllTypes();
+	}
+
 	public function toBlock(Vector3 $hereToCenter) : Block{
 		// TODO rotation support
 		if($this->blockDamage === BlockType::DAMAGE_ANY){
@@ -54,16 +67,30 @@ class BlockType{
 		return $block->getId() === $this->blockId && ($this->blockDamage === BlockType::DAMAGE_ANY || $this->blockDamage === $block->getId());
 	}
 
+	public function feed() : BlockType{
+		return $this;
+	}
+
 	/**
-	 * @param string $string
-	 * @param string &$error
+	 * @param PresetManager $presets
+	 * @param string        $string
+	 * @param string        &$error
 	 *
-	 * @param bool   $weighted
+	 * @param bool          $weighted
 	 *
-	 * @return BlockType|null
+	 * @return BlockTypeFeeder|null
 	 */
-	public static function parse(string $string, &$error, bool $weighted = false) : ?BlockType{
-		$parts = explode(":", str_replace([" ", "minecraft:"], ["_", ""], trim($string)), 2);
+	public static function parse(PresetManager $presets, string $string, &$error, bool $weighted = false) : ?BlockTypeFeeder{
+		if(stripos($string, "preset:") === 0){
+			$preset = $presets->getPreset($presetName = substr($string, 7));
+			if($preset === null){
+				$error = "There is no preset called $presetName";
+				return null;
+			}
+			return $preset->getValue();
+		}
+
+		$parts = explode(":", str_ireplace([" ", "minecraft:"], ["_", ""], trim($string)), 2);
 
 		$instance = $weighted ? new WeightedBlockType(0, 0, 1.0) : new BlockType(0, 0);
 

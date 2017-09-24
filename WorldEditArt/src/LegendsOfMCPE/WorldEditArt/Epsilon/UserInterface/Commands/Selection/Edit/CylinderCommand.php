@@ -22,7 +22,7 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
 use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeWrapper;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
-use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\WEAMath;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\WEAUtils;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 use pocketmine\math\Vector3;
 use sofe\libgeom\shapes\CircularFrustumShape;
@@ -493,14 +493,15 @@ class CylinderCommand extends SessionCommand{
 		$n = $shape->getNormal();
 		$a = $shape->getRightDir();
 		$c = $shape->getTop();
+		assert($a !== null && $c !== null && $n !== null);
 		$N = $c->subtract($shape->getBase())->normalize(); // uppercase implies it's new
-		$rot = WEAMath::rotationMatrixBetween($n, $N);
+		$rot = WEAUtils::rotationMatrixBetween($n, $N);
 		if($preserveLength){
-			$A = WEAMath::matrixMultiplyVector($rot, $a);
+			$A = WEAUtils::matrixMultiplyVector($rot, $a);
 			$shape->rotate($N, $A);
 		}else{
 			// FixMe implement
-			$A = WEAMath::matrixMultiplyVector($rot, $a);
+			$A = WEAUtils::matrixMultiplyVector($rot, $a);
 			$shape->rotate($N, $A);
 			$session->msg("Non-length-preserving ellipse normalization (projection) is currently not supported. Length-preserving normalization (rotation) will be executed instead.", BuilderSession::MSG_CLASS_WARN);
 		}
@@ -561,23 +562,19 @@ class CylinderCommand extends SessionCommand{
 			$session->msg("Your \"$selName\" selection is not a cylinder/circular frustum", BuilderSession::MSG_CLASS_ERROR);
 			return 2;
 		}
-		if($shape->getTop() === null){
+		$base = $shape->getTop();
+		if($base === null){
 			$session->msg("Your \"$selName\" selection does not have a top center defined, so it cannot be flipped.", BuilderSession::MSG_CLASS_ERROR);
 			return 2;
 		}
 
-		$base = $shape->getTop();
 		$top = $shape->getBase();
 		$baseFrontRadius = $shape->getTopFrontRadius();
 		$baseRightRadius = $shape->getTopRightRadius();
 		$topFrontRadius = $shape->getBaseFrontRadius();
 		$topRightRadius = $shape->getBaseRightRadius();
-		$shape->setBase($base);
-		$shape->setTop($top);
-		$shape->setBaseFrontRadius($baseFrontRadius);
-		$shape->setBaseRightRadius($baseRightRadius);
-		$shape->setTopFrontRadius($topFrontRadius);
-		$shape->setTopRightRadius($topRightRadius);
+		$shape->setBase($base)->setTop($top)
+			->setBaseFrontRadius($baseFrontRadius)->setBaseRightRadius($baseRightRadius)->setTopFrontRadius($topFrontRadius)->setTopRightRadius($topRightRadius);
 
 		return 1;
 	}

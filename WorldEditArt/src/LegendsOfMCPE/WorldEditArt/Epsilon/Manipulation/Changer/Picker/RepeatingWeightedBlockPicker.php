@@ -19,17 +19,18 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\Picker;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockPicker;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockType;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\WeightedBlockTypeFeeder;
 
 class RepeatingWeightedBlockPicker extends BlockPicker{
-	/** @var BlockType[] */
+	/** @var WeightedBlockTypeFeeder[] */
 	private $types;
 	/** @var int */
 	private $i;
 
 	/**
-	 * @param BlockType[] $types
+	 * @param WeightedBlockTypeFeeder[] $types
 	 */
-	public function __construct(array $types){
+	public function __construct($types){
 		$this->types = $types;
 	}
 
@@ -38,14 +39,15 @@ class RepeatingWeightedBlockPicker extends BlockPicker{
 		$this->i = 0;
 	}
 
-	public function feed() : ?BlockType{
+	public function feed() : BlockType{
 		$ret = null;
 
+		/** @var WeightedBlockTypeFeeder $type */
 		$type = current($this->types);
 
 		while(true){
-			if($this->i++ < $type->weight){
-				return $type;
+			if($this->i++ < $type->getWeight()){
+				return $type->feed();
 			}
 
 			$this->i = 0;
@@ -56,5 +58,15 @@ class RepeatingWeightedBlockPicker extends BlockPicker{
 		}
 
 		throw new \AssertionError("Code logic error");
+	}
+
+	public function getAllTypes() : array{
+		$types = [];
+		foreach($this->types as $feeder){
+			foreach(BlockType::getAllTypes($feeder) as $blockType){
+				$types[] = $blockType;
+			}
+		}
+		return $types;
 	}
 }

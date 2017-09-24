@@ -17,12 +17,21 @@ declare(strict_types=1);
 
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer;
 
-class WeightedBlockType extends BlockType{
+class WeightedBlockType extends BlockType implements WeightedBlockTypeFeeder{
 	/** @var float */
 	public $weight;
 
 	public function __construct(int $blockId, int $blockDamage, float $weight){
 		parent::__construct($blockId, $blockDamage);
 		$this->weight = $weight;
+	}
+
+	public function getWeight() : float{
+		return $this->weight;
+	}
+
+	public function setWeight(float $weight) : WeightedBlockTypeFeeder{
+		$this->weight = $weight;
+		return $this;
 	}
 }

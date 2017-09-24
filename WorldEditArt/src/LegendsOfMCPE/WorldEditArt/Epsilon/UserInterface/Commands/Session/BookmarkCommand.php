@@ -64,11 +64,11 @@ class BookmarkCommand extends SessionCommand{
 					$session->msg("You don't have permission to ues //bm tp", BuilderSession::MSG_CLASS_ERROR);
 					return;
 				}
-				if(!$session->hasBookmark($args[1])){
+				$bm = $session->getBookmark($args[1]);
+				if($bm === null){
 					$session->msg("No bookmark named $args[1]", BuilderSession::MSG_CLASS_ERROR);
 					return;
 				}
-				$bm = $session->getBookmark($args[1]);
 				$owner->teleport($bm);
 				$session->msg("Teleported to bookmark $args[1]: " . UserFormat::formatLocation($bm, TextFormat::GREEN), BuilderSession::MSG_CLASS_SUCCESS);
 				return;

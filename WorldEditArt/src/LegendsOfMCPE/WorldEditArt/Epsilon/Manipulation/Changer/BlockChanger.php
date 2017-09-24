@@ -20,7 +20,7 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer;
 use pocketmine\block\Block;
 
 class BlockChanger{
-	/** @var BlockType[] */
+	/** @var BlockTypeFeeder[] */
 	private $fromTypes;
 	/** @var BlockPicker */
 	private $toTypes;
@@ -28,8 +28,8 @@ class BlockChanger{
 	/**
 	 * BlockChanger constructor.
 	 *
-	 * @param BlockPicker $picker
-	 * @param BlockType[] $fromTypes
+	 * @param BlockPicker       $picker
+	 * @param BlockTypeFeeder[] $fromTypes
 	 */
 	public function __construct(BlockPicker $picker, array $fromTypes){
 		$this->fromTypes = $fromTypes;
@@ -44,9 +44,12 @@ class BlockChanger{
 		if(count($this->fromTypes) === 0){
 			return $this->toTypes->feed();
 		}
+		/** @var BlockTypeFeeder $type */
 		foreach($this->fromTypes as $type){
-			if($type->matches($from)){
-				return $this->toTypes->feed();
+			foreach(BlockType::getAllTypes($type) as $blockType){
+				if($blockType->matches($from)){
+					return $this->toTypes->feed();
+				}
 			}
 		}
 		return null;

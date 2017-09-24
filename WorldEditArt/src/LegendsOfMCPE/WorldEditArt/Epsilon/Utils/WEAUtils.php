@@ -18,11 +18,12 @@ declare(strict_types=1);
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\Utils;
 
 use pocketmine\math\Vector3;
+use TypeError;
 
 /**
  * A 3x3 matrix is represented as a Vector3[3] array, and a 1x3 matrix is represented as a Vector3 object.
  */
-class WEAMath{
+class WEAUtils{
 	public static function vectorToYawPitch(Vector3 $vector, &$yaw, &$pitch) : void{
 		if(((float) $vector->lengthSquared()) !== 1.0){
 			$vector = $vector->normalize();
@@ -72,7 +73,7 @@ class WEAMath{
 
 		/** @noinspection PhpStrictTypeCheckingInspection */ // blame the PHP doc
 		if((float) abs($cosRotAngle) === 1.0){ // $from and $to are parallel
-			return WEAMath::matrixMultiplyScalar($identityMatrix, $cosRotAngle);
+			return WEAUtils::matrixMultiplyScalar($identityMatrix, $cosRotAngle);
 		}
 
 		$crossMatrix = [
@@ -80,10 +81,10 @@ class WEAMath{
 			new Vector3($rotAxis->z, 0, -$rotAxis->x),
 			new Vector3(-$rotAxis->y, $rotAxis->x, 0),
 		];
-		$crossSquared = WEAMath::matrixMultiplyMatrix($crossMatrix, $crossMatrix);
+		$crossSquared = WEAUtils::matrixMultiplyMatrix($crossMatrix, $crossMatrix);
 
-		$matrix = WEAMath::matrixAddMatrix($identityMatrix, $crossMatrix);
-		$matrix = WEAMath::matrixAddMatrix($matrix, WEAMath::matrixMultiplyScalar($crossSquared, 1 / (1 + $cosRotAngle)));
+		$matrix = WEAUtils::matrixAddMatrix($identityMatrix, $crossMatrix);
+		$matrix = WEAUtils::matrixAddMatrix($matrix, WEAUtils::matrixMultiplyScalar($crossSquared, 1 / (1 + $cosRotAngle)));
 
 
 		return $matrix;
@@ -124,7 +125,7 @@ class WEAMath{
 	 * @return Vector3[]
 	 */
 	public static function matrixMultiplyMatrix(array $m1, array $m2) : array{
-		$m2t = WEAMath::matrixTranspose($m2);
+		$m2t = WEAUtils::matrixTranspose($m2);
 		return [
 			new Vector3($m1[0]->dot($m2t[0]), $m1[0]->dot($m2t[1]), $m2t[0]->dot($m2t[2])),
 			new Vector3($m1[1]->dot($m2t[0]), $m1[1]->dot($m2t[1]), $m2t[1]->dot($m2t[2])),
@@ -157,5 +158,40 @@ class WEAMath{
 			$matrix[1]->dot($vector),
 			$matrix[2]->dot($vector)
 		);
+	}
+
+
+	public static function isLinearArray(array $array) : bool{
+		$i = 0;
+		foreach($array as $key => $v){
+			if($key !== ($i++)){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static function validateArrayType(array $array, string $class) : bool{
+		foreach($array as $index => $value){
+			if(!($value instanceof $class)){
+				/** @noinspection PhpUnhandledExceptionInspection */
+				throw new TypeError("Array must be {$class}[], but array[{$index}] is a " . self::getType($value));
+			}
+		}
+		return true;
+	}
+
+	public static function validateArrayScalarType(array $array, string $type) : bool{
+		foreach($array as $index => $value){
+			if(gettype($value) !== $type){
+				/** @noinspection PhpUnhandledExceptionInspection */
+				throw new TypeError("Array must be {$type}[], but array[{$index}] is a " . self::getType($value));
+			}
+		}
+		return true;
+	}
+
+	public static function getType($value) : string{
+		return is_object($value) ? get_class($value) : gettype($value);
 	}
 }

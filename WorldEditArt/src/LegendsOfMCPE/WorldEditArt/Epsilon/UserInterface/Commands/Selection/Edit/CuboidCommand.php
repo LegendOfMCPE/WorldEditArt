@@ -22,7 +22,7 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
 use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeWrapper;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
-use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\WEAMath;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\WEAUtils;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 use pocketmine\math\Vector3;
 use sofe\libgeom\shapes\CuboidShape;
@@ -101,13 +101,13 @@ class CuboidCommand extends SessionCommand{
 				}
 				$distance = (float) $args[1];
 				$from = $session->getLocation();
-				$to = $from->add(WEAMath::yawPitchToVector($from->yaw, $from->pitch)->multiply($distance));
+				$to = $from->add(WEAUtils::yawPitchToVector($from->yaw, $from->pitch)->multiply($distance));
 				$shape = new ShapeWrapper(new CuboidShape($from->getLevel(), $from, $to));
 				$session->setSelection($selName = $args[2] ?? $session->getDefaultSelectionName(), $shape);
 				break;
 			case "grow":
 			case "g":
-				if($new = mb_strtolower($args[1]) === "new"){
+				if($new = (mb_strtolower($args[1]) === "new")){
 					array_shift($args);
 				}
 				$minus = new Vector3((float) $args[1], (float) $args[2], (float) $args[3]);
@@ -126,6 +126,10 @@ class CuboidCommand extends SessionCommand{
 					$session->msg("Your prior \"$selName\" selection was in an unloaded level, so your selection is reset.", BuilderSession::MSG_CLASS_WARN);
 					goto grow_create_new_cuboid;
 				}
+				if(!$shape->isComplete()){
+					$session->msg("Your prior \"$selName\" selection is incomplete, so a new cuboid growing from your location will be created.", BuilderSession::MSG_CLASS_WARN);
+					goto grow_create_new_cuboid;
+				}
 				$myLevel = $session->getLocation()->getLevel();
 				assert($myLevel !== null);
 				if($shape->getLevelName() !== $myLevel->getFolderName()){
@@ -135,6 +139,7 @@ class CuboidCommand extends SessionCommand{
 				}
 				$min = $shape->getMin();
 				$max = $shape->getMax();
+				/** @noinspection NullPointerExceptionInspection */
 				$shape->setFrom($min->subtract($minus))->setTo($max->add($plus));
 				$shape = $wrapper;
 				break;

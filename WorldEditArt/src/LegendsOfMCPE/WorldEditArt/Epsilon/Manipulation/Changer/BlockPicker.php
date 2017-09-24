@@ -30,34 +30,42 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\Picker\SingleBlockPi
  * - Within an *action*, use a <code>foreach</code> loop to get as many blocks
  * - To *finalize/invalidate/close* a Generator when it is not used anymore: <pre>$generator->send(false);</pre>
  */
-abstract class BlockPicker{
+abstract class BlockPicker implements WeightedBlockTypeFeeder{
+	/** @var float */
+	private $weight;
+
 	/**
-	 * @param string[] $args
-	 * @param bool     $random
-	 * @param string   &$error
+	 * @param PresetManager $presets
+	 * @param string[]      $args
+	 * @param bool          $random
+	 * @param string        &$error
 	 *
 	 * @return BlockPicker|null
 	 */
-	public static function parseArgs(array $args, bool $random, &$error) : ?BlockPicker{
-		/** @var WeightedBlockType[] $types */
+	public static function parseArgs(PresetManager $presets, array $args, bool $random, &$error) : ?BlockPicker{
+		/** @var WeightedBlockTypeFeeder[] $types */
 		$types = [];
-		/** @var WeightedBlockType $currentType */
+		/** @var WeightedBlockTypeFeeder $currentType */
 		$currentType = null;
 		$weighted = false;
 		foreach($args as $arg){
+			// store last type
 			if($currentType !== null){
-				if(is_numeric($arg)){
-					$currentType->weight = (float) $arg;
-					if($currentType->weight <= 0){
+				// specify weight
+				if(($arg{0} === "*" || $arg{0} === "x" || $arg{0} === "X") && is_numeric(substr($arg, 1))){
+					$weight = (float) substr($arg, 1);
+					if($weight <= 0){
 						$error = "Weight must be positive";
 						return null;
 					}
+					$currentType->setWeight($weight);
 					$weighted = true;
 					continue;
 				}
 				$types[] = $currentType;
 			}
-			$currentType = BlockType::parse($arg, $error, true);
+			// $currentType is now obsolete
+			$currentType = BlockType::parse($presets, $arg, $error, true);
 			if($currentType === null){
 				return null;
 			}
@@ -76,8 +84,24 @@ abstract class BlockPicker{
 		return $random ? ($weighted ? new RandomWeightedBlockPicker($types) : new RandomLinearBlockPicker($types)) : ($weighted ? new RepeatingWeightedBlockPicker($types) : new RepeatingLinearBlockPicker($types));
 	}
 
+	public function setWeight(float $weight) : WeightedBlockTypeFeeder{
+		$this->weight = $weight;
+		return $this;
+	}
+
+	public function getWeight() : float{
+		if(!isset($this->weight)){
+			throw new \RuntimeException("Attempt to use non-weighted BlockPicker as a weighted BlockPicker");
+		}
+		return $this->weight;
+	}
+
 	public function reset() : void{
 	}
 
-	public abstract function feed() : ?BlockType;
+	/**
+	 * @return BlockType[]
+	 */
+	public abstract function getAllTypes() : array;
+
 }

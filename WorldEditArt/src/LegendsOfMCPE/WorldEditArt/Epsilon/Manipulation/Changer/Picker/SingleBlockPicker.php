@@ -19,16 +19,21 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\Picker;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockPicker;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockType;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockTypeFeeder;
 
 class SingleBlockPicker extends BlockPicker{
-	/** @var BlockType */
+	/** @var BlockTypeFeeder */
 	private $blockType;
 
-	public function __construct(BlockType $blockType){
+	public function __construct(BlockTypeFeeder $blockType){
 		$this->blockType = $blockType;
 	}
 
-	public function feed() : ?BlockType{
-		return $this->blockType;
+	public function feed() : BlockType{
+		return $this->blockType->feed();
+	}
+
+	public function getAllTypes() : array{
+		return BlockType::getAllTypes($this->blockType);
 	}
 }

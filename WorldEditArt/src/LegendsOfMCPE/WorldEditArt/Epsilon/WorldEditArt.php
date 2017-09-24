@@ -17,8 +17,8 @@ declare(strict_types=1);
 
 namespace LegendsOfMCPE\WorldEditArt\Epsilon;
 
-
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockChanger;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\PresetManager;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\SerializableBlockStreamGetter;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Selection\Wand\WandManager;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Session\PlayerBuilderSession;
@@ -47,6 +47,8 @@ class WorldEditArt extends PluginBase{
 	private $builderSessionMap;
 	/** @var WandManager */
 	private $wandManager;
+	/** @var PresetManager */
+	private $presetManager;
 
 
 	public static function requireVersion(Server $server, int $edition, int $major, int $minor){
@@ -66,13 +68,17 @@ class WorldEditArt extends PluginBase{
 		return $this->wandManager;
 	}
 
+	public function getPresetManager() : PresetManager{
+		return $this->presetManager;
+	}
+
 	public function getCacheFolder() : string{
 		return $this->getDataFolder() . "cache" . DIRECTORY_SEPARATOR;
 	}
 
 
 	/** @noinspection SpellCheckingInspection */
-	public function onEnable(){
+	public function onEnable() : void{
 		if(PHP_MAJOR_VERSION !== 7 || PHP_MINOR_VERSION < 2){
 			/** @noinspection SpellCheckingInspection */
 			$this->getLogger()->critical(base64_decode("V29ybGRFZGl0QXJ0LUVwc2lsb24gb25seSBzdXBwb3J0cyBQSFAgNy4yIG9yIGFib3ZlLiBQbGVhc2UgdXBncmFkZSB5b3VyIFBIUCBiaW5hcmllcyBhbmQgUG9ja2V0TWluZSB2ZXJzaW9uLiBTZWUgdGhpcyB0d2VldCAoYW5kIGl0cyByZXBsaWVzKSBmb3IgZGV0YWlsczogaHR0cHM6Ly90d2l0dGVyLmNvbS9ka3RhcHBzL3N0YXR1cy85MDMzNTk4ODk3OTEyMTM1Njg="));
@@ -131,19 +137,23 @@ class WorldEditArt extends PluginBase{
 		if(!is_file($this->getDataFolder() . "config.yml")){
 			throw new PluginException("config.yml missing");
 		}
-		$this->getConfig();
 		$this->czManager = new ConstructionZoneManager($this);
 
 		$this->builderSessionMap = [];
 		$this->wandManager = new WandManager($this);
 		WorldEditArtCommand::registerAll($this, $this->wandManager->getCommands());
 
+		$this->presetManager = new PresetManager($this);
+
 		new PlayerEventListener($this);
 	}
 
-	public function onDisable(){
+	public function onDisable() : void{
 		if(isset($this->czManager)){
 			$this->czManager->save();
+		}
+		if(isset($this->presetManager)){
+			$this->presetManager->save();
 		}
 	}
 

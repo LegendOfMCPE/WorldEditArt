@@ -19,19 +19,30 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\Picker;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockPicker;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockType;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockTypeFeeder;
 
 class RandomLinearBlockPicker extends BlockPicker{
-	/** @var BlockType[] */
+	/** @var BlockTypeFeeder[] */
 	private $types;
 
 	/**
-	 * @param BlockType[] $types
+	 * @param BlockTypeFeeder[] $types
 	 */
 	public function __construct(array $types){
 		$this->types = $types;
 	}
 
-	public function feed() : ?BlockType{
-		return $this->types[array_rand($this->types)];
+	public function feed() : BlockType{
+		return $this->types[array_rand($this->types)]->feed();
+	}
+
+	public function getAllTypes() : array{
+		$types = [];
+		foreach($this->types as $feeder){
+			foreach(BlockType::getAllTypes($feeder) as $blockType){
+				$types[] = $blockType;
+			}
+		}
+		return $types;
 	}
 }
