@@ -1,5 +1,5 @@
 ---
-layout: wiki
+layout: wiki_shape
 title: Shapes | CCC
 excerpt: Cone? Cylinder? Circular frustum? They're all here!
 keywords: selection,shape,cylinder,cone,frustum

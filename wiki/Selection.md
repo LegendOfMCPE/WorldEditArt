@@ -57,3 +57,10 @@ Sometimes it might be useful to deselect your selections, i.e. empty your select
 anything. Accidentally doing things with your selection can be prevented if you aren't selecting anything.
 
 Deselection can be done via a very simple command: `//desel` (or `//desel <selectionName>`).
+
+## Using selections
+Selections can be used for many things in WorldEditArt. Here lists all features that use selections:
+
+* [Block analysis](Block_analysis)
+* [Editing](Editing)
+* [Construction zone](Construction_zone)
