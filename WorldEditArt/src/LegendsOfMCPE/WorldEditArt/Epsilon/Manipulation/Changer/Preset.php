@@ -57,6 +57,13 @@ class Preset{
 		if(is_array($value)){
 			if(WEAUtils::isLinearArray($value)){
 				$types = array_map(function($entry) use ($presets){
+					if(is_array($entry)){
+						$type = BlockType::parse($presets, array_keys($entry)[0], $error, true);
+						if($type === null){
+							throw new \InvalidArgumentException($error);
+						}
+						return $type->setWeight((float) array_values($entry)[0]);
+					}
 					$type = BlockType::parse($presets, (string) $entry, $error);
 					if($type === null){
 						throw new \InvalidArgumentException($error);
@@ -71,7 +78,7 @@ class Preset{
 					if($type === null){
 						throw new \InvalidArgumentException($error);
 					}
-					$types[] = $type;
+					$types[] = $type->setWeight($weight);
 				}
 				$this->value = $repeating ? new RepeatingWeightedBlockPicker($types) : new RandomWeightedBlockPicker($types);
 			}
