@@ -19,20 +19,23 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\Picker;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockPicker;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockType;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockTypeFeeder;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\WeightedBlockTypeFeeder;
+use pocketmine\block\BlockFactory;
 
 class RandomWeightedBlockPicker extends BlockPicker{
 	private $sum = 0.0;
-	/** @var BlockPicker[] */
+	/** @var BlockTypeFeeder[] */
 	private $types;
 
 	/**
-	 * @param BlockType[] $types
+	 * @param WeightedBlockTypeFeeder[] $types
 	 */
-	public function __construct(array $types){
+	public function __construct($types){
 		assert($types !== []);
 		foreach($types as $type){
-			$this->sum += $type->weight;
-			assert($type->weight > 0);
+			$this->sum += $type->getWeight();
+			assert($type->getWeight() > 0);
 		}
 		$this->types = $types;
 	}
@@ -41,15 +44,25 @@ class RandomWeightedBlockPicker extends BlockPicker{
 
 	}
 
-	public function feed() : ?BlockType{
-		$rand = random_int(0, PHP_INT_MAX - 1);
+	public function feed() : BlockType{
+		$rand = rand(0, PHP_INT_MAX - 1);
 		$rand *= $this->sum / PHP_INT_MAX;
 		foreach($this->types as $type){
-			$rand -= $type->weight;
+			$rand -= $type->getWeight();
 			if($rand < 0){
-				return $type;
+				return $type->feed();
 			}
 		}
 		throw new \AssertionError("Code logic error");
+	}
+
+	public function getAllTypes() : array{
+		$types = [];
+		foreach($this->types as $feeder){
+			foreach(BlockType::getAllTypes($feeder) as $blockType){
+				$types[] = $blockType;
+			}
+		}
+		return $types;
 	}
 }

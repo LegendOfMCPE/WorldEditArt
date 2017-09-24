@@ -1,0 +1,24 @@
+---
+fillf:
+  description: Replace all air and fluid blocks in the selection with other blocks
+  type: replace:from
+  from:
+    - air
+    - water
+    - still_water
+    - lava
+    - still_lava
+fill:
+  description: Replace all air blocks in the selection with other blocks
+  type: replace:from
+  from: air
+drain:
+  description: Replace all fluid blocks with air
+  type: replace
+  from:
+    - water
+    - still_water
+    - lava
+    - still_lava
+  to: air
+...

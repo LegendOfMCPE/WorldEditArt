@@ -22,7 +22,7 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
 use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeWrapper;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
-use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\WEAMath;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\WEAUtils;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 use pocketmine\math\Vector3;
 use sofe\libgeom\shapes\CircularFrustumShape;
@@ -494,13 +494,13 @@ class CylinderCommand extends SessionCommand{
 		$a = $shape->getRightDir();
 		$c = $shape->getTop();
 		$N = $c->subtract($shape->getBase())->normalize(); // uppercase implies it's new
-		$rot = WEAMath::rotationMatrixBetween($n, $N);
+		$rot = WEAUtils::rotationMatrixBetween($n, $N);
 		if($preserveLength){
-			$A = WEAMath::matrixMultiplyVector($rot, $a);
+			$A = WEAUtils::matrixMultiplyVector($rot, $a);
 			$shape->rotate($N, $A);
 		}else{
 			// FixMe implement
-			$A = WEAMath::matrixMultiplyVector($rot, $a);
+			$A = WEAUtils::matrixMultiplyVector($rot, $a);
 			$shape->rotate($N, $A);
 			$session->msg("Non-length-preserving ellipse normalization (projection) is currently not supported. Length-preserving normalization (rotation) will be executed instead.", BuilderSession::MSG_CLASS_WARN);
 		}

@@ -1,0 +1,130 @@
+---
+# NOTE: If a preset references other presets (via preset:preset_name syntax), it must be defined AFTER all referenced presets
+
+ore:
+  description: All ore blocks
+  value:
+  - diamond_ore
+  - gold_ore
+  - iron_ore
+  - coal_ore
+  - lapis_ore
+  - redstonre_ore
+  - glowing_redstone_ore
+  - emerald_ore
+  - nether_quartz_ore
+
+natural:
+  description: The average natural landscape composition excluding air.
+  # source: https://www.reddit.com/r/Minecraft/comments/2mjtbb/minecraft_18_block_statistics/
+  value:
+  - stone: 62.1040813
+  - water: 8.848718151
+  - bedrock: 3.743932505
+  - dirt: 3.010592708
+  - gravel: 1.290546042
+  - coal_ore: 0.8540786525
+  - grass: 0.6018187637
+  - leaves: 0.4867320423
+  - iron_ore: 0.4819159683
+  - lava: 0.4350898084
+  - sand: 0.3749635578
+  - sandstone: 0.2027194447
+  - redstone_ore: 0.1432821316
+  - snow_layer: 0.131073694
+  - tallgrass: 0.07393393765
+  - leaves2: 0.06768911866
+  - log: 0.0586317438
+  - gold_ore: 0.05078277472
+  - vine: 0.0399154572
+  - log2: 0.02542961757
+  - planks: 0.02181999944
+  - lapis_ore: 0.02030571751
+  - monster_egg: 0.01780892535
+  - diamond_ore: 0.01777586325
+  - fence: 0.01631226157
+  - ice: 0.01255534802
+  - clay: 0.007908691371
+  - double_plant: 0.007211833509
+  - prismarine: 0.007187071449
+  - obsidian: 0.005956302158
+  - cobblestone: 0.005007941143
+  - flowing_lava: 0.004893086598
+  - rail: 0.004556115512
+  - web: 0.004302765989
+  - red_flower: 0.002266203028
+  - emerald_ore: 0.002210949985
+  - mossy_cobblestone: 0.00201385434
+  - yellow_flower: 0.001725078679
+  - packed_ice: 0.001408383147
+  - waterlily: 0.0009158511055
+  - snow: 0.0007413432915
+  - stonebrick: 0.0007192041117
+  - red_mushroom_block: 0.0006429335156
+  - brown_mushroom_block: 0.0006347715265
+  - brown_mushroom: 0.0004837833555
+  - flowing_water: 0.0002103308361
+  - reeds: 0.0001911423965
+  - red_mushroom: 0.0001735587455
+  - cocoa: 0.0001680023808
+  - fire: 0.0001510571941
+  - torch: 0.0001470365948
+  - mob_spawner: 0.0000842427715
+  - cactus: 0.00008332821458
+  - deadbush: 0.00007290571683
+  - chest: 0.00006217261485
+  - sea_lantern: 0.00006179298745
+  - oak_stairs: 0.00004766049465
+  - melon_block: 0.00002838577614
+  - farmland: 0.00002752298659
+  - pumpkin: 0.00002683275495
+  - bookshelf: 0.000022536063
+  - sponge: 0.00001901588164
+  - wheat: 0.0000162376993
+  - sandstone_stairs: 0.00001478821286
+  - glass_pane: 0.00001466742232
+  - stone_slab: 0.00001270026215
+  - iron_bars: 0.00001197551893
+  - stone_stairs: 0.000009749521896
+  - carrots: 0.00000678152585
+  - stained_hardened_clay: 0.000006643479522
+  - wooden_door: 0.000005280272036
+  - potatoes: 0.000004434738278
+  - double_stone_slab: 0.000004193157205
+  - gold_block: 0.000004003343504
+  - ladder: 0.000003295856075
+  - redstone_wire: 0.000003106042374
+  - iron_door: 0.00000232953178
+  - spruce_stairs: 0.00000179460226
+  - stone_button: 0.000001587532769
+  - wooden_pressure_plate: 0.000001173393786
+  - tripwire: 0.000001035347458
+  - tnt: 0.0000009318127122
+  - tripwire_hook: 0.0000008282779664
+  - lit_redstone_ore: 0.0000007937663844
+  - end_portal_frame: 0.0000006212084748
+  - lever: 0.0000006212084748
+  - sticky_piston: 0.0000006212084748
+  - stone_brick_stairs: 0.0000004141389832
+  - dispenser: 0.0000004141389832
+  - furnace: 0.0000003451158193
+  - crafting_table: 0.0000003278600284
+  - unpowered_repeater: 0.0000002070694916
+  - wool: 0.0000001898137006
+  - stone_pressure_plate: 0.0000001035347458
+  - cauldron: 0.00000006902316386
+
+skyblock:
+  description: Use this to generate a horizontal level in a skyblock map in a cuboid
+    selection, based on the natural preset. Does not work correctly if the Z-side
+    length of the selection is not an even number.
+  repeating: true
+  recommended_shape: CuboidShape # will show warning if is not cuboid
+  value:
+  - preset:natural: 1
+  - air: 1
+
+# To generate a whole skyblock cuboid, first calculate its horizontal area (e.g. for X*Y*Z=8*5*10 cuboid, 80), then use the following command:
+# //set r preset:skyblock x80 air x80
+# where the "80" in x80 depends on the horizontal area
+...

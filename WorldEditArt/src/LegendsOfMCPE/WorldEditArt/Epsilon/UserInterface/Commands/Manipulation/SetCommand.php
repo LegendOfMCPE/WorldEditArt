@@ -78,7 +78,7 @@ class SetCommand extends SessionCommand{
 			goto start_parse;
 		}
 
-		$picker = BlockPicker::parseArgs($args, $random, $error);
+		$picker = BlockPicker::parseArgs($this->getPlugin()->getPresetManager(), $args, $random, $error);
 		if($picker === null){
 			$session->msg($error, BuilderSession::MSG_CLASS_ERROR);
 			$this->sendBlocksUsage($session);

@@ -22,6 +22,7 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockChanger;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockPicker;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockType;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockTypeFeeder;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\Picker\SingleBlockPicker;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\SerializableBlockStreamGetter;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
@@ -81,13 +82,16 @@ class ReplaceCommand extends SessionCommand{
 		}
 
 		$error = null;
+		$presets = $this->getPlugin()->getPresetManager();
+		/** @var BlockTypeFeeder[] $fromTypes */
+		/** @var BlockPicker[] $toTypes */
 		if(count($args) === 2){
-			$fromTypes = [BlockType::parse($args[0], $error)];
+			$fromTypes = [BlockType::parse($presets, $args[0], $error)];
 			if($fromTypes[0] === null){
 				$session->msg("Error parsing <from type>: $error", BuilderSession::MSG_CLASS_ERROR);
 				return;
 			}
-			$toType = BlockType::parse($args[1], $error);
+			$toType = BlockType::parse($presets, $args[1], $error);
 			if($toType === null){
 				$session->msg("Error parsing <to type>: $error", BuilderSession::MSG_CLASS_ERROR);
 				return;
@@ -97,23 +101,27 @@ class ReplaceCommand extends SessionCommand{
 			$fromTypes = [];
 			while(($arg = array_shift($args)) !== null){
 				$arg = mb_strtolower($arg);
-				if($arg === "to" || $arg === "with" || $arg === "as"){
+				if($arg === "to" || $arg === "with" || $arg === "as" || $arg === ">"){
 					break;
 				}
-				$fromTypes[] = $type = BlockType::parse($arg, $error);
+				$fromTypes[] = $type = BlockType::parse($presets, $arg, $error);
 				if($type === null){
 					$session->msg("Error parsing from type (\"$arg\"): $error", BuilderSession::MSG_CLASS_ERROR);
 					return;
 				}
 			}
 			if(count($fromTypes) === 0){
-				$session->msg("<from types> cannot be empty!");
+				$session->msg("<fromTypes> cannot be empty!");
 				$this->sendUsage($session);
 				return;
 			}
-			$toTypes = BlockPicker::parseArgs($args, $random, $error);
+			if(count($args) === 0){
+				$session->msg(/** @lang text */
+					'Ambiguous command! For multiple types, please use the syntax "//replace <fromTypes> as <toTypes>".', BuilderSession::MSG_CLASS_ERROR);
+			}
+			$toTypes = BlockPicker::parseArgs($this->getPlugin()->getPresetManager(), $args, $random, $error);
 			if($toTypes === null){
-				$session->msg("Error parsing <to types>: $error", BuilderSession::MSG_CLASS_ERROR);
+				$session->msg("Error parsing <toTypes>: $error", BuilderSession::MSG_CLASS_ERROR);
 				return;
 			}
 		}

@@ -22,7 +22,7 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\Consts;
 use LegendsOfMCPE\WorldEditArt\Epsilon\LibgeomAdapter\ShapeWrapper;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCommand;
 use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\UserFormat;
-use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\WEAMath;
+use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\WEAUtils;
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 use pocketmine\math\Vector3;
 use sofe\libgeom\shapes\CuboidShape;
@@ -101,7 +101,7 @@ class CuboidCommand extends SessionCommand{
 				}
 				$distance = (float) $args[1];
 				$from = $session->getLocation();
-				$to = $from->add(WEAMath::yawPitchToVector($from->yaw, $from->pitch)->multiply($distance));
+				$to = $from->add(WEAUtils::yawPitchToVector($from->yaw, $from->pitch)->multiply($distance));
 				$shape = new ShapeWrapper(new CuboidShape($from->getLevel(), $from, $to));
 				$session->setSelection($selName = $args[2] ?? $session->getDefaultSelectionName(), $shape);
 				break;
