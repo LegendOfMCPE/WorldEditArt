@@ -119,7 +119,7 @@ skyblock:
     selection, based on the natural preset. Does not work correctly if the Z-side
     length of the selection is not an even number.
   repeating: true
-  recommended_shape: CuboidShape # will show warning if is not cuboid
+  recommended_shape: CuboidShape
   value:
   - preset:natural: 1
   - air: 1

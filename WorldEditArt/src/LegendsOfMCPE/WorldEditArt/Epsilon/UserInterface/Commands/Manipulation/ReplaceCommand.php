@@ -31,7 +31,7 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 class ReplaceCommand extends SessionCommand{
 	public function __construct(WorldEditArt $plugin){
 		parent::__construct($plugin, "/replace", "Replace some blocks in your selection to other blocks", /** @lang text */
-			"//rep [s <selectionName>] [h <padding> <margin>] [r] <from blocks> [to] <to blocks>", ["/rep"], Consts::PERM_REPLACE);
+			"//rep [s <selectionName>] [h[=<padding>[,<margin>]]] [r] <from blocks> [to] <to blocks>", ["/rep"], Consts::PERM_REPLACE);
 	}
 
 	/**
@@ -56,21 +56,24 @@ class ReplaceCommand extends SessionCommand{
 				continue;
 			}
 
-			if($i === "h" || $i === "hollow"){
+			if($i === "h"){
+				$hollowConfig = [1.0, 0.0];
 				array_shift($args);
-				$padding = array_shift($args);
-				$margin = array_shift($args);
-				if(!is_numeric($padding) or !is_numeric($margin)){
-					$this->sendUsage($session);
-					return;
-				}
-				$hollowConfig = [(float) $padding, (float) $margin];
+				continue;
+			}
+			if(strpos($i, "h=") === 0 || strpos($i, "h:") === 0){
+				$dimens = explode(",", substr($i, 2), 2);
+				$padding = (float) $dimens[0];
+				$margin = (float) ($dimens[1] ?? 0.0);
+				$hollowConfig = [$padding, $margin];
+				array_shift($args);
 				continue;
 			}
 
 			if($i === "r"){
 				array_shift($args);
 				$random = false;
+				continue;
 			}
 
 			break;
