@@ -27,7 +27,7 @@ types.
 Looks very complicated? Let's look at it part by part:
 
 #### `<to blocks [x<weight>] ...>`
-This is a list of [block types](#block-types) separated by spaces.
+This is a list of [block types](#block-types) to change to, separated by spaces.
 
 If you want to apply [weighting](#weighting)/[frequency](#frequency) to a block type, type a space after it, then an
 `x`, then the weight/frequency. If no weight/frequency is provided, it is is assumed as `1`.
@@ -40,7 +40,8 @@ For example, the following command will have `air` with a weight of `0.8`, `ston
 ```
 
 #### `<from blocks ...>`
-This is a list of [block types](#block-types) separated by spaces. Weighting/frequency is not supported in this list.
+This is a list of [block types](#block-types) to change from, separated by spaces. Weighting/frequency is not supported
+in this list.
 
 #### `with`
 If there is more than one block type in `<from blocks>` or in `<to blocks>`, they must be separated by a
