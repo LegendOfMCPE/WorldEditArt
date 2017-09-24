@@ -19,7 +19,6 @@ namespace LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\Picker;
 
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockPicker;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockType;
-use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\BlockTypeFeeder;
 use LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer\WeightedBlockTypeFeeder;
 
 class RepeatingWeightedBlockPicker extends BlockPicker{

@@ -107,7 +107,7 @@ class CuboidCommand extends SessionCommand{
 				break;
 			case "grow":
 			case "g":
-				if($new = mb_strtolower($args[1]) === "new"){
+				if($new = (mb_strtolower($args[1]) === "new")){
 					array_shift($args);
 				}
 				$minus = new Vector3((float) $args[1], (float) $args[2], (float) $args[3]);
@@ -126,6 +126,10 @@ class CuboidCommand extends SessionCommand{
 					$session->msg("Your prior \"$selName\" selection was in an unloaded level, so your selection is reset.", BuilderSession::MSG_CLASS_WARN);
 					goto grow_create_new_cuboid;
 				}
+				if(!$shape->isComplete()){
+					$session->msg("Your prior \"$selName\" selection is incomplete, so a new cuboid growing from your location will be created.", BuilderSession::MSG_CLASS_WARN);
+					goto grow_create_new_cuboid;
+				}
 				$myLevel = $session->getLocation()->getLevel();
 				assert($myLevel !== null);
 				if($shape->getLevelName() !== $myLevel->getFolderName()){
@@ -135,6 +139,7 @@ class CuboidCommand extends SessionCommand{
 				}
 				$min = $shape->getMin();
 				$max = $shape->getMax();
+				/** @noinspection NullPointerExceptionInspection */
 				$shape->setFrom($min->subtract($minus))->setTo($max->add($plus));
 				break;
 				//@formatter:off

@@ -493,6 +493,7 @@ class CylinderCommand extends SessionCommand{
 		$n = $shape->getNormal();
 		$a = $shape->getRightDir();
 		$c = $shape->getTop();
+		assert($a !== null && $c !== null && $n !== null);
 		$N = $c->subtract($shape->getBase())->normalize(); // uppercase implies it's new
 		$rot = WEAUtils::rotationMatrixBetween($n, $N);
 		if($preserveLength){
@@ -561,23 +562,19 @@ class CylinderCommand extends SessionCommand{
 			$session->msg("Your \"$selName\" selection is not a cylinder/circular frustum", BuilderSession::MSG_CLASS_ERROR);
 			return 2;
 		}
-		if($shape->getTop() === null){
+		$base = $shape->getTop();
+		if($base === null){
 			$session->msg("Your \"$selName\" selection does not have a top center defined, so it cannot be flipped.", BuilderSession::MSG_CLASS_ERROR);
 			return 2;
 		}
 
-		$base = $shape->getTop();
 		$top = $shape->getBase();
 		$baseFrontRadius = $shape->getTopFrontRadius();
 		$baseRightRadius = $shape->getTopRightRadius();
 		$topFrontRadius = $shape->getBaseFrontRadius();
 		$topRightRadius = $shape->getBaseRightRadius();
-		$shape->setBase($base);
-		$shape->setTop($top);
-		$shape->setBaseFrontRadius($baseFrontRadius);
-		$shape->setBaseRightRadius($baseRightRadius);
-		$shape->setTopFrontRadius($topFrontRadius);
-		$shape->setTopRightRadius($topRightRadius);
+		$shape->setBase($base)->setTop($top)
+			->setBaseFrontRadius($baseFrontRadius)->setBaseRightRadius($baseRightRadius)->setTopFrontRadius($topFrontRadius)->setTopRightRadius($topRightRadius);
 
 		return 1;
 	}

@@ -46,7 +46,7 @@ class Preset{
 	 * @param string        $description
 	 * @param bool          $repeating
 	 * @param string[]|null $recommendedShapes
-	 * @param mixed       $value
+	 * @param mixed         $value
 	 */
 	public function __construct(PresetManager $presets, string $name, string $description, bool $repeating, ?array $recommendedShapes, $value){
 		$this->name = $name;
@@ -56,7 +56,7 @@ class Preset{
 		$this->storeValue = $value;
 		if(is_array($value)){
 			if(WEAUtils::isLinearArray($value)){
-				$types = array_map(function($entry) use($presets){
+				$types = array_map(function($entry) use ($presets){
 					$type = BlockType::parse($presets, (string) $entry, $error);
 					if($type === null){
 						throw new \InvalidArgumentException($error);

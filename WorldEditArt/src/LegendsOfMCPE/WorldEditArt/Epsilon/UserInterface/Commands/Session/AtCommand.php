@@ -181,7 +181,7 @@ class AtCommand extends SessionCommand{
 						return;
 					}
 					$player = $session->getPlugin()->getServer()->getPlayerExact($pname = array_shift($args));
-					if($at === null){
+					if($player === null){
 						$session->msg("No player called \"$pname\"", BuilderSession::MSG_CLASS_ERROR);
 						return;
 					}

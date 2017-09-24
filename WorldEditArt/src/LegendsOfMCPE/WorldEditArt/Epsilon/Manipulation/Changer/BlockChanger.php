@@ -28,7 +28,7 @@ class BlockChanger{
 	/**
 	 * BlockChanger constructor.
 	 *
-	 * @param BlockPicker $picker
+	 * @param BlockPicker       $picker
 	 * @param BlockTypeFeeder[] $fromTypes
 	 */
 	public function __construct(BlockPicker $picker, array $fromTypes){
