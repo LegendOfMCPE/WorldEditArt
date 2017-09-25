@@ -122,7 +122,7 @@ class SetCommand extends SessionCommand{
 		}
 	}
 
-	private function sendBlocksUsage(BuilderSession $session, int $class = BuilderSession::MSG_CLASS_ERROR){
+	private function sendBlocksUsage(BuilderSession $session, int $class = BuilderSession::MSG_CLASS_ERROR) : void{
 		/** @noinspection UnnecessaryParenthesesInspection */
 		$session->msg((/** @lang text */
 			"Usage for <blocks>:\n") .

@@ -55,7 +55,7 @@ class SphereRadiusWand extends AbstractFieldDefinitionWand{
 		return $shape instanceof EllipsoidShape and $shape->getCenter() !== null;
 	}
 
-	protected function modify(BuilderSession $session, Shape $shape, Position $position){
+	protected function modify(BuilderSession $session, Shape $shape, Position $position) : void{
 		assert($shape instanceof EllipsoidShape);
 		$this->setRadius($shape, $position->distance($shape->getCenter()));
 	}
@@ -66,7 +66,7 @@ class SphereRadiusWand extends AbstractFieldDefinitionWand{
 		return false;
 	}
 
-	private function setRadius(EllipsoidShape $shape, float $radius){
+	private function setRadius(EllipsoidShape $shape, float $radius) : void{
 		switch($this->axis){
 			case self::AXIS_X:
 				$shape->setRadiusX($radius);

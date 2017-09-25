@@ -27,7 +27,7 @@ class CylinderCircumProjectionWand extends CylinderCircumWand{
 		parent::__construct($isTop, $isFront, "proj", "p");
 	}
 
-	protected function modify(BuilderSession $session, Shape $shape, Position $position){
+	protected function modify(BuilderSession $session, Shape $shape, Position $position) : void{
 		assert($shape instanceof CircularFrustumShape);
 		$aRadius = $this->getRadius($shape, true, false);
 		$otherDir = $this->getDir($shape, true);

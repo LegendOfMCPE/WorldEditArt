@@ -49,7 +49,7 @@ abstract class AbstractFieldDefinitionWand implements Wand{
 
 	protected abstract function canModify(Shape $shape) : bool;
 
-	protected abstract function modify(BuilderSession $session, Shape $shape, Position $position);
+	protected abstract function modify(BuilderSession $session, Shape $shape, Position $position) : void;
 
 	protected function canCreateNoisy(/** @noinspection PhpUnusedParameterInspection */
 		BuilderSession $session) : bool{

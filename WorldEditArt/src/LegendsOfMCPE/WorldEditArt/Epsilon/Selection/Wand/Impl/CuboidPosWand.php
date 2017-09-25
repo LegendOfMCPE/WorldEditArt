@@ -50,7 +50,7 @@ class CuboidPosWand extends AbstractFieldDefinitionWand{
 		return $shape instanceof CuboidShape;
 	}
 
-	protected function modify(BuilderSession $session, Shape $shape, Position $position){
+	protected function modify(BuilderSession $session, Shape $shape, Position $position) : void{
 		assert($shape instanceof CuboidShape);
 		if($this->one){
 			$shape->setFrom($position);

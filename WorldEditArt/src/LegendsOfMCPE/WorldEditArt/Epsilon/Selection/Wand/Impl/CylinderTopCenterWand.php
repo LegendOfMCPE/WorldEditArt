@@ -42,7 +42,7 @@ class CylinderTopCenterWand extends AbstractFieldDefinitionWand{
 		return $shape instanceof CircularFrustumShape;
 	}
 
-	protected function modify(BuilderSession $session, Shape $shape, Position $position){
+	protected function modify(BuilderSession $session, Shape $shape, Position $position) : void{
 		assert($shape instanceof CircularFrustumShape);
 		$oldTop = $shape->getTop();
 		$shape->setTop($position);

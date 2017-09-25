@@ -64,7 +64,7 @@ class PolygonFrustumShapeBuilder extends Shape{
 		throw new \AssertionError("Incomplete shape");
 	}
 
-	public function toBinary(LibgeomDataWriter $stream){
+	public function toBinary(LibgeomDataWriter $stream) : void{
 		throw new \AssertionError("Incomplete shape");
 	}
 

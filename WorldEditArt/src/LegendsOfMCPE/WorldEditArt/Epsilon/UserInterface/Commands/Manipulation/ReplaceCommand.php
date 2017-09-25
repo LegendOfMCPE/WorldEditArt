@@ -164,7 +164,7 @@ class ReplaceCommand extends SessionCommand{
 		}
 	}
 
-	public function sendUsage(BuilderSession $session, int $class = BuilderSession::MSG_CLASS_ERROR){
+	public function sendUsage(BuilderSession $session, int $class = BuilderSession::MSG_CLASS_ERROR) : void{
 		$session->msg(/** @lang text */
 			<<<EOU
 To change a single block type to another block type:

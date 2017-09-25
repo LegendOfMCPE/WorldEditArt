@@ -59,7 +59,7 @@ class ShowSelectionCommand extends SessionCommand{
 		}
 	}
 
-	private function showSelection(BuilderSession $session, string $name, IShape $shape, int $class = BuilderSession::MSG_CLASS_INFO){
+	private function showSelection(BuilderSession $session, string $name, IShape $shape, int $class = BuilderSession::MSG_CLASS_INFO) : void{
 		$session->msg(UserFormat::describeShape($session->getPlugin()->getServer(), $shape, UserFormat::FORMAT_USER_DEFINITION), $class, "Selection " . TextFormat::AQUA . "\"$name\"");
 	}
 }

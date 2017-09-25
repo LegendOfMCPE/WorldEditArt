@@ -73,7 +73,7 @@ abstract class WorldEditArtCommand extends Command implements PluginIdentifiable
 		return $this->plugin;
 	}
 
-	public function getFormats(){
+	public function getFormats() : array{
 		return $this->formats;
 	}
 
@@ -81,7 +81,7 @@ abstract class WorldEditArtCommand extends Command implements PluginIdentifiable
 	 * @param WorldEditArt  $plugin
 	 * @param WandCommand[] $cmds Wand commands
 	 */
-	public static function registerAll(WorldEditArt $plugin, array $cmds){
+	public static function registerAll(WorldEditArt $plugin, array $cmds) : void{
 		// session commands except //@
 		$cmds[] = new ConstructionZoneCommand($plugin);
 		$cmds[] = new BookmarkCommand($plugin);

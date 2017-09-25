@@ -86,7 +86,7 @@ abstract class CylinderCircumWand extends AbstractFieldDefinitionWand{
 		return $shape->getBaseRightRadius();
 	}
 
-	protected function setRadius(CircularFrustumShape $shape, float $length, bool $differentAxis, bool $differentFace){
+	protected function setRadius(CircularFrustumShape $shape, float $length, bool $differentAxis, bool $differentFace) : void{
 		// the !== used below are equivalent to the XOR operator
 		if($this->isTop !== $differentFace){
 			if($this->isFront !== $differentAxis){
@@ -103,11 +103,11 @@ abstract class CylinderCircumWand extends AbstractFieldDefinitionWand{
 		}
 	}
 
-	protected function getDir(CircularFrustumShape $shape, bool $differentAxis){
+	protected function getDir(CircularFrustumShape $shape, bool $differentAxis) : ?Vector3{
 		return ($this->isFront !== $differentAxis) ? $shape->getFrontDir() : $shape->getRightDir();
 	}
 
-	protected function setDir(CircularFrustumShape $shape, Vector3 $dir, bool $differentAxis){
+	protected function setDir(CircularFrustumShape $shape, Vector3 $dir, bool $differentAxis) : void{
 		if($this->isFront !== $differentAxis){
 			$shape->setFrontDir($dir);
 		}else{
@@ -115,7 +115,7 @@ abstract class CylinderCircumWand extends AbstractFieldDefinitionWand{
 		}
 	}
 
-	protected function getCenter(CircularFrustumShape $shape, bool $differentFace){
+	protected function getCenter(CircularFrustumShape $shape, bool $differentFace) : ?Vector3{
 		return ($this->isTop !== $differentFace) ? $shape->getTop() : $shape->getBase();
 	}
 }
