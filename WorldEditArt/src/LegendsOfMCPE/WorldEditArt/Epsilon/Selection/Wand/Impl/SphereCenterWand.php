@@ -43,7 +43,7 @@ class SphereCenterWand extends AbstractFieldDefinitionWand{
 		return $shape instanceof EllipsoidShape;
 	}
 
-	protected function modify(BuilderSession $session, Shape $shape, Position $position){
+	protected function modify(BuilderSession $session, Shape $shape, Position $position) : void{
 		assert($shape instanceof EllipsoidShape);
 		$shape->setCenter($position);
 	}

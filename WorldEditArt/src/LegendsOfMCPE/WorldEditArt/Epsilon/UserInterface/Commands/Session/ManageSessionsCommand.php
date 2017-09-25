@@ -56,7 +56,7 @@ class ManageSessionsCommand extends WorldEditArtCommand{
 		return parent::testPermission($target);
 	}
 
-	public function execute(CommandSender $sender, string $commandLabel, array $args){
+	public function execute(CommandSender $sender, string $commandLabel, array $args) : void{
 		if(!$this->testPermission($sender)){
 			return;
 		}

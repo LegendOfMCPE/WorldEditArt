@@ -83,7 +83,7 @@ class ConstructionZoneManager implements \Serializable{
 		return null;
 	}
 
-	public function rename(ConstructionZone $zone, string $name){
+	public function rename(ConstructionZone $zone, string $name) : void{
 		if(!isset($this->constructionZones[$oldName = mb_strtolower($zone->getName())])){
 			throw new \UnexpectedValueException("The construction zone was not added");
 		}

@@ -47,7 +47,7 @@ class WorldEditArt extends PluginBase{
 	private $presetManager;
 
 
-	public static function requireVersion(Server $server, int $edition, int $major, int $minor){
+	public static function requireVersion(Server $server, int $edition, int $major, int $minor) : void{
 		$instance = WorldEditArt::getInstance($server);
 		[$a, $b, $c] = array_map("intval", explode(".", $instance->getDescription()->getVersion()));
 		if(!($a === $edition && $major === $b && $minor < $c)){
@@ -176,7 +176,7 @@ class WorldEditArt extends PluginBase{
 	 *
 	 * @param Player $player
 	 */
-	public function closePlayerSession(Player $player){
+	public function closePlayerSession(Player $player) : void{
 		$this->builderSessionMap[$player->getId()][PlayerBuilderSession::SESSION_KEY]->close();
 		unset($this->builderSessionMap[$player->getId()][PlayerBuilderSession::SESSION_KEY]);
 	}
@@ -197,7 +197,7 @@ class WorldEditArt extends PluginBase{
 	 *
 	 * @param CommandSender $sender
 	 */
-	public function closeSessions(CommandSender $sender){
+	public function closeSessions(CommandSender $sender) : void{
 		if(isset($this->builderSessionMap[$sender instanceof Player ? $sender->getId() : $sender->getName()])){
 			foreach($this->builderSessionMap[$sender instanceof Player ? $sender->getId() : $sender->getName()] as $session){
 				$session->close();

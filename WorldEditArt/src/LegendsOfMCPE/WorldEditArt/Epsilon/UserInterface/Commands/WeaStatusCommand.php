@@ -28,7 +28,7 @@ class WeaStatusCommand extends WorldEditArtCommand{
 		parent::__construct($plugin, "/status", "View information about WorldEditArt and you", "/status", ["/info", "/"], Consts::PERM_STATUS);
 	}
 
-	public function execute(CommandSender $sender, string $commandLabel, array $args){
+	public function execute(CommandSender $sender, string $commandLabel, array $args) : void{
 		if(!$this->testPermission($sender)){
 			return;
 		}

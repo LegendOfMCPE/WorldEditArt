@@ -41,7 +41,7 @@ class PlayerEventListener implements Listener{
 		$plugin->getServer()->getPluginManager()->registerEvents($this, $plugin);
 	}
 
-	public function onJoin(PlayerJoinEvent $event){
+	public function onJoin(PlayerJoinEvent $event) : void{
 		$player = $event->getPlayer();
 		/** @noinspection NotOptimalIfConditionsInspection */
 		if($this->plugin->getConfig()->get(Consts::CONFIG_SESSION_IMPLICIT) && $player->hasPermission(Consts::PERM_SESSION_START)){
@@ -49,7 +49,7 @@ class PlayerEventListener implements Listener{
 		}
 	}
 
-	public function onQuit(PlayerQuitEvent $event){
+	public function onQuit(PlayerQuitEvent $event) : void{
 		$this->plugin->closeSessions($event->getPlayer());
 	}
 
@@ -59,7 +59,7 @@ class PlayerEventListener implements Listener{
 	 * @priority        HIGH
 	 * @ignoreCancelled true
 	 */
-	public function onMove(PlayerMoveEvent $event){
+	public function onMove(PlayerMoveEvent $event) : void{
 		$player = $event->getPlayer();
 		if($player->hasPermission(Consts::PERM_CZONE_BUILDER_ENTRY)){
 			return;
@@ -81,7 +81,7 @@ class PlayerEventListener implements Listener{
 	 * @priority        HIGH
 	 * @ignoreCancelled true
 	 */
-	public function onPlace(BlockPlaceEvent $event){
+	public function onPlace(BlockPlaceEvent $event) : void{
 		$this->blockEvent($event->getPlayer(), $event->getBlock(), $event);
 	}
 
@@ -91,11 +91,11 @@ class PlayerEventListener implements Listener{
 	 * @priority        HIGH
 	 * @ignoreCancelled true
 	 */
-	public function onBreak(BlockBreakEvent $event){
+	public function onBreak(BlockBreakEvent $event) : void{
 		$this->blockEvent($event->getPlayer(), $event->getBlock(), $event);
 	}
 
-	private function blockEvent(Player $player, Block $block, Cancellable $event){
+	private function blockEvent(Player $player, Block $block, Cancellable $event) : void{
 		if($player->hasPermission(Consts::PERM_CZONE_BUILDER_BLOCKS)){
 			return;
 		}
@@ -115,7 +115,7 @@ class PlayerEventListener implements Listener{
 	 *
 	 * @priority LOW
 	 */
-	public function onInteract(PlayerInteractEvent $event){
+	public function onInteract(PlayerInteractEvent $event) : void{
 		$player = $event->getPlayer();
 		$sessions = $this->plugin->getSessionsOf($player);
 		if(!isset($sessions[PlayerBuilderSession::SESSION_KEY])){

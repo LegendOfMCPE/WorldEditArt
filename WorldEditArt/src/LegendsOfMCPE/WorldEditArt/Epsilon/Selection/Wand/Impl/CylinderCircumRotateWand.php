@@ -27,7 +27,7 @@ class CylinderCircumRotateWand extends CylinderCircumWand{
 		parent::__construct($isTop, $isFront, "rot", "r");
 	}
 
-	protected function modify(BuilderSession $session, Shape $shape, Position $position){
+	protected function modify(BuilderSession $session, Shape $shape, Position $position) : void{
 		assert($shape instanceof CircularFrustumShape);
 		$radius = $position->distance($this->getCenter($shape, false));
 		$aRadius = $this->getRadius($shape, true, false);

@@ -27,7 +27,7 @@ use pocketmine\Player;
  * SessionCommand is the superclass of all commands executing actions based on a builder session.
  */
 abstract class SessionCommand extends WorldEditArtCommand{
-	public function execute(CommandSender $sender, string $commandLabel, array $args){
+	public function execute(CommandSender $sender, string $commandLabel, array $args) : void{
 		if(!$this->testPermission($sender)){
 			return;
 		}
@@ -54,7 +54,7 @@ abstract class SessionCommand extends WorldEditArtCommand{
 	 */
 	public abstract function run(BuilderSession $session, array $args) : void;
 
-	public function sendUsage(BuilderSession $session, int $class = BuilderSession::MSG_CLASS_ERROR){
+	public function sendUsage(BuilderSession $session, int $class = BuilderSession::MSG_CLASS_ERROR) : void{
 		$session->msg("Usage: " . $this->getUsage(), $class);
 	}
 }

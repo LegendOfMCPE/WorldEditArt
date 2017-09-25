@@ -48,7 +48,7 @@ class CylinderShiftWand extends AbstractFieldDefinitionWand{
 		return $shape instanceof CircularFrustumShape;
 	}
 
-	protected function modify(BuilderSession $session, Shape $shape, Position $newBase){
+	protected function modify(BuilderSession $session, Shape $shape, Position $newBase) : void{
 		assert($shape instanceof CircularFrustumShape);
 		$oldBase = $shape->getBase();
 		$oldTop = $shape->getTop();
