@@ -102,8 +102,13 @@ class BlockType implements BlockTypeFeeder{
 			$itemId = constant(ItemIds::class . "::" . strtoupper($parts[0]));
 			$instance->blockId = $itemId < 256 ? $itemId : Item::get($itemId)->getBlock()->getId();
 			if($instance->blockId === 0){
-				$error = "$parts[0] cannot be converted into a block";
-				return null;
+				if(defined(BlockIds::class . "::" . strtoupper($parts[0]) . "_BLOCK")){
+					$blockId = constant(BlockIds::class . "::" . strtoupper($parts[0]) . "_BLOCK");
+					$instance->blockId = $blockId;
+				}else{
+					$error = "$parts[0] cannot be converted into a block";
+					return null;
+				}
 			}
 		}else{
 			$error = "$parts[0] is an unknown item name";

@@ -40,7 +40,7 @@ class PresetManager{
 			try{
 				$this->presets[mb_strtolower($name)] = new Preset($this, $name, $preset["description"] ?? "", (bool) ($preset["repeating"] ?? false), $shapes, $preset["value"]);
 			}catch(\InvalidArgumentException $e){
-				$plugin->getLogger()->error("Error loading a preset: {$e->getMessage()}");
+				$plugin->getLogger()->error("Error loading a preset called $name: {$e->getMessage()}");
 			}
 		}
 	}
