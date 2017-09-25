@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace LegendsOfMCPE\WorldEditArt\Epsilon\Manipulation\Changer;
 
+use LegendsOfMCPE\WorldEditArt\Epsilon\Utils\WEAUtils;
 use pocketmine\block\Block;
 
 class BlockChanger{
@@ -24,16 +25,21 @@ class BlockChanger{
 	private $fromTypes;
 	/** @var BlockPicker */
 	private $toTypes;
+	/** @var bool */
+	private $invert;
 
 	/**
 	 * BlockChanger constructor.
 	 *
 	 * @param BlockPicker       $picker
 	 * @param BlockTypeFeeder[] $fromTypes
+	 * @param bool              $invert
 	 */
-	public function __construct(BlockPicker $picker, array $fromTypes){
+	public function __construct(BlockPicker $picker, array $fromTypes, bool $invert){
 		$this->fromTypes = $fromTypes;
+		assert(WEAUtils::validateArrayType($fromTypes, BlockTypeFeeder::class));
 		$this->toTypes = $picker;
+		$this->invert = $invert;
 	}
 
 	public function reset() : void{
@@ -41,17 +47,17 @@ class BlockChanger{
 	}
 
 	public function change(Block $from) : ?BlockType{
-		if(count($this->fromTypes) === 0){
-			return $this->toTypes->feed();
-		}
 		/** @var BlockTypeFeeder $type */
 		foreach($this->fromTypes as $type){
 			foreach(BlockType::getAllTypes($type) as $blockType){
-				if($blockType->matches($from)){
-					return $this->toTypes->feed();
+				$matches = $blockType->matches($from);
+				if($matches){
+					return $this->invert ? null : // matches, should not replace
+						$this->toTypes->feed(); // matches, should replace
 				}
 			}
 		}
-		return null;
+		return $this->invert ? $this->toTypes->feed() : // no matches, should replace
+			null; // no matches, should not replace
 	}
 }

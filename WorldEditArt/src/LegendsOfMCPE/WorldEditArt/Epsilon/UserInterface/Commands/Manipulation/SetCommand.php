@@ -86,7 +86,7 @@ class SetCommand extends SessionCommand{
 			$this->sendBlocksUsage($session);
 			return;
 		}
-		$changer = new BlockChanger($picker, []);
+		$changer = new BlockChanger($picker, [], true);
 
 		$shape = $session->getSelection($selName);
 		if($shape === null){

@@ -29,9 +29,18 @@ use LegendsOfMCPE\WorldEditArt\Epsilon\UserInterface\Commands\Session\SessionCom
 use LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt;
 
 class ReplaceCommand extends SessionCommand{
-	public function __construct(WorldEditArt $plugin){
-		parent::__construct($plugin, "/replace", "Replace some blocks in your selection to other blocks", /** @lang text */
-			"//rep [s <selectionName>] [h[=<padding>[,<margin>]]] [r] <from blocks> [to] <to blocks>", ["/rep"], Consts::PERM_REPLACE);
+	/** @var bool */
+	private $invert;
+
+	public function __construct(WorldEditArt $plugin, bool $invert){
+		if($invert){
+			parent::__construct($plugin, "/replacenot", "Replace all blocks in your selection to other blocks except some types should not be replaced", /** @lang text */
+				"//repn [s <selectionName>] [h[=<padding>[,<margin>]]] [r] <from blocks> [to] <to blocks>", ["/repn"], Consts::PERM_REPLACE);
+		}else{
+			parent::__construct($plugin, "/replace", "Replace only some types of blocks in your selection to other blocks", /** @lang text */
+				"//rep [s <selectionName>] [h[=<padding>[,<margin>]]] [r] <from blocks> [to] <to blocks>", ["/rep"], Consts::PERM_REPLACE);
+		}
+		$this->invert = $invert;
 	}
 
 	/**
@@ -128,7 +137,7 @@ class ReplaceCommand extends SessionCommand{
 				return;
 			}
 		}
-		$changer = new BlockChanger($toTypes, $fromTypes);
+		$changer = new BlockChanger($toTypes, $fromTypes, $this->invert);
 
 		$selection = $session->getSelection($selName);
 		if($selection === null){
