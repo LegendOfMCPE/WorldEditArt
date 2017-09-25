@@ -171,6 +171,13 @@ class WEAUtils{
 		return true;
 	}
 
+	/**
+	 * @param array  $array
+	 * @param string $class
+	 *
+	 * @return bool
+	 * @throws TypeError
+	 */
 	public static function validateArrayType(array $array, string $class) : bool{
 		foreach($array as $index => $value){
 			if(!($value instanceof $class)){
