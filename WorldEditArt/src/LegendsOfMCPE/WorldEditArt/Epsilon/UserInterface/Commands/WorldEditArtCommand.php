@@ -93,7 +93,8 @@ abstract class WorldEditArtCommand extends Command implements PluginIdentifiable
 		$cmds[] = new SphereCommand($plugin);
 		$cmds[] = new WandConfigCommand($plugin);
 		$cmds[] = new SetCommand($plugin);
-		$cmds[] = new ReplaceCommand($plugin);
+		$cmds[] = new ReplaceCommand($plugin, true);
+		$cmds[] = new ReplaceCommand($plugin, false);
 		// then //@
 		$at = new AtCommand($plugin, $cmds);
 		$cmds[] = $at;
