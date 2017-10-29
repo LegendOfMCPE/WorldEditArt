@@ -47,15 +47,6 @@ class WorldEditArt extends PluginBase{
 	private $presetManager;
 
 
-	public static function requireVersion(Server $server, int $edition, int $major, int $minor) : void{
-		$instance = WorldEditArt::getInstance($server);
-		[$a, $b, $c] = array_map("intval", explode(".", $instance->getDescription()->getVersion()));
-		if(!($a === $edition && $major === $b && $minor < $c)){
-			throw new PluginException("Depends on unsupported WorldEditArt version (provided $a.$b.$c, dependent uses $edition.$major.$minor)");
-		}
-	}
-
-
 	public function getConstructionZoneManager() : ConstructionZoneManager{
 		return $this->czManager;
 	}

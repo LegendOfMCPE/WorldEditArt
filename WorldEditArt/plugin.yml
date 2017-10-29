@@ -1,11 +1,11 @@
 name: WorldEditArt
-version: 4.1.0.0 # {code name (rewrite)}.{major version (API change)}.{minor version (API addition)}.{patch version (identical API)}
+version: 4.1.0 # {code name (rewrite)}.{minor version (API change)}.{patch version (identical API)}
 website: https://legendofmcpe.github.io/WorldEditArt/
 author: SOFe
 
 main: LegendsOfMCPE\WorldEditArt\Epsilon\WorldEditArt
 api:
-  - 3.0.0-ALPHA8
+  - 3.0.0-ALPHA10
 extensions:
   mbstring: "*"
 softdepend:
