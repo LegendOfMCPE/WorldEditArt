@@ -3,7 +3,6 @@ projects:
   WorldEditArt-Epsilon:
     path: WorldEditArt/
     icon: plugin_icon.png
-
     libs:
       - src: BlockHorizons/libgeom/libgeom
         version: "^2.0"
